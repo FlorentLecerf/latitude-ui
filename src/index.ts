@@ -5,10 +5,11 @@ export {
   Badge,
   StatCard,
   ProgressBar,
+  ProgressRing,
   Logo,
   SectionLabel,
 } from "./components/primitives";
-export type { ButtonProps, CardProps, BadgeProps, StatCardProps, ProgressBarProps } from "./components/primitives";
+export type { ButtonProps, CardProps, BadgeProps, StatCardProps, ProgressBarProps, ProgressRingProps } from "./components/primitives";
 export { List, ListHead, ListRow, Pill } from "./components/list";
 export type { ListProps, ListRowProps } from "./components/list";
 export { ThemeToggle, useTheme, applyTheme } from "./components/theme";

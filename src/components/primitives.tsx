@@ -60,6 +60,72 @@ export function ProgressBar({ value, className, ...props }: ProgressBarProps) {
   );
 }
 
+/* -------------------------------- ProgressRing ----------------------------- */
+export interface ProgressRingProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Valeur courante (0..max). */
+  value: number;
+  /** Borne haute. Défaut 100. */
+  max?: number;
+  /** Diamètre en px. Défaut 76. */
+  size?: number;
+  /** Épaisseur du trait. Défaut 7. */
+  thickness?: number;
+  /** Couleur de l'arc rempli. Défaut var(--primary). Accepte n'importe quelle
+   *  couleur CSS / var() (ex. "var(--success)", "#86C2A0"). */
+  color?: string;
+  /** Couleur de la piste. Défaut var(--lt-ring-track). */
+  trackColor?: string;
+  /** Extrémités arrondies. Défaut true. */
+  rounded?: boolean;
+  /** Contenu centré (valeur, libellé court…). */
+  children?: React.ReactNode;
+}
+export function ProgressRing({
+  value,
+  max = 100,
+  size = 76,
+  thickness = 7,
+  color = "var(--primary)",
+  trackColor = "var(--lt-ring-track)",
+  rounded = true,
+  className,
+  children,
+  style,
+  ...props
+}: ProgressRingProps) {
+  const pct = max <= 0 ? 0 : Math.max(0, Math.min(1, value / max));
+  const r = (size - thickness) / 2;
+  const circ = 2 * Math.PI * r;
+  const c = size / 2;
+  return (
+    <div
+      className={cn("lt-ring", className)}
+      style={{ width: size, height: size, ...style }}
+      role="img"
+      aria-label={`${Math.round(pct * 100)}%`}
+      {...props}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="lt-ring__svg">
+        <circle cx={c} cy={c} r={r} fill="none" stroke={trackColor} strokeWidth={thickness} />
+        <circle
+          cx={c}
+          cy={c}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={thickness}
+          strokeLinecap={rounded ? "round" : "butt"}
+          strokeDasharray={circ}
+          strokeDashoffset={circ * (1 - pct)}
+          transform={`rotate(-90 ${c} ${c})`}
+          className="lt-ring__val"
+        />
+      </svg>
+      {children != null && <div className="lt-ring__c">{children}</div>}
+    </div>
+  );
+}
+
 /* ----------------------------------- Logo ---------------------------------- */
 export function Logo({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   // .logo-mark ajoute le point terracotta via ::after

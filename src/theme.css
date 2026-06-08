@@ -56,6 +56,7 @@
   --dark: #2E2E2E;
   --border: rgba(58, 58, 58, 0.08);
   --primary-light: rgba(224, 120, 85, 0.08);
+  --lt-ring-track: rgba(58, 50, 40, 0.10);
 
   --shadow-sm: 0 1px 2px rgba(58, 50, 40, 0.06);
   --shadow-md: 0 4px 14px rgba(58, 50, 40, 0.08);
@@ -89,6 +90,7 @@
   --dark: #1F1E1C;
   --border: rgba(255, 255, 255, 0.09);
   --primary-light: rgba(224, 120, 85, 0.14);
+  --lt-ring-track: rgba(255, 255, 255, 0.10);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.30);
@@ -255,6 +257,15 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 /* Barre de progression */
 .lt-bar { height: 8px; border-radius: 999px; background: var(--warm); overflow: hidden; }
 .lt-bar > i { display: block; height: 100%; background: var(--primary); border-radius: 999px; }
+
+/* Anneau de progression (jauge circulaire) */
+.lt-ring { position: relative; display: inline-flex; flex: none; }
+.lt-ring__svg { display: block; }
+.lt-ring__val { transition: stroke-dashoffset .6s var(--ease); }
+.lt-ring__c {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; line-height: 1.04; text-align: center;
+}
 
 /* Toggle de thème */
 .lt-toggle {
