@@ -6,6 +6,34 @@ composants React pour le **CRM**, l'**espace client** et le **diagnostic**.
 La source de vérité du langage visuel est [`DESIGN.md`](./DESIGN.md). Ce package en
 est l'implémentation physique (Tailwind v4, CSS-first).
 
+## Adopter le design Latitude dans un projet (checklist agent)
+
+Quand on te demande d'« appliquer » ou d'« aligner » le nouveau design sur un projet,
+**pars toujours d'ici**. Règle d'or : **utiliser ce package, ne jamais redéfinir
+couleurs / typo / composants en local.**
+
+1. **Lis [`DESIGN.md`](./DESIGN.md)** — le langage visuel (couleurs, typo, espace, motion).
+2. **Branche le package** : dépendance `github:FlorentLecerf/latitude-ui`,
+   `transpilePackages: ["@latitude/ui"]`, et dans `globals.css` :
+   `@import "tailwindcss"; @import "@latitude/ui/theme.css"; @source "../../node_modules/@latitude/ui/src";`
+   (ça remplace les anciens tokens locaux — `theme.css` en est un superset, rien ne casse).
+3. **Thème clair/sombre** : `themeInitScript()` dans le layout (anti-flash) + un
+   `<ThemeToggle />`. Défaut par surface (public → `"light"`, outil → `"dark"`). Retire
+   au fil de l'eau les classes `.crm`/`.espace`/`.reserver` pour passer la surface sous
+   contrôle du toggle.
+4. **Refonds écran par écran** en assemblant les composants (voir plus bas). Mise en page
+   spécifique d'un écran = dans le projet ; primitive réutilisable = **ici**, dans le
+   package (via PR).
+5. **Principes non négociables** (cf. DESIGN.md) :
+   - jamais de gris/noir purs (neutres chauds) ;
+   - profondeur = ombres chaudes `var(--shadow-sm|md|lg)` ;
+   - le serif (`font-serif` / DM Serif) porte titres + chiffres clés ;
+   - listes = **cartes séparées** (`ListRow`), jamais un tableau « Excel » ;
+   - motion intentionnelle (`var(--ease)`, ~220ms), jamais bouncy ;
+   - densité spacieuse côté client/public, plus compacte côté outil.
+6. **Vérifie en vrai** : `bun run build` + un coup d'œil visuel réel (les maquettes ne
+   suffisent pas). Puis PR → preview Vercel → merge.
+
 ## Installation (app Next.js 16 + Tailwind v4)
 
 Le package se consomme en **dépendance git** (dev local : lien direct vers le repo voisin).
@@ -70,7 +98,7 @@ fil de la migration pour passer la surface sous contrôle du toggle.
 
 ```tsx
 import {
-  Button, Card, Badge, StatCard, ProgressBar,
+  Button, Card, Badge, StatCard, ProgressBar, ProgressRing,
   List, ListHead, ListRow, Pill, Logo, SectionLabel, ThemeToggle,
 } from "@latitude/ui";
 ```
@@ -90,3 +118,10 @@ Liste de cartes (pas un tableau Excel) :
   </ListRow>
 </List>
 ```
+
+## Projets non-React (vitrine HTML statique)
+
+`latitude-web` est en **HTML statique** : il ne peut pas consommer les composants React
+ni `theme.css` (Tailwind v4). Il s'aligne en **recopiant les tokens** de `DESIGN.md`
+dans son propre CSS (mêmes hex terracotta/neutres, mêmes fontes DM Sans / DM Serif).
+Le package reste la **référence des valeurs** ; la vitrine les duplique à la main.
