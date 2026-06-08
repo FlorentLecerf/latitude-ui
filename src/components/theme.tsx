@@ -1,31 +1,17 @@
 "use client";
 import * as React from "react";
 import { cn } from "../cn";
-
-export type Theme = "light" | "dark";
-const STORAGE_KEY = "lt-theme";
+import { THEME_STORAGE_KEY, type Theme } from "./theme-init";
 
 /** Applique le thème sur <html> et le persiste. */
 export function applyTheme(t: Theme) {
   if (typeof document === "undefined") return;
   document.documentElement.setAttribute("data-theme", t);
   try {
-    localStorage.setItem(STORAGE_KEY, t);
+    localStorage.setItem(THEME_STORAGE_KEY, t);
   } catch {
     /* localStorage indisponible (mode privé) — on ignore. */
   }
-}
-
-/**
- * Script anti-FOUC à injecter dans <head> AVANT l'hydratation, pour poser
- * data-theme dès le premier paint (sinon flash de thème au chargement).
- *
- *   <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
- *
- * @param fallback thème par défaut si rien n'est stocké ("light" | "dark").
- */
-export function themeInitScript(fallback: Theme = "light"): string {
-  return `(function(){try{var t=localStorage.getItem('${STORAGE_KEY}')||'${fallback}';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','${fallback}');}})();`;
 }
 
 /** Hook : lit le thème courant depuis le DOM et expose un toggle. */
