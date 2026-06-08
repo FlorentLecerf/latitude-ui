@@ -4,8 +4,12 @@
    Tailwind v4, CSS-first. Drop-in superset des anciens globals.css :
    tous les tokens existants sont préservés (rien ne casse), les valeurs
    sont « élevées », et le thème clair/sombre est piloté par [data-theme].
+
+   IMPORTANT : ce fichier NE FAIT PAS `@import "tailwindcss"`. L'app hôte importe
+   Tailwind v4 d'abord, puis ce fichier :
+       @import "tailwindcss";
+       @import "@latitude/ui/theme.css";
    ============================================================================ */
-@import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
    1. ACCENT + ÉCHELLES (communs aux deux thèmes)
