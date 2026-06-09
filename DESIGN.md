@@ -71,7 +71,7 @@ Sérieux et haut de gamme sans jamais être froid.
 - Fades + translations subtiles à l'entrée, transitions d'état fluides, micro-lift au hover des cartes/lignes.
 
 ## Composants (`@latitude/ui`)
-`Button` (primary/ghost/soft) · `Card` (+hover) · `Badge` (ok/warn/err/info) ·
+`Button` (primary/ghost/soft/outline/danger · size sm/md) · `Card` (+hover, +elevated, +padded) · `Badge` (ok/warn/err/info/neutral/accent) ·
 `StatCard` · `List` + `ListHead` + `ListRow` + `Pill` · `ProgressBar` · `Logo` ·
 `SectionLabel` · `ThemeToggle` (+ `useTheme`, `applyTheme`, `themeInitScript`).
 Styles dans `src/theme.css` (classes `lt-*` + utilitaires hérités `.section-label`,

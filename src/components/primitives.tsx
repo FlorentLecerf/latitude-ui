@@ -2,24 +2,48 @@ import * as React from "react";
 import { cn } from "../cn";
 
 /* ---------------------------------- Button --------------------------------- */
-type ButtonVariant = "primary" | "ghost" | "soft";
+type ButtonVariant = "primary" | "ghost" | "soft" | "outline" | "danger";
+type ButtonSize = "sm" | "md";
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
+  /** md = bouton standard (défaut) ; sm = action inline sur carte/ligne. */
+  size?: ButtonSize;
 }
-export function Button({ variant = "primary", className, type = "button", ...props }: ButtonProps) {
-  return <button type={type} className={cn("lt-btn", `lt-btn--${variant}`, className)} {...props} />;
+export function Button({ variant = "primary", size = "md", className, type = "button", ...props }: ButtonProps) {
+  return (
+    <button
+      type={type}
+      className={cn("lt-btn", `lt-btn--${variant}`, size === "sm" && "lt-btn--sm", className)}
+      {...props}
+    />
+  );
 }
 
 /* ----------------------------------- Card ---------------------------------- */
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
+  /** Ombre portée. Défaut true. false = carte plate (sur fond déjà contrasté). */
+  elevated?: boolean;
+  /** Padding interne 24px. Défaut true. false = le contenu gère son rythme. */
+  padded?: boolean;
 }
-export function Card({ hover, className, ...props }: CardProps) {
-  return <div className={cn("lt-card", hover && "lt-card--hover", className)} {...props} />;
+export function Card({ hover, elevated = true, padded = true, className, ...props }: CardProps) {
+  return (
+    <div
+      className={cn(
+        "lt-card",
+        hover && "lt-card--hover",
+        !elevated && "lt-card--flat",
+        !padded && "lt-card--bare",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 /* ---------------------------------- Badge ---------------------------------- */
-type Tone = "ok" | "warn" | "err" | "info";
+type Tone = "ok" | "warn" | "err" | "info" | "neutral" | "accent";
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   tone?: Tone;
   dot?: boolean;

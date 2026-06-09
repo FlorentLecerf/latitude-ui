@@ -196,6 +196,9 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
   transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .lt-card--hover:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+/* Modulateurs : flat = sans ombre ; bare = sans padding (le contenu gère son rythme) */
+.lt-card--flat { box-shadow: none; }
+.lt-card--bare { padding: 0; }
 
 /* Bouton */
 .lt-btn {
@@ -211,6 +214,15 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 .lt-btn--ghost:hover { border-color: var(--primary); color: var(--primary); }
 .lt-btn--soft { background: var(--primary-light); color: var(--primary-deep); }
 [data-theme="dark"] .lt-btn--soft, .crm .lt-btn--soft, .espace .lt-btn--soft, .reserver .lt-btn--soft { color: #F5D9CD; }
+/* outline : action secondaire bordée, neutre au repos, se contraste au hover */
+.lt-btn--outline { background: transparent; color: var(--muted); border-color: var(--border); }
+.lt-btn--outline:hover { color: var(--foreground); border-color: var(--foreground); }
+/* danger : action destructive/sensible, terracotta sans aplat */
+.lt-btn--danger { background: transparent; color: var(--primary-deep); }
+.lt-btn--danger:hover { background: var(--primary-light); }
+[data-theme="dark"] .lt-btn--danger, .crm .lt-btn--danger, .espace .lt-btn--danger, .reserver .lt-btn--danger { color: #F5D9CD; }
+/* Tailles (défaut = base lt-btn). sm = action inline sur carte/ligne. */
+.lt-btn--sm { padding: 6px 12px; font-size: 0.75rem; gap: 6px; }
 
 /* Badge */
 .lt-badge {
@@ -221,6 +233,10 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 .lt-badge--warn { background: var(--warning-bg); color: var(--warning-fg); }
 .lt-badge--err  { background: var(--error-bg);   color: var(--error-fg); }
 .lt-badge--info { background: var(--info-bg);     color: var(--info-fg); }
+/* neutral : libellé sobre sur fond chaud. accent : pastille terracotta. */
+.lt-badge--neutral { background: var(--warm); color: var(--foreground); }
+.lt-badge--accent  { background: var(--primary-light); color: var(--primary-deep); }
+[data-theme="dark"] .lt-badge--accent, .crm .lt-badge--accent, .espace .lt-badge--accent, .reserver .lt-badge--accent { color: #F5D9CD; }
 .lt-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
 
 /* Stat */
