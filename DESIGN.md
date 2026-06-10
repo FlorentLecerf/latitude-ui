@@ -50,6 +50,7 @@ Sérieux et haut de gamme sans jamais être froid.
   - error `#B23A2F` / `#E39B92` (brique, accordée au terracotta — jamais rouge criard)
   - info `#2F6B6B` / `#8FC2C2` (teal sourd, calme)
 - **Règle d'or :** jamais de gris ni de noir purs. Tout porte une nuance chaude, ombres comprises.
+- **Échelle de chaleur** (maturité % d'un prospect + température diagnostic) — tokens `--heat-{froid,tiede,chaud,ultra}-{bg,fg,hue}`, classes `.lt-heat--*` : froid (bleu-gris dormant) → tiède (ambre) → chaud (orange) → **ultra = terracotta PLEIN, texte blanc** = « opportunité à actionner ». **Jamais de rouge** (le rouge = perdu/négatif, signal opposé). `hue` = couleur représentative pour anneaux/accents.
 
 ## Spacing & density
 - **Base 8px.** Layout via utilities Tailwind (`gap-6`, `p-8`…).

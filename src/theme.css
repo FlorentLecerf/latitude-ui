@@ -61,6 +61,13 @@
      en haut + bord un cran plus net. */
   --lt-card-halo: rgba(255, 255, 255, 0.7);
   --lt-card-border: rgba(58, 50, 40, 0.12);
+  /* Échelle de chaleur (maturité % + température diagnostic) — option 1 :
+     froid→chaud, le PIC = terracotta PLEIN (= action à mener), jamais rouge.
+     bg/fg = badge ; hue = couleur représentative (anneaux, accents, lignes). */
+  --heat-froid-bg: rgba(96,125,160,0.12); --heat-froid-fg: #5E7E9C; --heat-froid-hue: #6E8CA8;
+  --heat-tiede-bg: rgba(176,130,40,0.14); --heat-tiede-fg: #8C5A1F; --heat-tiede-hue: #B98A2E;
+  --heat-chaud-bg: rgba(224,120,85,0.14); --heat-chaud-fg: #A8492E; --heat-chaud-hue: #C96640;
+  --heat-ultra-bg: #E07855; --heat-ultra-fg: #FFFFFF; --heat-ultra-hue: #E07855;
 
   --shadow-sm: 0 1px 2px rgba(58, 50, 40, 0.06);
   --shadow-md: 0 4px 14px rgba(58, 50, 40, 0.08);
@@ -97,6 +104,11 @@
   --lt-ring-track: rgba(255, 255, 255, 0.10);
   --lt-card-halo: rgba(255, 255, 255, 0.05);
   --lt-card-border: rgba(255, 255, 255, 0.11);
+  /* Échelle de chaleur — sombre (cf. clair pour la logique option 1). */
+  --heat-froid-bg: rgba(125,143,165,0.16); --heat-froid-fg: #9BB0C4; --heat-froid-hue: #9BB0C4;
+  --heat-tiede-bg: rgba(205,160,70,0.18); --heat-tiede-fg: #CBA24E; --heat-tiede-hue: #CBA24E;
+  --heat-chaud-bg: rgba(224,120,85,0.20); --heat-chaud-fg: #E89A7E; --heat-chaud-hue: #E07855;
+  --heat-ultra-bg: #E07855; --heat-ultra-fg: #FFFFFF; --heat-ultra-hue: #E07855;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.30);
@@ -248,6 +260,17 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 .lt-badge--accent  { background: var(--primary-light); color: var(--primary-deep); }
 [data-theme="dark"] .lt-badge--accent, .crm .lt-badge--accent, .espace .lt-badge--accent, .reserver .lt-badge--accent { color: #F5D9CD; }
 .lt-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+/* Chaleur (maturité % + température diagnostic) — échelle option 1 :
+   froid → chaud, le pic ultra = terracotta PLEIN (action à mener). */
+.lt-heat {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  border-radius: 999px; padding: 4px 12px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.lt-heat--froid { background: var(--heat-froid-bg); color: var(--heat-froid-fg); }
+.lt-heat--tiede { background: var(--heat-tiede-bg); color: var(--heat-tiede-fg); }
+.lt-heat--chaud { background: var(--heat-chaud-bg); color: var(--heat-chaud-fg); }
+.lt-heat--ultra { background: var(--heat-ultra-bg); color: var(--heat-ultra-fg); }
 
 /* Stat */
 .lt-stat {

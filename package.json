@@ -1,6 +1,6 @@
 {
   "name": "@latitude/ui",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Système de design partagé Latitude — tokens, thèmes clair/sombre et composants pour le CRM, l'espace client et le diagnostic.",
   "license": "UNLICENSED",
   "private": false,
