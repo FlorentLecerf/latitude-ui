@@ -210,12 +210,14 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 
 /* Bouton */
 .lt-btn {
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   font: inherit; font-weight: 600; font-size: 0.875rem;
-  border-radius: var(--radius-md); padding: 11px 18px;
+  /* Hauteur « option A » validée (≈32px) : padding vertical fin. */
+  border-radius: var(--radius-md); padding: 6px 16px;
   cursor: pointer; border: 1px solid transparent;
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
+.lt-btn:disabled { opacity: .5; cursor: not-allowed; }
 .lt-btn--primary { background: var(--primary); color: #fff; }
 .lt-btn--primary:hover { background: var(--primary-hover); }
 .lt-btn--ghost { background: transparent; color: var(--foreground); border-color: var(--border); }
@@ -230,7 +232,7 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 .lt-btn--danger:hover { background: var(--primary-light); }
 [data-theme="dark"] .lt-btn--danger, .crm .lt-btn--danger, .espace .lt-btn--danger, .reserver .lt-btn--danger { color: #F5D9CD; }
 /* Tailles (défaut = base lt-btn). sm = action inline sur carte/ligne. */
-.lt-btn--sm { padding: 6px 12px; font-size: 0.75rem; gap: 6px; }
+.lt-btn--sm { padding: 5px 12px; font-size: 0.75rem; gap: 6px; }
 
 /* Badge */
 .lt-badge {
