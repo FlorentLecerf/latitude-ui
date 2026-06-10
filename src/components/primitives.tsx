@@ -3,17 +3,23 @@ import { cn } from "../cn";
 
 /* ---------------------------------- Button --------------------------------- */
 type ButtonVariant = "primary" | "ghost" | "soft" | "outline" | "danger";
-type ButtonSize = "sm" | "md";
+type ButtonSize = "sm" | "md" | "lg";
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  /** md = bouton standard (défaut) ; sm = action inline sur carte/ligne. */
+  /** md = standard (défaut) ; sm = action inline ; lg = CTA proéminent. */
   size?: ButtonSize;
 }
 export function Button({ variant = "primary", size = "md", className, type = "button", ...props }: ButtonProps) {
   return (
     <button
       type={type}
-      className={cn("lt-btn", `lt-btn--${variant}`, size === "sm" && "lt-btn--sm", className)}
+      className={cn(
+        "lt-btn",
+        `lt-btn--${variant}`,
+        size === "sm" && "lt-btn--sm",
+        size === "lg" && "lt-btn--lg",
+        className,
+      )}
       {...props}
     />
   );

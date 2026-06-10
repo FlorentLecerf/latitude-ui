@@ -243,8 +243,9 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 .lt-btn--danger { background: transparent; color: var(--primary-deep); }
 .lt-btn--danger:hover { background: var(--primary-light); }
 [data-theme="dark"] .lt-btn--danger, .crm .lt-btn--danger, .espace .lt-btn--danger, .reserver .lt-btn--danger { color: #F5D9CD; }
-/* Tailles (défaut = base lt-btn). sm = action inline sur carte/ligne. */
+/* Tailles (défaut = base lt-btn). sm = action inline ; lg = CTA proéminent. */
 .lt-btn--sm { padding: 5px 12px; font-size: 0.75rem; gap: 6px; }
+.lt-btn--lg { padding: 11px 24px; font-size: 1rem; gap: 10px; }
 
 /* Badge */
 .lt-badge {
