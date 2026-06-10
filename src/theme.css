@@ -199,13 +199,14 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
   border-radius: 14px;
   /* Flat premium : aucune ombre portée, juste un fin halo de lumière en haut. */
   box-shadow: inset 0 1px 0 var(--lt-card-halo);
-  padding: 24px;
   transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .lt-card--hover:hover { border-color: var(--primary); transform: translateY(-1px); }
-/* Modulateurs : flat = même sans halo ; bare = sans padding (le contenu gère son rythme) */
 .lt-card--flat { box-shadow: none; }
-.lt-card--bare { padding: 0; }
+/* Padding OPT-IN (padded=true). Le package n'impose pas de padding par défaut
+   sur la base : ainsi un écran qui pose son propre p-4/p-5 via className n'est
+   jamais écrasé (theme.css est chargé après Tailwind = non-layered > layered). */
+.lt-card--pad { padding: 24px; }
 
 /* Bouton */
 .lt-btn {

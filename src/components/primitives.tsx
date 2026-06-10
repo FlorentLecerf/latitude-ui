@@ -24,7 +24,8 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
   /** Ombre portée. Défaut true. false = carte plate (sur fond déjà contrasté). */
   elevated?: boolean;
-  /** Padding interne 24px. Défaut true. false = le contenu gère son rythme. */
+  /** Padding interne 24px (opt-in). Défaut true. false = AUCUN padding posé par
+   *  le package → l'écran impose le sien via className (p-4, p-5…). */
   padded?: boolean;
 }
 export function Card({ hover, elevated = true, padded = true, className, ...props }: CardProps) {
@@ -34,7 +35,7 @@ export function Card({ hover, elevated = true, padded = true, className, ...prop
         "lt-card",
         hover && "lt-card--hover",
         !elevated && "lt-card--flat",
-        !padded && "lt-card--bare",
+        padded && "lt-card--pad",
         className,
       )}
       {...props}
