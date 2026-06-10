@@ -237,14 +237,14 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 /* Badge */
 .lt-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600; padding: 3px 11px; border-radius: 999px;
 }
 .lt-badge--ok   { background: var(--success-bg); color: var(--success-fg); }
 .lt-badge--warn { background: var(--warning-bg); color: var(--warning-fg); }
 .lt-badge--err  { background: var(--error-bg);   color: var(--error-fg); }
 .lt-badge--info { background: var(--info-bg);     color: var(--info-fg); }
 /* neutral : libellé sobre sur fond chaud. accent : pastille terracotta. */
-.lt-badge--neutral { background: var(--warm); color: var(--foreground); }
+.lt-badge--neutral { background: var(--warm); color: var(--muted); }
 .lt-badge--accent  { background: var(--primary-light); color: var(--primary-deep); }
 [data-theme="dark"] .lt-badge--accent, .crm .lt-badge--accent, .espace .lt-badge--accent, .reserver .lt-badge--accent { color: #F5D9CD; }
 .lt-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }

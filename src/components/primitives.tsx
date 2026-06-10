@@ -47,9 +47,11 @@ export function Card({ hover, elevated = true, padded = true, className, ...prop
 type Tone = "ok" | "warn" | "err" | "info" | "neutral" | "accent";
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   tone?: Tone;
+  /** Point coloré devant le libellé (style « option 2 » validé). Défaut true ;
+   *  passer dot={false} pour un badge sans point. */
   dot?: boolean;
 }
-export function Badge({ tone = "ok", dot, children, className, ...props }: BadgeProps) {
+export function Badge({ tone = "ok", dot = true, children, className, ...props }: BadgeProps) {
   return (
     <span className={cn("lt-badge", `lt-badge--${tone}`, className)} {...props}>
       {dot && <span className="lt-dot" />}
