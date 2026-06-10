@@ -62,8 +62,12 @@ Sérieux et haut de gamme sans jamais être froid.
 ## Layout
 - **Approche :** hybride — grille disciplinée pour l'app (CRM, tableaux), éditorial pour le public (diagnostic, accueil).
 - **Rayons :** sm 6 · md 10 · lg 16 · xl 24 · pill 9999.
-- **Profondeur :** ombres chaudes (`rgba(58,50,40,…)` en clair, noires en sombre) —
-  `sm` (1px), `md` (cartes), `lg` (survol / éléments flottants).
+- **Profondeur :** **cartes « flat premium » (option B validée 10/06)** — PAS
+  d'ombre portée : bord net (`--lt-card-border`) + fin halo de lumière en haut
+  (`inset 0 1px 0 var(--lt-card-halo)`), rayon 14px. Le survol relève d'un
+  bord terracotta + micro-lift (pas d'ombre). Les ombres chaudes
+  (`--shadow-sm/md/lg`) restent dispo pour le flottant réel (modales, overlays),
+  pas pour les cartes de contenu.
 
 ## Motion
 - **Approche :** intentionnelle, jamais bouncy.

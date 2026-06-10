@@ -57,6 +57,10 @@
   --border: rgba(58, 58, 58, 0.08);
   --primary-light: rgba(224, 120, 85, 0.08);
   --lt-ring-track: rgba(58, 50, 40, 0.10);
+  /* Cartes « flat premium » (option B validée) : pas d'ombre portée, fin halo
+     en haut + bord un cran plus net. */
+  --lt-card-halo: rgba(255, 255, 255, 0.7);
+  --lt-card-border: rgba(58, 50, 40, 0.12);
 
   --shadow-sm: 0 1px 2px rgba(58, 50, 40, 0.06);
   --shadow-md: 0 4px 14px rgba(58, 50, 40, 0.08);
@@ -91,6 +95,8 @@
   --border: rgba(255, 255, 255, 0.09);
   --primary-light: rgba(224, 120, 85, 0.14);
   --lt-ring-track: rgba(255, 255, 255, 0.10);
+  --lt-card-halo: rgba(255, 255, 255, 0.05);
+  --lt-card-border: rgba(255, 255, 255, 0.11);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.30);
@@ -189,14 +195,15 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 /* Carte */
 .lt-card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--lt-card-border);
+  border-radius: 14px;
+  /* Flat premium : aucune ombre portée, juste un fin halo de lumière en haut. */
+  box-shadow: inset 0 1px 0 var(--lt-card-halo);
   padding: 24px;
-  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
-.lt-card--hover:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-/* Modulateurs : flat = sans ombre ; bare = sans padding (le contenu gère son rythme) */
+.lt-card--hover:hover { border-color: var(--primary); transform: translateY(-1px); }
+/* Modulateurs : flat = même sans halo ; bare = sans padding (le contenu gère son rythme) */
 .lt-card--flat { box-shadow: none; }
 .lt-card--bare { padding: 0; }
 
@@ -241,8 +248,8 @@ body.sidebar-collapsed .fiche-wide { max-width: none; }
 
 /* Stat */
 .lt-stat {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 20px; box-shadow: var(--shadow-sm);
+  background: var(--surface); border: 1px solid var(--lt-card-border);
+  border-radius: 14px; padding: 20px; box-shadow: inset 0 1px 0 var(--lt-card-halo);
 }
 .lt-stat__v { font-family: var(--font-dm-serif), serif; font-size: 1.9375rem; line-height: 1; }
 .lt-stat__k { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 6px; font-weight: 600; }
