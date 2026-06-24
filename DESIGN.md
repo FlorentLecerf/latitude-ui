@@ -82,9 +82,18 @@ Sérieux et haut de gamme sans jamais être froid.
 Styles dans `src/theme.css` (classes `lt-*` + utilitaires hérités `.section-label`,
 `.logo-mark`, `.font-serif`, `.scrollbar-discrete`).
 
+## Assets de marque (hors-app)
+Le logo est **typographique** (« Latitude » DM Serif + point terracotta, cf. `<Logo/>`),
+donc il n'existe pas en fichier. Pour les usages hors-app (réseaux sociaux, favicon,
+signature, carte de visite), les visuels sont **matérialisés par rendu déterministe**
+depuis ce master. Le registre des formats (dimensions par destination) et le mode
+d'emploi agents vivent dans [`brand/`](brand/README.md). Masters + exports lourds sur
+Google Drive `04_IDENTITE-MARQUE`. Marque carrée (favicon/avatars) = « L » DM Serif + point.
+
 ## Décisions
 | Date | Décision | Raison |
 |------|----------|--------|
+| 2026-06-24 | Architecture assets de marque : registre + masters dans le repo, bibliothèque lourde sur Drive `04_IDENTITE-MARQUE`, génération par rendu déterministe (cf. `brand/`) | Logo = code typographique ; séparer le registre machine (repo, lu par les agents) des exports lourds (Drive). |
 | 2026-06-08 | Système « Latitude, élevé » créé via /design-consultation | Codifier + élever la marque existante (terracotta + DM Serif + crème/anthracite), dé-dupliquée dans @latitude/ui. |
 | 2026-06-08 | Thème clair + sombre natifs, toggle data-theme | Demande explicite : les deux versions disponibles partout. |
 | 2026-06-08 | Listes = cartes séparées (pas tableau) | Préférence validée en preview : éviter l'effet Excel, lignes fines qui flottent. |

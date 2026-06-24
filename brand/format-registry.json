@@ -1,0 +1,44 @@
+{
+  "_comment": "Registre des formats d'assets de marque Latitude — SOURCE DE VÉRITÉ MACHINE, lue par les agents avant toute génération de visuel. Les tokens (couleur, typo) et la définition du logo vivent dans DESIGN.md + src/theme.css. Les masters vectoriels et les exports lourds vivent sur Google Drive (voir brand/README.md). Quand l'utilisateur nomme une destination (ex: « bannière LinkedIn »), l'agent lit l'entrée correspondante ici, rend le format à la dimension exacte depuis le master, puis dépose au bon endroit (repo ou Drive).",
+  "version": 1,
+  "brand": {
+    "wordmark": "Latitude",
+    "logoFont": "DM Serif Display",
+    "bodyFont": "DM Sans",
+    "primary": "#E07855",
+    "anthracite": "#262523",
+    "creme": "#FAFAF8",
+    "squareMark": "Initiale « L » en DM Serif + point terracotta (#E07855) — pour favicon et contextes carrés/avatars"
+  },
+  "drive": {
+    "root": { "name": "04_IDENTITE-MARQUE", "id": "1QrVSgOUy_Xm1wPINSIxzzbxs9feYztR-" },
+    "folders": {
+      "logos":          { "name": "Logos",            "id": "1rsWGFaRO6734sxUDo-Mdw6WVInMWP9JR" },
+      "charte":         { "name": "Charte-Graphique", "id": "1lYdXTOAuM9XncmS0piLODQGF1YcuC5Au" },
+      "carteDeVisite":  { "name": "Carte-De-Visite",  "id": "1tQxtRM8zGNorFeNcH6yhA1My056S4Pj_" },
+      "social":         { "name": "Social",           "id": null, "_note": "à créer lors du rangement Drive" },
+      "signatureEmail": { "name": "Signature-Email",  "id": null, "_note": "à créer lors du rangement Drive" }
+    }
+  },
+  "formats": [
+    { "key": "linkedin-perso-banner", "label": "LinkedIn — bannière profil perso", "width": 1584, "height": 396,  "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "notes": "zone centrale safe : le mobile rogne les bords" },
+    { "key": "linkedin-page-cover",   "label": "LinkedIn — couverture page entreprise", "width": 1128, "height": 191, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "linkedin-post",         "label": "LinkedIn — post paysage", "width": 1200, "height": 627, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "linkedin-post-square",  "label": "LinkedIn — post carré", "width": 1080, "height": 1080, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "linkedin-avatar",       "label": "LinkedIn — photo de profil", "width": 400, "height": 400, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "usesSquareMark": true },
+    { "key": "facebook-cover",        "label": "Facebook — couverture page", "width": 1640, "height": 624, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "notes": "affiché 820×312, upload 2x pour la netteté" },
+    { "key": "facebook-post",         "label": "Facebook — visuel de post", "width": 1200, "height": 630, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "instagram-post",        "label": "Instagram — post carré", "width": 1080, "height": 1080, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "instagram-portrait",    "label": "Instagram — post portrait", "width": 1080, "height": 1350, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "instagram-story",       "label": "Instagram — story / reel", "width": 1080, "height": 1920, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "youtube-banner",        "label": "YouTube — bannière chaîne", "width": 2560, "height": 1440, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "safeArea": { "width": 1546, "height": 423 }, "notes": "tout élément vital dans la zone safe centrale (TV vs mobile)" },
+    { "key": "youtube-thumbnail",     "label": "YouTube — miniature", "width": 1280, "height": 720, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "favicon",               "label": "Favicon", "width": 48, "height": 48, "unit": "px", "fileType": "ico", "sizes": [16, 32, 48], "destination": "repo", "repoTarget": "app/favicon.ico (chaque app Next) ou public/", "usesSquareMark": true },
+    { "key": "apple-touch",           "label": "Apple touch icon", "width": 180, "height": 180, "unit": "px", "fileType": "png", "destination": "repo", "repoTarget": "public/apple-touch-icon.png", "usesSquareMark": true },
+    { "key": "pwa-192",               "label": "Icône PWA 192", "width": 192, "height": 192, "unit": "px", "fileType": "png", "destination": "repo", "repoTarget": "public/icon-192.png", "usesSquareMark": true },
+    { "key": "pwa-512",               "label": "Icône PWA 512", "width": 512, "height": 512, "unit": "px", "fileType": "png", "destination": "repo", "repoTarget": "public/icon-512.png", "usesSquareMark": true },
+    { "key": "og-image",              "label": "Open Graph (aperçu de partage de lien)", "width": 1200, "height": 630, "unit": "px", "fileType": "png", "destination": "repo", "repoTarget": "app/opengraph-image.png (par app) ; miroir Drive social/" },
+    { "key": "email-signature",       "label": "Signature mail", "width": 600, "height": null, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "signatureEmail", "notes": "largeur ~600px, logo ~180px ; hauteur libre" },
+    { "key": "business-card",         "label": "Carte de visite", "width": 85, "height": 55, "unit": "mm", "dpi": 300, "fileType": "pdf", "destination": "drive", "driveFolder": "carteDeVisite", "notes": "format print + fond perdu 3mm à prévoir" }
+  ]
+}
