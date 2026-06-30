@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Image Open Graph — SITE PRINCIPAL (latitude.coach). Aperçu de partage de lien.
+  Format : og-image 1200×630. Voix MARQUE (thèse), surface marque comme la Page entreprise.
+  Base CSS 1200×630, rendu 2× (→2400×1260) puis réduit à 1200×630 (net).
+  Destination : latitude-web/og-image.png (remplace le provisoire) + miroir Drive Social.
+
+  RENDU :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=1200,630 \
+      --screenshot="og-home@2x.png" "file://$PWD/og-home.html"
+    sips -z 630 1200 og-home@2x.png --out og-home.png
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'DM Serif Display';
+    src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+    font-weight:400; font-style:normal; font-display:block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=block');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1200px;height:630px;}
+  .og{
+    position:relative;width:1200px;height:630px;overflow:hidden;
+    background:
+      radial-gradient(900px 540px at 78% 6%, rgba(224,120,85,0.13), transparent 60%),
+      radial-gradient(760px 500px at 12% 104%, rgba(52,50,47,0.6), transparent 55%),
+      #262523;
+    font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#F5F0EB;
+  }
+  .topo{position:absolute;inset:0;opacity:.5;}
+  .c{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;padding:0 90px;}
+  .wordmark{font-family:'DM Serif Display',Georgia,serif;font-size:42px;letter-spacing:-0.01em;color:#F5F0EB;margin-bottom:30px;}
+  .wordmark .dot{color:#E07855;}
+  .thesis{font-family:'DM Serif Display',Georgia,serif;font-size:62px;line-height:1.13;letter-spacing:-0.005em;color:#F5F0EB;}
+  .thesis .ter{color:#E07855;}
+  .tag{margin-top:28px;font-weight:500;font-size:27px;letter-spacing:.18em;color:#D0C5B9;text-transform:uppercase;}
+</style>
+</head>
+<body>
+  <div class="og">
+    <svg class="topo" viewBox="0 0 1200 630" preserveAspectRatio="none">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2">
+        <path d="M-40 470 C 240 410, 480 540, 720 460 S 1140 360, 1280 420"/>
+        <path d="M-40 520 C 260 460, 520 590, 760 510 S 1160 410, 1280 470"/>
+        <path d="M-40 410 C 220 360, 460 480, 700 410 S 1120 320, 1280 370"/>
+      </g>
+    </svg>
+    <div class="c">
+      <div class="wordmark">Latitude<span class="dot">.</span></div>
+      <div class="thesis">Une entreprise ne grandit qu'à<br>la hauteur de <span class="ter">son dirigeant.</span></div>
+      <div class="tag">Coaching de dirigeants de PME</div>
+    </div>
+  </div>
+</body>
+</html>
