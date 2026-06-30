@@ -16,16 +16,18 @@ n'est qu'un rendu local jetable.
 
 ## Rendre un gabarit
 
-Depuis ce dossier :
+Depuis ce dossier. **Toujours `--force-device-scale-factor=2`** (supersampling) : `--window-size`
+reste aux dimensions registry, mais le PNG sort en **2×** (ex. 3168×792 pour LinkedIn) → net sur
+Retina, sinon le serif paraît pixelisé. Le ratio est identique, LinkedIn/Drive l'acceptent.
 
 ```sh
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
-  --disable-gpu --force-device-scale-factor=1 --hide-scrollbars \
+  --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
   --virtual-time-budget=4000 --window-size=1584,396 \
   --screenshot="linkedin-perso.png" "file://$PWD/linkedin-perso.html"
 ```
 
-Ajuster `--window-size` à `width,height` de l'entrée registry correspondante.
+`--window-size` = `width,height` de l'entrée registry ; la sortie fait 2× ces valeurs.
 
 ## Source de vérité COPY
 
