@@ -31,6 +31,16 @@ Retina, sinon le serif paraît pixelisé. Le ratio est identique, LinkedIn/Drive
 
 `--window-size` = `width,height` de l'entrée registry ; la sortie fait 2× ces valeurs.
 
+## Netteté après upload (compression réseaux)
+
+Les réseaux (LinkedIn en tête) **recompressent** les bannières → léger flou, surtout sur :
+- les **dégradés** (banding, contours sales) → garder un fond **quasi uni**, repousser tout halo
+  loin du texte, faible opacité ;
+- les polices à **forts contrastes** (DM Serif, déliés fins) → les premiers traits ramollis ;
+- les **petits éléments** → voir grand (wordmark/tagline/CTA généreux).
+Indice : un PNG qui chute fortement en poids après aplatissement du fond = moins de matière à
+abîmer. Rendre en **2×** (Retina). Une part de flou reste côté réseau (universelle, incompressible).
+
 ## Source de vérité COPY
 
 Le **contenu** (accroche, sous-titre, CTA, direction créative) est décidé en amont dans le

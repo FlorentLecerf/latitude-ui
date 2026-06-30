@@ -33,8 +33,9 @@
     position:relative;width:1584px;height:396px;overflow:hidden;
     /* fond anthracite « élevé » du thème dark + halo terracotta + creux chaud bas-gauche */
     background:
-      radial-gradient(1100px 680px at 72% 12%, rgba(224,120,85,0.12), transparent 60%),
-      radial-gradient(820px 560px at 12% 100%, rgba(52,50,47,0.7), transparent 55%),
+      /* fond quasi uni : le halo est repoussé loin du texte (coin) + très faible →
+         compresse proprement à l'upload LinkedIn, les contours du texte restent nets */
+      radial-gradient(1500px 720px at 94% -15%, rgba(224,120,85,0.06), transparent 55%),
       #262523;                              /* --background (dark) */
     font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
     color:#F5F0EB;                          /* --foreground (dark) */
@@ -64,7 +65,7 @@
   }
   .sub{
     margin-top:18px;font-weight:500;font-size:29px;line-height:1.38;
-    color:#D0C5B9;                          /* --muted (dark) */
+    color:#EBE4DB;                          /* plus contrasté que --muted → plus net après compression */
   }
   .cta{
     margin-top:26px;display:inline-flex;align-items:center;gap:12px;
