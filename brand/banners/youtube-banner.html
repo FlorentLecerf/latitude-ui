@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Bannière YouTube — chaîne Latitude (surface MARQUE, voix thèse).
+  Format : youtube-banner 2560×1440. SAFE AREA centrale 1546×423 = seule zone visible
+  sur TOUS les appareils (mobile/tablette/desktop/TV) → TOUT le contenu vital dedans.
+  Le reste = fond « bleed » (vu seulement desktop/TV).
+  Base CSS 2560×1440, rendu 2× (→5120×2880) puis réduit à 2560×1440 (supersampling = net).
+  Source de vérité COPY : ~/Agents/latitude-marque/editorial/visuels/youtube-banner.md
+
+  RENDU (depuis brand/banners/) :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=2560,1440 \
+      --screenshot="youtube-banner@2x.png" "file://$PWD/youtube-banner.html"
+    sips -z 1440 2560 youtube-banner@2x.png --out youtube-banner.png   # → 2560×1440 net
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'DM Serif Display';
+    src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+    font-weight:400; font-style:normal; font-display:block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=block');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:2560px;height:1440px;}
+  .banner{
+    position:relative;width:2560px;height:1440px;overflow:hidden;
+    background:
+      radial-gradient(1700px 1000px at 64% 22%, rgba(224,120,85,0.12), transparent 58%),
+      radial-gradient(1500px 1000px at 30% 96%, rgba(52,50,47,0.6), transparent 55%),
+      #262523;
+    font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#F5F0EB;
+  }
+  .topo{position:absolute;inset:0;opacity:.5;}
+  /* contenu centré = pile dans la safe area 1546×423 (centrée dans 2560×1440) */
+  .center{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:1500px;text-align:center;
+  }
+  .wordmark{font-family:'DM Serif Display',Georgia,serif;font-size:56px;letter-spacing:-0.01em;color:#F5F0EB;margin-bottom:34px;}
+  .wordmark .dot{color:#E07855;}
+  .thesis{font-family:'DM Serif Display',Georgia,serif;font-size:68px;line-height:1.13;letter-spacing:-0.005em;color:#F5F0EB;}
+  .thesis .ter{color:#E07855;}
+  .tag{margin-top:30px;font-weight:500;font-size:30px;letter-spacing:.2em;color:#D0C5B9;text-transform:uppercase;}
+</style>
+</head>
+<body>
+  <div class="banner">
+    <svg class="topo" viewBox="0 0 2560 1440" preserveAspectRatio="none">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="2.5">
+        <path d="M-80 1010 C 500 900, 1000 1150, 1560 980 S 2440 820, 2680 920"/>
+        <path d="M-80 1100 C 540 1000, 1080 1240, 1660 1070 S 2460 910, 2680 1010"/>
+        <path d="M-80 900 C 460 800, 940 1040, 1500 880 S 2400 720, 2680 810"/>
+      </g>
+    </svg>
+
+    <div class="center">
+      <div class="wordmark">Latitude<span class="dot">.</span></div>
+      <div class="thesis">Une entreprise ne grandit qu'à<br>la hauteur de <span class="ter">son dirigeant.</span></div>
+      <div class="tag">Coaching de dirigeants de PME</div>
+    </div>
+  </div>
+</body>
+</html>

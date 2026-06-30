@@ -16,6 +16,7 @@ n'est qu'un rendu local jetable.
 | `linkedin-page-cover.html` | `linkedin-page-cover` (4200×700, 6:1) | base 2100×350 → 4200×700 | Drive `Social` |
 | `linkedin-company-logo.html` | `linkedin-company-logo` (carré) | base 800×800 → 1600×1600 | Drive `Logos` |
 | `facebook-cover.html` | `facebook-cover` (1640×624) | base 1640×624 → 3280×1248 | Drive `Social` |
+| `youtube-banner.html` | `youtube-banner` (2560×1440, safe 1546×423) | 2× → réduit à 2560×1440 | Drive `Social` |
 
 ## Rendre un gabarit
 
