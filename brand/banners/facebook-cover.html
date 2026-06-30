@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Couverture FACEBOOK — profil perso Florent Lecerf · marque Latitude.
+  Format : facebook-cover (registry 1640×624, affiché ~820×312). Base CSS 1640×624,
+  rendu 2× → 3280×1248 (net + marge pour la compression FB).
+  Direction MIX A+B (= LinkedIn perso), voix « vous ». CTA non cliquable sur FB → URL en clair.
+  Safe zone FB : mobile rogne les côtés (garder le centre) + photo de profil bas-gauche → centré, bas dégagé.
+  Source de vérité COPY : ~/Agents/latitude-marque/editorial/visuels/facebook-cover.md
+
+  RENDU (depuis brand/banners/) — scale-factor=2 → 3280×1248 :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=1640,624 \
+      --screenshot="facebook-cover.png" "file://$PWD/facebook-cover.html"
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'DM Serif Display';
+    src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+    font-weight:400; font-style:normal; font-display:block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=block');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1640px;height:624px;}
+  .cover{
+    position:relative;width:1640px;height:624px;overflow:hidden;
+    background:
+      radial-gradient(1300px 760px at 80% 2%, rgba(224,120,85,0.11), transparent 60%),
+      radial-gradient(960px 600px at 9% 108%, rgba(52,50,47,0.6), transparent 55%),
+      #262523;
+    font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#F5F0EB;
+  }
+  .topo{position:absolute;inset:0;opacity:.5;}
+  .wordmark{
+    position:absolute;top:50px;left:84px;
+    font-family:'DM Serif Display',Georgia,serif;
+    font-size:48px;letter-spacing:-0.01em;color:#F5F0EB;
+  }
+  .wordmark .dot{color:#E07855;}
+  /* centré (mobile rogne les côtés) + remonté pour dégager le bas-gauche (photo de profil) */
+  .center{position:absolute;left:0;right:0;top:43%;transform:translateY(-50%);text-align:center;padding:0 200px;}
+  .ter{color:#E07855;}
+  .hook{font-family:'DM Serif Display',Georgia,serif;font-size:60px;line-height:1.1;letter-spacing:-0.005em;color:#F5F0EB;}
+  .sub{margin-top:20px;font-weight:500;font-size:30px;line-height:1.35;color:#EBE4DB;}
+  .cta{
+    margin-top:36px;display:inline-flex;align-items:center;gap:13px;
+    font-weight:600;font-size:26px;letter-spacing:0.015em;color:#E07855;
+    padding:15px 34px;border:2px solid rgba(224,120,85,0.55);border-radius:999px;background:rgba(224,120,85,0.07);
+  }
+  .url{margin-top:16px;font-weight:500;font-size:23px;letter-spacing:0.04em;color:#D0C5B9;}
+</style>
+</head>
+<body>
+  <div class="cover">
+    <svg class="topo" viewBox="0 0 1640 624" preserveAspectRatio="none">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="2">
+        <path d="M-60 470 C 320 410, 640 540, 980 450 S 1560 350, 1760 420"/>
+        <path d="M-60 520 C 340 460, 680 590, 1040 500 S 1580 410, 1760 470"/>
+        <path d="M-60 410 C 300 360, 600 480, 940 400 S 1540 300, 1760 360"/>
+      </g>
+    </svg>
+
+    <div class="wordmark">Latitude<span class="dot">.</span></div>
+
+    <div class="center">
+      <div class="hook">Le vrai levier de votre entreprise,<br><span class="ter">c'est vous.</span></div>
+      <div class="sub">Vous prenez de la hauteur, votre entreprise aussi.</div>
+      <div class="cta">Diagnostic gratuit</div>
+      <div class="url">diag.latitude.coach</div>
+    </div>
+  </div>
+</body>
+</html>
