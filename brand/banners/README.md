@@ -10,9 +10,11 @@ n'est qu'un rendu local jetable.
 
 ## Gabarits
 
-| Fichier | Format (registry) | Destination |
-|---|---|---|
-| `linkedin-perso.html` | `linkedin-perso-banner` (1584×396) | Drive `Social` |
+| Fichier | Format (registry) | Rendu (scale 2×) | Destination |
+|---|---|---|---|
+| `linkedin-perso.html` | `linkedin-perso-banner` (1584×396) | 3168×792 | Drive `Social` |
+| `linkedin-page-cover.html` | `linkedin-page-cover` (4200×700, 6:1) | base 2100×350 → 4200×700 | Drive `Social` |
+| `linkedin-company-logo.html` | `linkedin-company-logo` (carré) | base 800×800 → 1600×1600 | Drive `Logos` |
 
 ## Rendre un gabarit
 

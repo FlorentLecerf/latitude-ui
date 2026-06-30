@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Couverture LinkedIn — PAGE ENTREPRISE (marque Latitude.)
+  Format : linkedin-page-cover — 4200×700 (ratio 6:1, spec LinkedIn 2026 ; l'ancienne 1128×191
+  est trop basse déf et pixelise). Base de design 2100×350, rendu en 2× → 4200×700.
+  Mobile : LinkedIn rogne vers le centre → texte centré + sur 2 lignes (pas trop large).
+  Voix MARQUE (thèse impersonnelle). Logo carré « L. » overlap bas-gauche → centré.
+  Source de vérité COPY : ~/Agents/latitude-marque/editorial/visuels/page-entreprise-linkedin.md
+
+  RENDU (depuis brand/banners/) — scale-factor=2 → 4200×700 :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=2100,350 \
+      --screenshot="linkedin-page-cover.png" "file://$PWD/linkedin-page-cover.html"
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'DM Serif Display';
+    src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+    font-weight:400; font-style:normal; font-display:block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=block');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:2100px;height:350px;}
+  .cover{
+    position:relative;width:2100px;height:350px;overflow:hidden;
+    background:
+      radial-gradient(1300px 620px at 72% 4%, rgba(224,120,85,0.13), transparent 60%),
+      radial-gradient(1000px 540px at 9% 112%, rgba(52,50,47,0.7), transparent 55%),
+      #262523;
+    font-family:'DM Sans',Helvetica,Arial,sans-serif;color:#F5F0EB;
+  }
+  .topo{position:absolute;inset:0;opacity:.5;}
+  .c{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;padding:0 200px;}
+  .thesis{
+    font-family:'DM Serif Display',Georgia,serif;
+    font-size:62px;line-height:1.12;letter-spacing:-0.005em;color:#F5F0EB;
+  }
+  .thesis .ter{color:#E07855;}
+  .tag{
+    margin-top:18px;font-size:24px;font-weight:500;letter-spacing:.16em;
+    color:#D0C5B9;text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <svg class="topo" viewBox="0 0 2100 350" preserveAspectRatio="none">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2">
+        <path d="M-60 270 C 420 220, 820 320, 1300 248 S 2000 180, 2200 224"/>
+        <path d="M-60 300 C 450 260, 880 350, 1380 278 S 2030 224, 2200 270"/>
+      </g>
+    </svg>
+    <div class="c">
+      <div class="thesis">Une entreprise ne grandit<br>qu'à la hauteur de <span class="ter">son dirigeant.</span></div>
+      <div class="tag">Coaching de dirigeants de PME</div>
+    </div>
+  </div>
+</body>
+</html>

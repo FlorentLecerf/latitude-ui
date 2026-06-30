@@ -22,7 +22,8 @@
   },
   "formats": [
     { "key": "linkedin-perso-banner", "label": "LinkedIn — bannière profil perso", "width": 1584, "height": 396,  "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "notes": "zone centrale safe : le mobile rogne les bords" },
-    { "key": "linkedin-page-cover",   "label": "LinkedIn — couverture page entreprise", "width": 1128, "height": 191, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
+    { "key": "linkedin-page-cover",   "label": "LinkedIn — couverture page entreprise", "width": 4200, "height": 700, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "notes": "spec 2026 (ratio 6:1) ; l'ancienne 1128×191 pixelise. Mobile rogne vers le centre → texte centré sur 2 lignes" },
+    { "key": "linkedin-company-logo", "label": "LinkedIn — logo Page entreprise (carré)", "width": 400, "height": 400, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "logos", "usesSquareMark": true, "notes": "tuile pleine fond anthracite + L. crème ; rendre en haute déf (≥1600) ; LinkedIn arrondit les coins" },
     { "key": "linkedin-post",         "label": "LinkedIn — post paysage", "width": 1200, "height": 627, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
     { "key": "linkedin-post-square",  "label": "LinkedIn — post carré", "width": 1080, "height": 1080, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social" },
     { "key": "linkedin-avatar",       "label": "LinkedIn — photo de profil", "width": 400, "height": 400, "unit": "px", "fileType": "png", "destination": "drive", "driveFolder": "social", "usesSquareMark": true },
