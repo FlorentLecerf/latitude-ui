@@ -36,13 +36,13 @@
   }
   .topo{position:absolute;inset:0;opacity:.5;}
   .wordmark{
-    position:absolute;top:50px;left:84px;
     font-family:'DM Serif Display',Georgia,serif;
-    font-size:48px;letter-spacing:-0.01em;color:#F5F0EB;
+    font-size:42px;letter-spacing:-0.01em;color:#F5F0EB;margin-bottom:28px;
   }
   .wordmark .dot{color:#E07855;}
-  /* centré (mobile rogne les côtés) + remonté pour dégager le bas-gauche (photo de profil) */
-  .center{position:absolute;left:0;right:0;top:45%;transform:translateY(-50%);text-align:center;padding:0 200px;}
+  /* TOUT centré (horizontal ET vertical) : FB rogne les côtés ET le haut/bas.
+     Le wordmark est DANS le bloc centré → jamais coupé. Marges haut/bas = sacrifiables. */
+  .center{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;padding:0 200px;}
   .ter{color:#E07855;}
   .hook{font-family:'DM Serif Display',Georgia,serif;font-size:60px;line-height:1.1;letter-spacing:-0.005em;color:#F5F0EB;}
   .sub{margin-top:20px;font-weight:500;font-size:30px;line-height:1.35;color:#EBE4DB;}
@@ -64,9 +64,8 @@
       </g>
     </svg>
 
-    <div class="wordmark">Latitude<span class="dot">.</span></div>
-
     <div class="center">
+      <div class="wordmark">Latitude<span class="dot">.</span></div>
       <div class="hook">Le vrai levier de votre entreprise,<br><span class="ter">c'est vous.</span></div>
       <div class="sub">Vous prenez de la hauteur, votre entreprise aussi.</div>
       <div class="cta">Diagnostic gratuit <span class="arrow">&#8595;</span></div>
