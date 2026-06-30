@@ -33,9 +33,10 @@
     position:relative;width:1584px;height:396px;overflow:hidden;
     /* fond anthracite « élevé » du thème dark + halo terracotta + creux chaud bas-gauche */
     background:
-      /* fond quasi uni : le halo est repoussé loin du texte (coin) + très faible →
-         compresse proprement à l'upload LinkedIn, les contours du texte restent nets */
-      radial-gradient(1500px 720px at 94% -15%, rgba(224,120,85,0.06), transparent 55%),
+      /* halo terracotta (identité) repoussé vers le coin haut-droit pour ne pas tomber
+         pile derrière le texte + creux chaud bas-gauche pour la profondeur */
+      radial-gradient(1200px 700px at 80% 2%, rgba(224,120,85,0.11), transparent 60%),
+      radial-gradient(900px 560px at 9% 108%, rgba(52,50,47,0.6), transparent 55%),
       #262523;                              /* --background (dark) */
     font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
     color:#F5F0EB;                          /* --foreground (dark) */
