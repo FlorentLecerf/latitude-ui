@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Image Open Graph — DIAGNOSTIC (diag.latitude.coach). Aperçu de partage de lien.
+  Format : og-image 1200×630. Base CSS 1200×630, rendu 2× (→2400×1260) puis réduit à 1200×630 (net).
+  Voix « vous » (surface froide). Destination : latitude-diagnostic/src/app/opengraph-image.png
+  (convention Next.js) + miroir Drive Social.
+
+  RENDU (depuis brand/banners/) :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=1200,630 \
+      --screenshot="og-diagnostic@2x.png" "file://$PWD/og-diagnostic.html"
+    sips -z 630 1200 og-diagnostic@2x.png --out og-diagnostic.png   # → 1200×630 net
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'DM Serif Display';
+    src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+    font-weight:400; font-style:normal; font-display:block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=block');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1200px;height:630px;}
+  .og{
+    position:relative;width:1200px;height:630px;overflow:hidden;
+    background:
+      radial-gradient(900px 540px at 78% 6%, rgba(224,120,85,0.13), transparent 60%),
+      radial-gradient(760px 500px at 12% 104%, rgba(52,50,47,0.6), transparent 55%),
+      #262523;
+    font-family:'DM Sans',-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#F5F0EB;
+  }
+  .topo{position:absolute;inset:0;opacity:.5;}
+  .c{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;padding:0 90px;}
+  .wordmark{font-family:'DM Serif Display',Georgia,serif;font-size:40px;letter-spacing:-0.01em;color:#F5F0EB;margin-bottom:30px;}
+  .wordmark .dot{color:#E07855;}
+  .hook{font-family:'DM Serif Display',Georgia,serif;font-size:64px;line-height:1.12;letter-spacing:-0.005em;color:#F5F0EB;}
+  .hook .ter{color:#E07855;}
+  .label{
+    margin-top:34px;display:inline-flex;align-items:center;gap:12px;
+    font-weight:600;font-size:24px;letter-spacing:0.04em;color:#E07855;
+    padding:13px 28px;border:2px solid rgba(224,120,85,0.55);border-radius:999px;background:rgba(224,120,85,0.07);
+  }
+</style>
+</head>
+<body>
+  <div class="og">
+    <svg class="topo" viewBox="0 0 1200 630" preserveAspectRatio="none">
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2">
+        <path d="M-40 470 C 240 410, 480 540, 720 460 S 1140 360, 1280 420"/>
+        <path d="M-40 520 C 260 460, 520 590, 760 510 S 1160 410, 1280 470"/>
+        <path d="M-40 410 C 220 360, 460 480, 700 410 S 1120 320, 1280 370"/>
+      </g>
+    </svg>
+    <div class="c">
+      <div class="wordmark">Latitude<span class="dot">.</span></div>
+      <div class="hook">Où en êtes-vous,<br><span class="ter">en tant que dirigeant ?</span></div>
+      <div class="label">Diagnostic gratuit · sans engagement</div>
+    </div>
+  </div>
+</body>
+</html>

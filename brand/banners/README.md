@@ -17,6 +17,7 @@ n'est qu'un rendu local jetable.
 | `linkedin-company-logo.html` | `linkedin-company-logo` (carré) | base 800×800 → 1600×1600 | Drive `Logos` |
 | `facebook-cover.html` | `facebook-cover` (1640×624) | base 1640×624 → 3280×1248 | Drive `Social` |
 | `youtube-banner.html` | `youtube-banner` (2560×1440, safe 1546×423) | 2× → réduit à 2560×1440 | Drive `Social` |
+| `og-diagnostic.html` | `og-image` (1200×630) | 2× → réduit à 1200×630 | `latitude-diagnostic/src/app/opengraph-image.png` + Drive `Social` |
 
 ## Rendre un gabarit
 
