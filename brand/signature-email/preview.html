@@ -1,12 +1,12 @@
 <!doctype html>
-<!-- Preview de validation — signature e-mail Latitude v2.2 (11/07/2026 soir).
-     Variante B (choisie), 100 % TEXTE (logo typographique inclus) : s'adapte à TOUT
-     (clair, sombre, images bloquées, tous clients). La simulation dark montre ce que fait
-     Gmail mobile : il éclaircit TOUS les textes, logo compris — plus aucun cas dégradé. -->
+<!-- Preview de validation — signature e-mail Latitude v2.4 (11/07 tard : layout empilé mobile-safe,
+     après le test iPhone qui a montré la variante B écrasée par le font-boosting d'Apple Mail iOS).
+     100 % TEXTE. La carte « simulation mobile » montre le comportement de repli des lignes
+     quand la largeur manque : coupes propres uniquement (groupes nowrap). -->
 <html>
 <head>
 <meta charset="utf-8">
-<title>Preview — Signature e-mail Latitude v2.2</title>
+<title>Preview — Signature e-mail Latitude v2.4</title>
 <style>
   body { margin: 0; padding: 40px; background: #ECE7E0; font-family: Arial, sans-serif; }
   h1 { font-size: 18px; color: #3A3A3A; }
@@ -15,54 +15,54 @@
   .card { border-radius: 14px; padding: 26px; max-width: 620px; }
   .light { background: #FFFFFF; border: 1px solid rgba(58,58,58,.08); }
   .dark  { background: #262523; }
+  .mobile { max-width: 300px; }
   td { font-family: 'DM Sans', Arial, 'Helvetica Neue', Helvetica, sans-serif; }
-  .wordmark { font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif; font-size: 26px; line-height: 30px; letter-spacing: -0.3px; }
+  .wordmark { font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif; letter-spacing: -0.3px; white-space: nowrap; }
 </style>
 </head>
 <body>
-<h1>Signature e-mail Latitude v2.2 — preview de validation</h1>
+<h1>Signature e-mail Latitude v2.4 — preview de validation</h1>
 
-<h2>Compl&egrave;te — mode clair</h2>
+<h2>Compl&egrave;te — desktop, mode clair</h2>
 <div class="card light">
 <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-  <tr>
-    <td style="vertical-align:middle;padding:0 18px 0 0;"><span class="wordmark" style="color:#262523;">Latitude<span style="color:#E07855;">.</span></span></td>
-    <td style="vertical-align:middle;border-left:1px solid #E5DFD6;padding:0 0 0 18px;">
-      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-        <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#3A3A3A;">Florent Lecerf <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#6E6E6E;text-decoration:none;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
-        <tr><td style="font-size:12px;line-height:17px;color:#3A3A3A;">Coach de dirigeants de PME <span style="color:#E07855;">&middot;</span> <span style="color:#6E6E6E;">Coach d&rsquo;Excellence, certifi&eacute; par l&rsquo;ECA</span></td></tr>
-        <tr><td style="font-size:12px;line-height:17px;font-style:italic;color:#6E6E6E;">&laquo;&nbsp;Une entreprise ne grandit qu&rsquo;&agrave; la hauteur de son dirigeant.&nbsp;&raquo;</td></tr>
-        <tr><td style="font-size:12px;line-height:17px;padding:5px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#A8492E;text-decoration:none;font-weight:bold;">Prendre rendez-vous</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://diag.latitude.coach" style="color:#6E6E6E;text-decoration:none;">Diagnostic gratuit</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/florent-lecerf/" style="color:#6E6E6E;text-decoration:none;">LinkedIn</a></td></tr>
-      </table>
-    </td>
-  </tr>
+  <tr><td style="padding:0 0 6px 0;"><span class="wordmark" style="font-size:24px;line-height:28px;color:#262523;">Latitude<span style="color:#E07855;">.</span></span></td></tr>
+  <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#3A3A3A;"><span style="white-space:nowrap;">Florent Lecerf</span> <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#6E6E6E;text-decoration:none;white-space:nowrap;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;color:#3A3A3A;"><span style="white-space:nowrap;">Coach de dirigeants de PME</span> <span style="color:#E07855;">&middot;</span> <span style="color:#6E6E6E;white-space:nowrap;">Coach d&rsquo;Excellence, certifi&eacute; par l&rsquo;ECA</span></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;font-style:italic;color:#6E6E6E;">&laquo;&nbsp;Une entreprise ne grandit qu&rsquo;&agrave; la hauteur de son dirigeant.&nbsp;&raquo;</td></tr>
+  <tr><td style="font-size:12px;line-height:20px;padding:5px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#A8492E;text-decoration:none;font-weight:bold;white-space:nowrap;">Prendre rendez-vous</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://diag.latitude.coach" style="color:#6E6E6E;text-decoration:none;white-space:nowrap;">Diagnostic gratuit</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/florent-lecerf/" style="color:#6E6E6E;text-decoration:none;white-space:nowrap;">LinkedIn</a></td></tr>
 </table>
 </div>
 
-<h2>Compl&egrave;te — dark mode (Gmail &eacute;claircit tous les textes, logo compris)</h2>
+<h2>Compl&egrave;te — desktop, dark mode</h2>
 <div class="card dark">
 <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-  <tr>
-    <td style="vertical-align:middle;padding:0 18px 0 0;"><span class="wordmark" style="color:#F5F0EB;">Latitude<span style="color:#E07855;">.</span></span></td>
-    <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,.18);padding:0 0 0 18px;">
-      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-        <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#F5F0EB;">Florent Lecerf <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#D0C5B9;text-decoration:none;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
-        <tr><td style="font-size:12px;line-height:17px;color:#F5F0EB;">Coach de dirigeants de PME <span style="color:#E07855;">&middot;</span> <span style="color:#D0C5B9;">Coach d&rsquo;Excellence, certifi&eacute; par l&rsquo;ECA</span></td></tr>
-        <tr><td style="font-size:12px;line-height:17px;font-style:italic;color:#D0C5B9;">&laquo;&nbsp;Une entreprise ne grandit qu&rsquo;&agrave; la hauteur de son dirigeant.&nbsp;&raquo;</td></tr>
-        <tr><td style="font-size:12px;line-height:17px;padding:5px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#E39B92;text-decoration:none;font-weight:bold;">Prendre rendez-vous</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://diag.latitude.coach" style="color:#D0C5B9;text-decoration:none;">Diagnostic gratuit</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/florent-lecerf/" style="color:#D0C5B9;text-decoration:none;">LinkedIn</a></td></tr>
-      </table>
-    </td>
-  </tr>
+  <tr><td style="padding:0 0 6px 0;"><span class="wordmark" style="font-size:24px;line-height:28px;color:#F5F0EB;">Latitude<span style="color:#E07855;">.</span></span></td></tr>
+  <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#F5F0EB;"><span style="white-space:nowrap;">Florent Lecerf</span> <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#D0C5B9;text-decoration:none;white-space:nowrap;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;color:#F5F0EB;"><span style="white-space:nowrap;">Coach de dirigeants de PME</span> <span style="color:#E07855;">&middot;</span> <span style="color:#D0C5B9;white-space:nowrap;">Coach d&rsquo;Excellence, certifi&eacute; par l&rsquo;ECA</span></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;font-style:italic;color:#D0C5B9;">&laquo;&nbsp;Une entreprise ne grandit qu&rsquo;&agrave; la hauteur de son dirigeant.&nbsp;&raquo;</td></tr>
+  <tr><td style="font-size:12px;line-height:20px;padding:5px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#E39B92;text-decoration:none;font-weight:bold;white-space:nowrap;">Prendre rendez-vous</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://diag.latitude.coach" style="color:#D0C5B9;text-decoration:none;white-space:nowrap;">Diagnostic gratuit</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/florent-lecerf/" style="color:#D0C5B9;text-decoration:none;white-space:nowrap;">LinkedIn</a></td></tr>
 </table>
 </div>
-<p class="note">100&nbsp;% texte : plus aucune image dans la signature. Le logo typographique est &eacute;clairci par le client mail comme le reste du texte &rarr; nickel en clair, en sombre, images bloqu&eacute;es ou non, sur tous les clients. Police du logo chez le destinataire&nbsp;: Georgia (serif &eacute;l&eacute;gant, DM Serif ne charge pas en email).</p>
+
+<h2>Compl&egrave;te — simulation mobile &eacute;troit (repli des lignes)</h2>
+<div class="card light mobile">
+<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+  <tr><td style="padding:0 0 6px 0;"><span class="wordmark" style="font-size:24px;line-height:28px;color:#262523;">Latitude<span style="color:#E07855;">.</span></span></td></tr>
+  <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#3A3A3A;"><span style="white-space:nowrap;">Florent Lecerf</span> <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#6E6E6E;text-decoration:none;white-space:nowrap;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;color:#3A3A3A;"><span style="white-space:nowrap;">Coach de dirigeants de PME</span> <span style="color:#E07855;">&middot;</span> <span style="color:#6E6E6E;white-space:nowrap;">Coach d&rsquo;Excellence, certifi&eacute; par l&rsquo;ECA</span></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;font-style:italic;color:#6E6E6E;">&laquo;&nbsp;Une entreprise ne grandit qu&rsquo;&agrave; la hauteur de son dirigeant.&nbsp;&raquo;</td></tr>
+  <tr><td style="font-size:12px;line-height:20px;padding:5px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#A8492E;text-decoration:none;font-weight:bold;white-space:nowrap;">Prendre rendez-vous</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://diag.latitude.coach" style="color:#6E6E6E;text-decoration:none;white-space:nowrap;">Diagnostic gratuit</a><span style="color:#E07855;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span><a href="https://www.linkedin.com/in/florent-lecerf/" style="color:#6E6E6E;text-decoration:none;white-space:nowrap;">LinkedIn</a></td></tr>
+</table>
+</div>
+<p class="note">Quand la largeur manque (mobile), les lignes se replient uniquement &agrave; des coupes propres : la certif passe sous le poste, les portes passent &agrave; la ligne en entier. Le logo et chaque asset sont ins&eacute;cables.</p>
 
 <h2>Courte (r&eacute;ponses / fils) — 3 lignes</h2>
 <div class="card light">
 <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-  <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#3A3A3A;">Florent Lecerf <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#6E6E6E;text-decoration:none;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
-  <tr><td style="font-size:12px;line-height:19px;color:#3A3A3A;">Coach de dirigeants de PME <span style="color:#E07855;">&middot;</span> <a href="https://latitude.coach" style="text-decoration:none;"><span class="wordmark" style="font-size:15px;letter-spacing:-0.2px;color:#262523;">Latitude<span style="color:#E07855;">.</span></span></a></td></tr>
-  <tr><td style="font-size:12px;line-height:18px;padding:3px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#A8492E;text-decoration:none;font-weight:bold;">Prendre rendez-vous</a></td></tr>
+  <tr><td style="font-size:14px;line-height:20px;font-weight:bold;color:#3A3A3A;"><span style="white-space:nowrap;">Florent Lecerf</span> <span style="color:#E07855;font-weight:normal;">&middot;</span> <a href="tel:+33695963055" style="font-size:12px;font-weight:normal;color:#6E6E6E;text-decoration:none;white-space:nowrap;">06&nbsp;95&nbsp;96&nbsp;30&nbsp;55</a></td></tr>
+  <tr><td style="font-size:12px;line-height:19px;color:#3A3A3A;"><span style="white-space:nowrap;">Coach de dirigeants de PME</span> <span style="color:#E07855;">&middot;</span> <a href="https://latitude.coach" style="text-decoration:none;"><span class="wordmark" style="font-size:15px;letter-spacing:-0.2px;color:#262523;">Latitude<span style="color:#E07855;">.</span></span></a></td></tr>
+  <tr><td style="font-size:12px;line-height:18px;padding:3px 0 0 0;"><a href="https://crm.latitude.coach/rdv/cadrage" style="color:#A8492E;text-decoration:none;font-weight:bold;white-space:nowrap;">Prendre rendez-vous</a></td></tr>
 </table>
 </div>
 
