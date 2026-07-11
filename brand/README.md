@@ -71,5 +71,8 @@ ou anthracite) est composée au moment de l'export favicon.
 - [x] Registre des formats posé.
 - [x] Master vectoriel du wordmark (SVG outlines) — `brand/masters/`.
 - [x] Marque carrée « L. » (variante A) — `brand/masters/square-mark*.svg`.
+- [x] Signature e-mail v2 (11/07/2026) — `brand/signature-email/` : 2 snippets HTML + logo tuile crème
+      rendu depuis le master, hébergé sur latitude-web. Brief : QG `editorial/signature-email-brief.md`.
 - [ ] Sous-dossiers Drive `Social/` + `Signature-Email/` — à créer (rangement Drive).
-- [ ] Template de rendu + pipeline d'export (depuis les masters → formats du registre).
+- [ ] Template de rendu + pipeline d'export généralisé (depuis les masters → formats du registre) —
+      premier exemplaire : `signature-email/render-logo.html`.
