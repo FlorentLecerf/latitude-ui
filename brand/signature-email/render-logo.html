@@ -1,24 +1,17 @@
 <!doctype html>
-<!-- Template de rendu déterministe : logo e-mail Latitude (wordmark sur tuile crème).
-     Rendu @2x : fenêtre 356×96 → affiché 178×48 dans la signature.
-     La tuile crème (#FAFAF8, rayon 20px @2x) garde le wordmark lisible quand les
-     clients mail passent le fond en sombre (les images ne sont pas inversées).
-     Commande : Chrome headless --screenshot --window-size=356,96 --default-background-color=00000000 -->
+<!-- Template de rendu déterministe : logo e-mail Latitude (wordmark NU, fond transparent — v2.1, 11/07/2026 :
+     Florent a refusé la tuile crème de la v2 « le logo est simple, c'est juste Latitude »).
+     Rendu @2x : fenêtre 216×40 → affiché 108×20 dans la signature.
+     Commande : Chrome headless --screenshot --window-size=216,40 --default-background-color=00000000 -->
 <html>
 <head>
 <meta charset="utf-8">
 <style>
   html, body { margin: 0; padding: 0; background: transparent; }
-  .tile {
-    width: 356px; height: 96px;
-    background: #FAFAF8;
-    border-radius: 20px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .tile img { width: 300px; height: 56px; display: block; }
+  img { width: 216px; height: 40px; display: block; }
 </style>
 </head>
 <body>
-  <div class="tile"><img src="../masters/wordmark-latitude.svg" alt="Latitude."></div>
+  <img src="../masters/wordmark-latitude.svg" alt="Latitude.">
 </body>
 </html>
