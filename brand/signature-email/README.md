@@ -25,7 +25,8 @@ terracotta (écho du point du logo). Aucune URL affichée, aucun soulignement.
 | Fichier | Rôle |
 |---|---|
 | `signature-complete.html` | à coller dans Gmail « Pour les nouveaux e-mails » (+ 1er mail sortant / séquences CRM) |
-| `signature-courte.html` | à coller dans Gmail « En cas de réponse/transfert » (2 lignes, « Latitude. » = le lien) |
+| `signature-courte.html` | à coller dans Gmail « En cas de réponse/transfert » (3 lignes, mini-logo + tél + RDV) |
+| `signature-ios-mail.html` | variante app Mail iPhone : iOS force le bleu souligné sur TOUS les liens à la composition → logo + téléphone en texte non cliquable, un seul lien « Prendre rendez-vous » |
 | `preview.html` | preview de validation : complète clair + dark + courte |
 | `render-logo.html` | template de rendu image du wordmark (Chrome headless) — plus utilisé par la signature, conservé comme premier exemplaire du pipeline d'export si un format image est un jour nécessaire |
 
