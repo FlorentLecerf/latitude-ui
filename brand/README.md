@@ -61,10 +61,21 @@ le point = glyphe `.` recoloré terracotta).
 | `wordmark-latitude-mono-creme.svg` | aplat crème (tampon monochrome sur sombre) |
 | `square-mark.svg` | marque carrée « L. » — L anthracite + point terracotta (favicon/avatars) |
 | `square-mark-on-dark.svg` | marque carrée « L. » — L crème + point terracotta (fond sombre) |
+| `crm-mark.svg` | favicon CRM « CRM. » — tuile anthracite + CRM crème (DM Sans ExtraBold) + point terracotta |
 
 Marque carrée = **variante A** retenue (le point est le glyphe DM Serif, même ADN que
 le wordmark). Les masters sont transparents (pas de fond) : la tuile (fond rond crème
 ou anthracite) est composée au moment de l'export favicon.
+
+**Exception — `crm-mark.svg`** (validé 13/07/2026) : la tuile anthracite arrondie fait
+partie du dessin, car c'est elle qui distingue l'onglet CRM de l'onglet site dans le
+navigateur. « CRM » est en **DM Sans** wght 800 (instance statique dans `tools/fonts/`,
+GSUB retirée pour opentype.js) ; le point reste le glyphe « . » DM Serif, élargi à
+0.275em pour rester visible à 16 px. Un texte dans le L à 16 px est illisible (testé) :
+à cette taille, seule une typo plein cadre fonctionne. Exports déposés dans
+`latitude-crm/src/app/` : `favicon.ico` (16+32+48, tuile arrondie), `icon.png` (512,
+tuile arrondie), `apple-icon.png` (180, **carré plein cadre** — iOS applique son propre
+arrondi).
 
 ## État du chantier
 
@@ -73,6 +84,8 @@ ou anthracite) est composée au moment de l'export favicon.
 - [x] Marque carrée « L. » (variante A) — `brand/masters/square-mark*.svg`.
 - [x] Signature e-mail v2 (11/07/2026) — `brand/signature-email/` : 2 snippets HTML + logo tuile crème
       rendu depuis le master, hébergé sur latitude-web. Brief : QG `editorial/signature-email-brief.md`.
+- [x] Favicon CRM distinct (13/07/2026) — master `crm-mark.svg` + exports déposés dans
+      `latitude-crm/src/app/` (favicon.ico, icon.png, apple-icon.png).
 - [ ] Sous-dossiers Drive `Social/` + `Signature-Email/` — à créer (rangement Drive).
 - [ ] Template de rendu + pipeline d'export généralisé (depuis les masters → formats du registre) —
       premier exemplaire : `signature-email/render-logo.html`.

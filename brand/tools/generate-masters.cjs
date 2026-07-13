@@ -81,9 +81,43 @@ function squareMark() {
   };
 }
 
+/* --------------------------- Marque CRM (F1) ------------------------------ */
+// Favicon du CRM, validé 13/07/2026 : tuile anthracite arrondie + « CRM » plein
+// cadre en DM Sans ExtraBold (wght 800, instancié depuis la variable) + point
+// terracotta = glyphe « . » DM Serif (ADN wordmark), élargi à 0.275em pour rester
+// visible à 16 px. Contrairement aux autres masters, la tuile fait partie du
+// dessin : c'est elle qui distingue l'onglet CRM de l'onglet site.
+function crmMark() {
+  const sans = opentype.parse(
+    fs.readFileSync(path.join(__dirname, 'fonts', 'DMSans-ExtraBold.ttf')).buffer);
+  const S = 1000, R = 180, PAD = 92;
+  const crm = sans.getPaths('CRM', 0, 0, FS, { kerning: true, letterSpacing: -0.02 });
+  const bC = bbox(crm);
+  const dotGlyph = font.getPaths('.', 0, 0, FS, {});
+  const bD = bbox(dotGlyph);
+  const dotScale = (0.275 * FS) / bD.w;   // diamètre visé 0.275em (proportion validée)
+  const GAP = 0.07 * FS;
+  const totalW = bC.w + GAP + bD.w * dotScale;
+  const s = (S - 2 * PAD) / totalW;
+  const tx = PAD - bC.x1 * s;
+  const ty = (S - bC.h * s) / 2 - bC.y1 * s;   // bloc de caps centré verticalement
+  const dx = bC.x2 + GAP - bD.x1 * dotScale;   // point posé sur la ligne de base
+  const crmD = crm.map(p => p.toPathData(2)).join(' ');
+  const dotD = dotGlyph.map(p => p.toPathData(2)).join(' ');
+  const svg =
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" role="img" aria-label="Latitude CRM">
+  <rect width="${S}" height="${S}" rx="${R}" fill="${ANTHRACITE}"/>
+  <g transform="translate(${tx.toFixed(1)} ${ty.toFixed(1)}) scale(${s.toFixed(4)})">
+    <path d="${crmD}" fill="${CREME}"/>
+    <g transform="translate(${dx.toFixed(1)} 0) scale(${dotScale.toFixed(4)})"><path d="${dotD}" fill="${TERRACOTTA}"/></g>
+  </g></svg>
+`;
+  return { 'crm-mark.svg': svg };
+}
+
 /* ------------------------------- Écriture --------------------------------- */
 fs.mkdirSync(OUT, { recursive: true });
-const all = { ...wordmark(), ...squareMark() };
+const all = { ...wordmark(), ...squareMark(), ...crmMark() };
 for (const [name, content] of Object.entries(all)) {
   fs.writeFileSync(path.join(OUT, name), content);
   console.log('écrit', name);

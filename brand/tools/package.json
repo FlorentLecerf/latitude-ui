@@ -1,0 +1,6 @@
+{
+  "name": "latitude-brand-tools",
+  "private": true,
+  "description": "Génération des masters vectoriels de marque (voir README.md)",
+  "dependencies": { "opentype.js": "^2.0.0" }
+}
