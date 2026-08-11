@@ -188,8 +188,14 @@ body {
 }
 .logo-mark::after { content: "."; color: var(--primary); }
 
-/* Repli sidebar : libère le plafond des fiches denses. */
-body.sidebar-collapsed .fiche-wide { max-width: none; }
+/* (11/08/2026) `body.sidebar-collapsed .fiche-wide { max-width: none }` a été
+   SUPPRIMÉE. Elle faisait dépendre la largeur d'un écran de l'état de la barre
+   latérale : replier la barre ne donnait pas de l'air au contenu, ça changeait
+   son GABARIT. Sur l'agenda du CRM le titre bougeait de 440 px, contre 176 px
+   ailleurs — d'où une impression d'incohérence d'une page à l'autre.
+   La largeur est désormais une décision du shell de l'app hôte (feuille unique
+   + gabarits « travail » / « lecture »), jamais du composant ni de la page.
+   Ne pas réintroduire : le CRM a un test qui refuse tout port de la classe. */
 
 /* Scrollbar discrète (zones internes scrollables). */
 .scrollbar-discrete { scrollbar-width: thin; scrollbar-color: transparent transparent; transition: scrollbar-color .2s; }
