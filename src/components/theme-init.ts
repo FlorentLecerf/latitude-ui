@@ -5,12 +5,18 @@ export type Theme = "light" | "dark";
 export const THEME_STORAGE_KEY = "lt-theme";
 
 /**
- * Script anti-FOUC à injecter dans le <head> AVANT l'hydratation, pour poser
- * data-theme dès le premier paint (sinon flash de thème au chargement).
+ * Script anti-FOUC à injecter dans le <head>, en script inline BLOQUANT, pour
+ * poser data-theme dès le premier paint (sinon flash de thème au chargement).
  *
- *   <Script id="lt-theme-init" strategy="beforeInteractive">
- *     {themeInitScript("dark")}
- *   </Script>
+ *   <head>
+ *     <script dangerouslySetInnerHTML={{ __html: themeInitScript("dark") }} />
+ *   </head>
+ *
+ * ⚠️ NE PAS passer par <Script strategy="beforeInteractive"> de next/script :
+ * en App Router, Next met le script en file (self.__next_s) et ne l'exécute
+ * qu'après chargement du bundle — donc APRÈS le premier paint. Le flash reste
+ * (constaté ~0,5 s sur diag.latitude.coach, corrigé le 13/08/2026).
+ * Penser aussi à `suppressHydrationWarning` sur <html>.
  *
  * @param fallback thème par défaut si rien n'est stocké ("light" | "dark").
  */
