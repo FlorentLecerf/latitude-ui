@@ -126,7 +126,8 @@ export interface StatTileAsideProps {
 export function StatTileAside({ value, label, onClick }: StatTileAsideProps) {
   const contenu = (
     <>
-      <b>{value}</b> {label}
+      <b>{value}</b>
+      <span>{label}</span>
     </>
   );
   return onClick ? (
@@ -138,7 +139,7 @@ export function StatTileAside({ value, label, onClick }: StatTileAsideProps) {
   );
 }
 
-/** La flèche d'un tunnel entre deux tuiles, avec son taux. Cachée sous 1024 px, où les tuiles se rangent autrement. */
+/** La flèche d'un tunnel entre deux tuiles, avec son taux. Cachée sous 1280 px (une rangée de tuiles + flèches n'y tient pas à côté d'une barre latérale), où les tuiles se rangent autrement. */
 export function FunnelArrow({ rate, label }: { rate: React.ReactNode; label: string }) {
   return (
     <div className="lt-funnel-arrow" aria-label={label} title={label}>
@@ -150,7 +151,7 @@ export function FunnelArrow({ rate, label }: { rate: React.ReactNode; label: str
   );
 }
 
-/** Le filet qui ÉCARTE une information du tunnel (le stock) : vertical à côté des tuiles, horizontal sous 1024 px. */
+/** Le filet qui ÉCARTE une information du tunnel (le stock) : vertical à côté des tuiles, horizontal sous 1280 px. */
 export function FunnelDivider({ className }: { className?: string }) {
   return (
     <div aria-hidden="true" className={cn("lt-funnel-divider", className)}>
