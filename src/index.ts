@@ -4,12 +4,16 @@ export {
   Card,
   Badge,
   StatCard,
+  StatTile,
+  StatTileAside,
+  FunnelArrow,
+  FunnelDivider,
   ProgressBar,
   ProgressRing,
   Logo,
   SectionLabel,
 } from "./components/primitives";
-export type { ButtonProps, CardProps, BadgeProps, StatCardProps, ProgressBarProps, ProgressRingProps } from "./components/primitives";
+export type { ButtonProps, CardProps, BadgeProps, StatCardProps, StatTileProps, StatTileAsideProps, ProgressBarProps, ProgressRingProps } from "./components/primitives";
 export { List, ListHead, ListRow, Pill } from "./components/list";
 export type { ListProps, ListRowProps } from "./components/list";
 export { ThemeToggle, useTheme, applyTheme } from "./components/theme";

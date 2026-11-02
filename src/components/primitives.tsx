@@ -80,6 +80,85 @@ export function StatCard({ value, label, className, ...props }: StatCardProps) {
   );
 }
 
+/* --------------------------------- StatTile -------------------------------- */
+/**
+ * LA TUILE DE CHIFFRE — basse (64 px), libellé et chiffre CENTRÉS, sans ligne
+ * dessous. Née de l'écran Appels du CRM (maquette validée le 02/11/2026) : c'est
+ * le référent de TOUT écran de chiffres refait ensuite.
+ *  - `label` et `value` acceptent un bouton ou un lien (le chiffre mène à ce
+ *    qu'il compte) : ils en héritent la typographie ;
+ *  - `aside` : ce qui décompose le chiffre, sur le CÔTÉ (« 15 intéressés »),
+ *    jamais dessous — la tuile reste basse ; `StatTileAside` le met en forme ;
+ *  - `dashed` : une information hors du tunnel ou de la période (le stock) ;
+ *  - `children` : un détail flottant éventuel (la tuile est `position: relative`
+ *    et passe au-dessus de ses voisines au survol ou quand `active`).
+ */
+export interface StatTileProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+  label: React.ReactNode;
+  value: React.ReactNode;
+  aside?: React.ReactNode;
+  dashed?: boolean;
+  active?: boolean;
+  children?: React.ReactNode;
+}
+export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function StatTile(
+  { label, value, aside, dashed, active, className, children, ...props },
+  ref,
+) {
+  return (
+    <div ref={ref} className={cn("lt-tile", dashed && "lt-tile--dashed", active && "is-active", className)} {...props}>
+      <div className="lt-tile__main">
+        <div className="lt-tile__k">{label}</div>
+        <div className="lt-tile__v">{value}</div>
+      </div>
+      {aside ? <div className="lt-tile__aside">{aside}</div> : null}
+      {children}
+    </div>
+  );
+});
+
+/** Une ligne du côté d'une `StatTile` : le chiffre en gras, puis ses mots. Cliquable si `onClick`. */
+export interface StatTileAsideProps {
+  value: React.ReactNode;
+  label: React.ReactNode;
+  onClick?: () => void;
+}
+export function StatTileAside({ value, label, onClick }: StatTileAsideProps) {
+  const contenu = (
+    <>
+      <b>{value}</b> {label}
+    </>
+  );
+  return onClick ? (
+    <button type="button" onClick={onClick} className="lt-tile__aside-row">
+      {contenu}
+    </button>
+  ) : (
+    <span className="lt-tile__aside-row">{contenu}</span>
+  );
+}
+
+/** La flèche d'un tunnel entre deux tuiles, avec son taux. Cachée sous 1024 px, où les tuiles se rangent autrement. */
+export function FunnelArrow({ rate, label }: { rate: React.ReactNode; label: string }) {
+  return (
+    <div className="lt-funnel-arrow" aria-label={label} title={label}>
+      <span>{rate}</span>
+      <svg viewBox="0 0 34 14" width="28" height="12" aria-hidden="true" fill="none" strokeWidth="1.6">
+        <path d="M1 7h30M25 2l6 5-6 5" />
+      </svg>
+    </div>
+  );
+}
+
+/** Le filet qui ÉCARTE une information du tunnel (le stock) : vertical à côté des tuiles, horizontal sous 1024 px. */
+export function FunnelDivider({ className }: { className?: string }) {
+  return (
+    <div aria-hidden="true" className={cn("lt-funnel-divider", className)}>
+      <span />
+    </div>
+  );
+}
+
 /* -------------------------------- ProgressBar ------------------------------ */
 export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   value: number; // 0..100
