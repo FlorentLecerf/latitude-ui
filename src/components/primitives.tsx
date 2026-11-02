@@ -86,12 +86,14 @@ export function StatCard({ value, label, className, ...props }: StatCardProps) {
  * dessous. Née de l'écran Appels du CRM (maquette validée le 02/11/2026) : c'est
  * le référent de TOUT écran de chiffres refait ensuite.
  *  - `label` et `value` acceptent un bouton ou un lien (le chiffre mène à ce
- *    qu'il compte) : ils en héritent la typographie ;
+ *    qu'il compte) : ils en héritent la typographie. Un libellé long se tronque
+ *    s'il est du texte, ou s'il est mis dans un `<span>` à l'intérieur du bouton ;
  *  - `aside` : ce qui décompose le chiffre, sur le CÔTÉ (« 15 intéressés »),
- *    jamais dessous — la tuile reste basse ; `StatTileAside` le met en forme ;
+ *    jamais dessous — la tuile reste basse : DEUX `StatTileAside` au plus ;
  *  - `dashed` : une information hors du tunnel ou de la période (le stock) ;
  *  - `children` : un détail flottant éventuel (la tuile est `position: relative`
  *    et passe au-dessus de ses voisines au survol ou quand `active`).
+ * Les styles vivent dans `@layer components` : un `className` Tailwind les surcharge.
  */
 export interface StatTileProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   label: React.ReactNode;
@@ -105,13 +107,15 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function
   { label, value, aside, dashed, active, className, children, ...props },
   ref,
 ) {
+  // Un tableau vide est « vrai » : compter, sinon un rail vide décentre le chiffre.
+  const aDuCote = React.Children.count(aside) > 0;
   return (
-    <div ref={ref} className={cn("lt-tile", dashed && "lt-tile--dashed", active && "is-active", className)} {...props}>
+    <div ref={ref} className={cn("lt-tile", dashed && "lt-tile--dashed", active && "lt-tile--active", className)} {...props}>
       <div className="lt-tile__main">
-        <div className="lt-tile__k">{label}</div>
+        <div className="lt-tile__k">{typeof label === "string" ? <span>{label}</span> : label}</div>
         <div className="lt-tile__v">{value}</div>
       </div>
-      {aside ? <div className="lt-tile__aside">{aside}</div> : null}
+      {aDuCote ? <div className="lt-tile__aside">{aside}</div> : null}
       {children}
     </div>
   );
@@ -139,11 +143,16 @@ export function StatTileAside({ value, label, onClick }: StatTileAsideProps) {
   );
 }
 
-/** La flèche d'un tunnel entre deux tuiles, avec son taux. Cachée sous 1280 px (une rangée de tuiles + flèches n'y tient pas à côté d'une barre latérale), où les tuiles se rangent autrement. */
-export function FunnelArrow({ rate, label }: { rate: React.ReactNode; label: string }) {
+/**
+ * La flèche d'un tunnel entre deux tuiles, avec son taux. Visible par défaut :
+ * l'écran qui porte la grille la cache là où les tuiles se rangent autrement
+ * (`className="hidden xl:flex"`). Le libellé est lu par les lecteurs d'écran.
+ */
+export function FunnelArrow({ rate, label, className }: { rate: React.ReactNode; label: string; className?: string }) {
   return (
-    <div className="lt-funnel-arrow" aria-label={label} title={label}>
-      <span>{rate}</span>
+    <div className={cn("lt-funnel-arrow", className)} title={label}>
+      <span className="lt-sr-only">{label} : </span>
+      <span aria-hidden="true">{rate}</span>
       <svg viewBox="0 0 34 14" width="28" height="12" aria-hidden="true" fill="none" strokeWidth="1.6">
         <path d="M1 7h30M25 2l6 5-6 5" />
       </svg>
@@ -151,10 +160,14 @@ export function FunnelArrow({ rate, label }: { rate: React.ReactNode; label: str
   );
 }
 
-/** Le filet qui ÉCARTE une information du tunnel (le stock) : vertical à côté des tuiles, horizontal sous 1280 px. */
-export function FunnelDivider({ className }: { className?: string }) {
+/**
+ * Le filet qui ÉCARTE une information du tunnel (le stock). `vertical` à côté des
+ * tuiles, `horizontal` quand elles s'empilent ; l'écran pose l'un ou l'autre selon
+ * sa grille (`className="hidden xl:flex"` / `"xl:hidden"`).
+ */
+export function FunnelDivider({ orientation = "vertical", className }: { orientation?: "vertical" | "horizontal"; className?: string }) {
   return (
-    <div aria-hidden="true" className={cn("lt-funnel-divider", className)}>
+    <div aria-hidden="true" className={cn("lt-funnel-divider", `lt-funnel-divider--${orientation}`, className)}>
       <span />
     </div>
   );
