@@ -301,7 +301,7 @@ body {
 .lt-tile__main { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 4px; }
 /* Seuls le libellé, le chiffre et le côté héritent : un détail flottant posé dans la tuile garde ses styles. */
 .lt-tile__k > :is(button, a), .lt-tile__v > :is(button, a), button.lt-tile__aside-row {
-  font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none;
+  font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none;
 }
 /* Le libellé se TOUCHE sur l'iPhone (il ouvre le détail) : sa zone déborde du texte sans bouger la tuile. */
 .lt-tile__k > :is(button, a) { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 10px 0 4px; margin: -10px 0 -4px; }
