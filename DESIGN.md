@@ -62,11 +62,11 @@ Sérieux et haut de gamme sans jamais être froid.
 
 ## Layout
 - **Approche :** hybride — grille disciplinée pour l'app (CRM, tableaux), éditorial pour le public (diagnostic, accueil).
-- **Rayons :** sm 6 · md 10 · lg 16 · xl 24 · pill 9999.
-- **Profondeur :** **cartes « flat premium » (option B validée 10/06)** — PAS
-  d'ombre portée : bord net (`--lt-card-border`) + fin halo de lumière en haut
-  (`inset 0 1px 0 var(--lt-card-halo)`), rayon 14px. Le survol relève d'un
-  bord terracotta + micro-lift (pas d'ombre). Les ombres chaudes
+- **Rayons (resserrés le 05/11/2026) :** sm 6 · md 10 · lg 10 · xl 12 · 2xl 12 · pill 9999. Rien ne dépasse 12 px.
+- **Profondeur :** **la carte de référence est la tuile de l'écran Appels** (Florent,
+  04/11/2026) : PAS d'ombre portée, filet fin (`--border`), rayon 10 px (`--radius-md`),
+  sans halo. Le survol teinte le bord en terracotta (45 %), rien ne bouge. `Card`,
+  `StatCard` et `StatTile` la partagent. Les ombres chaudes
   (`--shadow-sm/md/lg`) restent dispo pour le flottant réel (modales, overlays),
   pas pour les cartes de contenu.
 

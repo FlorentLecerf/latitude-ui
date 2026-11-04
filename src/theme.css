@@ -19,11 +19,13 @@
   --primary-hover: #c96640;
   --primary-deep: #A8492E;      /* terracotta lisible sur fond clair */
 
-  /* Rayons */
+  /* Rayons — resserrés le 05/11/2026 (Florent : « coins moins arrondis partout ») :
+     la tuile de l'écran Appels (10 px) est la référence ; rien ne dépasse 12 px. */
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 12px;
 
   /* Motion */
   --ease: cubic-bezier(.22, .61, .36, 1);
@@ -153,6 +155,7 @@
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
 }
 
 /* ---------------------------------------------------------------------------
@@ -210,16 +213,15 @@ body {
    6. COMPOSANTS (classes utilisées par @latitude/ui — préfixe lt-)
    --------------------------------------------------------------------------- */
 
-/* Carte */
+/* Carte — la tuile de l'écran Appels est LA référence de toutes les cartes (Florent, 04/11/2026) :
+   filet fin, 10 px, sans halo ; le survol teinte le bord, rien ne bouge. */
 .lt-card {
   background: var(--surface);
-  border: 1px solid var(--lt-card-border);
-  border-radius: 14px;
-  /* Flat premium : aucune ombre portée, juste un fin halo de lumière en haut. */
-  box-shadow: inset 0 1px 0 var(--lt-card-halo);
-  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur) var(--ease);
 }
-.lt-card--hover:hover { border-color: var(--primary); transform: translateY(-1px); }
+.lt-card--hover:hover { border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
 .lt-card--flat { box-shadow: none; }
 /* Padding OPT-IN (padded=true). Le package n'impose pas de padding par défaut
    sur la base : ainsi un écran qui pose son propre p-4/p-5 via className n'est
@@ -283,8 +285,8 @@ body {
 
 /* Stat */
 .lt-stat {
-  background: var(--surface); border: 1px solid var(--lt-card-border);
-  border-radius: 14px; padding: 20px; box-shadow: inset 0 1px 0 var(--lt-card-halo);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px;
 }
 .lt-stat__v { font-family: var(--font-dm-serif), serif; font-size: 1.9375rem; line-height: 1; }
 .lt-stat__k { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 6px; font-weight: 600; }
@@ -296,7 +298,7 @@ body {
   .lt-tile {
     position: relative; display: flex; align-items: center; justify-content: center; gap: 16px;
     height: 64px; min-width: 0; padding: 0 12px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
     transition: border-color var(--dur) var(--ease);
   }
   /* La teinte de `border-primary/45` (maquette validée). */
