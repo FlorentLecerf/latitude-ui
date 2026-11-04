@@ -19,7 +19,7 @@
   --primary-hover: #c96640;
   --primary-deep: #A8492E;      /* terracotta lisible sur fond clair */
 
-  /* Rayons — resserrés le 05/11/2026 (Florent : « coins moins arrondis partout ») :
+  /* Rayons — resserrés le 04/11/2026 (Florent : « coins moins arrondis partout ») :
      la tuile de l'écran Appels (10 px) est la référence ; rien ne dépasse 12 px. */
   --radius-sm: 6px;
   --radius-md: 10px;
