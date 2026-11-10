@@ -118,7 +118,10 @@
 
   --success-fg: #A8CFAC; --success-bg: rgba(98, 160, 103, 0.22);
   --warning-fg: #E8BF86; --warning-bg: rgba(224, 164, 85, 0.22);
-  --error-fg:   #E39B92; --error-bg:   rgba(178, 58, 47, 0.25);
+  /* Rouge du thème sombre — version A validée par Florent le 10/11/2026 : l'ancien
+     #E39B92 (brique pâle) se confondait avec le terracotta dès qu'il n'y avait que
+     du texte. Plus vif, tiré vers le rose : il se lit « non » sans fond coloré. */
+  --error-fg:   #FF8A93; --error-bg:   rgba(190, 47, 62, 0.28);
   --info-fg:    #8FC2C2; --info-bg:    rgba(47, 107, 107, 0.25);
 
   --badge-success-bg: var(--success-bg); --badge-success-fg: var(--success-fg);
@@ -247,10 +250,17 @@ body {
 /* outline : action secondaire bordée, neutre au repos, se contraste au hover */
 .lt-btn--outline { background: transparent; color: var(--muted); border-color: var(--border); }
 .lt-btn--outline:hover { color: var(--foreground); border-color: var(--foreground); }
-/* danger : action destructive/sensible, terracotta sans aplat */
-.lt-btn--danger { background: transparent; color: var(--primary-deep); }
-.lt-btn--danger:hover { background: var(--primary-light); }
-[data-theme="dark"] .lt-btn--danger, .crm .lt-btn--danger, .espace .lt-btn--danger, .reserver .lt-btn--danger { color: #F5D9CD; }
+/* danger : action DESTRUCTIVE (supprimer une fiche). Rouge teinté + filet, le même
+   dessin que la suppression en masse des listes — Florent, 10/11/2026 : le rouge dit
+   « non, perdu, supprimé », le terracotta reste « à toi d'agir ». Il était terracotta
+   sans aplat : un « Supprimer » se lisait comme une action ordinaire. Les deux thèmes
+   lisent le même jeton : aucune surcharge par thème. */
+.lt-btn--danger {
+  background: color-mix(in srgb, var(--error-fg) 10%, transparent);
+  color: var(--error-fg);
+  border-color: color-mix(in srgb, var(--error-fg) 30%, transparent);
+}
+.lt-btn--danger:hover { background: color-mix(in srgb, var(--error-fg) 20%, transparent); }
 /* Tailles (défaut = base lt-btn). sm = action inline ; lg = CTA proéminent. */
 .lt-btn--sm { padding: 5px 12px; font-size: 0.75rem; gap: 6px; }
 .lt-btn--lg { padding: 11px 24px; font-size: 1rem; gap: 10px; }

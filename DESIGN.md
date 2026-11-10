@@ -47,7 +47,7 @@ Sérieux et haut de gamme sans jamais être froid.
 - **Sémantiques (clair / sombre) :**
   - success `#3E6B42` / `#A8CFAC`
   - warning `#8C5A1F` / `#E8BF86`
-  - error `#B23A2F` / `#E39B92` (brique, accordée au terracotta — jamais rouge criard)
+  - error `#B23A2F` / `#FF8A93` (clair : brique ; sombre : rouge vif tiré vers le rose depuis le 10/11/2026 — la brique pâle `#E39B92` se confondait avec le terracotta en texte seul). Le rouge dit « non, perdu, supprimé, en échec » ; le terracotta dit « à toi d'agir ». Fond d'étiquette sombre `rgba(190,47,62,.28)`.
   - info `#2F6B6B` / `#8FC2C2` (teal sourd, calme)
 - **Règle d'or :** jamais de gris ni de noir purs. Tout porte une nuance chaude, ombres comprises.
 - **Échelle de chaleur** (maturité % d'un prospect + température diagnostic) — tokens `--heat-{froid,tiede,chaud,ultra}-{bg,fg,hue}`, classes `.lt-heat--*` : froid (bleu-gris dormant) → tiède (ambre) → chaud (orange) → **ultra = terracotta PLEIN, texte blanc** = « opportunité à actionner ». **Jamais de rouge** (le rouge = perdu/négatif, signal opposé). `hue` = couleur représentative pour anneaux/accents.
@@ -76,7 +76,7 @@ Sérieux et haut de gamme sans jamais être froid.
 - Fades + translations subtiles à l'entrée, transitions d'état fluides, micro-lift au hover des cartes/lignes.
 
 ## Composants (`@latitude/ui`)
-`Button` (primary/ghost/soft/outline/danger · size sm/md) · `Card` (+hover, +elevated, +padded) · `Badge` (ok/warn/err/info/neutral/accent) ·
+`Button` (primary/ghost/soft/outline/danger · size sm/md ; `danger` = suppression : rouge teinté + filet, jamais terracotta) · `Card` (+hover, +elevated, +padded) · `Badge` (ok/warn/err/info/neutral/accent) ·
 `StatCard` · `StatTile` (+ `StatTileAside`, `FunnelArrow`, `FunnelDivider` : la tuile de chiffre basse et centrée, référent des écrans de chiffres depuis le 02/11/2026) · `List` + `ListHead` + `ListRow` + `Pill` · `ProgressBar` · `Logo` ·
 `SectionLabel` · `ThemeToggle` (+ `useTheme`, `applyTheme`, `themeInitScript`).
 Styles dans `src/theme.css` (classes `lt-*` + utilitaires hérités `.section-label`,
