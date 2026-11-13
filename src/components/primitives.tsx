@@ -82,12 +82,15 @@ export function StatCard({ value, label, className, ...props }: StatCardProps) {
 
 /* --------------------------------- StatTile -------------------------------- */
 /**
- * LA TUILE DE CHIFFRE — basse (64 px), libellé et chiffre CENTRÉS, sans ligne
- * dessous. Née de l'écran Appels du CRM (maquette validée le 02/11/2026) : c'est
- * le référent de TOUT écran de chiffres refait ensuite.
- *  - `label` et `value` acceptent un bouton ou un lien (le chiffre mène à ce
- *    qu'il compte) : ils en héritent la typographie. Un libellé long se tronque
- *    s'il est du texte, ou s'il est mis dans un `<span>` à l'intérieur du bouton ;
+ * LA TUILE DE CHIFFRE — LA carte de chiffre de Latitude (règle du 12/11/2026,
+ * `DESIGN.md`, « Cartes de chiffres ») : 88 px au moins, titre et chiffre
+ * CENTRÉS, le chiffre calé en BAS (les chiffres d'une rangée s'alignent quand
+ * un titre passe sur deux lignes), RIEN sous le chiffre. Née de l'écran Appels
+ * du CRM (maquette validée le 02/11/2026).
+ *  - `label` et `value` acceptent un bouton (le titre déplie le détail, le
+ *    chiffre ouvre la fenêtre de ce qu'il compte) : ils en héritent la
+ *    typographie. Un titre long passe à la ligne, il n'est jamais coupé ; son
+ *    ⓘ se pose par `StatTileTitle` ;
  *  - `aside` : ce qui décompose le chiffre, sur le CÔTÉ (« 15 intéressés »),
  *    jamais dessous — la tuile reste basse : DEUX `StatTileAside` au plus ;
  *  - `dashed` : une information hors du tunnel ou de la période (le stock) ;
@@ -120,6 +123,38 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function
     </div>
   );
 });
+
+/**
+ * LE DESSIN DU ⓘ — un seul (15 px) : à côté d'un titre de carte comme d'un
+ * titre de rubrique, il remplace toute phrase sous un chiffre. Décoratif : ce
+ * qui le porte (un bouton) se nomme et lui donne sa zone de toucher. `active` :
+ * son détail est ouvert.
+ */
+export function InfoDot({ active, className }: { active?: boolean; className?: string }) {
+  return (
+    <span aria-hidden="true" className={cn("lt-info", active && "lt-info--active", className)}>
+      i
+    </span>
+  );
+}
+
+/**
+ * Le TITRE d'une `StatTile` et son ⓘ : le dernier mot ne quitte pas son ⓘ
+ * (seul, le ⓘ passerait à la ligne). À poser dans le `label`, nu ou dans le
+ * bouton qui déplie le détail.
+ */
+export function StatTileTitle({ children, info = true, active }: { children: string; info?: boolean; active?: boolean }) {
+  const coupe = children.lastIndexOf(" ") + 1;
+  return (
+    <span>
+      {children.slice(0, coupe)}
+      <span className="lt-tile__last">
+        {children.slice(coupe)}
+        {info ? <InfoDot active={active} /> : null}
+      </span>
+    </span>
+  );
+}
 
 /** Une ligne du côté d'une `StatTile` : le chiffre en gras, puis ses mots. Cliquable si `onClick`. */
 export interface StatTileAsideProps {

@@ -77,7 +77,7 @@ Sérieux et haut de gamme sans jamais être froid.
 
 ## Composants (`@latitude/ui`)
 `Button` (primary/ghost/soft/outline/danger · size sm/md ; `danger` = suppression : rouge teinté + filet, jamais terracotta) · `Card` (+hover, +elevated, +padded) · `Badge` (ok/warn/err/info/neutral/accent) ·
-`StatCard` · `StatTile` (+ `StatTileAside`, `FunnelArrow`, `FunnelDivider` : la tuile de chiffre basse et centrée, référent des écrans de chiffres depuis le 02/11/2026) · `List` + `ListHead` + `ListRow` + `Pill` · `ProgressBar` · `Logo` ·
+`StatCard` · `StatTile` (+ `StatTileTitle`, `InfoDot`, `StatTileAside`, `FunnelArrow`, `FunnelDivider` : LA carte de chiffre — 88 px, titre et chiffre centrés, chiffre calé en bas, ⓘ à côté du titre, rien sous le chiffre ; règle du 12/11/2026) · `List` + `ListHead` + `ListRow` + `Pill` · `ProgressBar` · `Logo` ·
 `SectionLabel` · `ThemeToggle` (+ `useTheme`, `applyTheme`, `themeInitScript`).
 Styles dans `src/theme.css` (classes `lt-*` + utilitaires hérités `.section-label`,
 `.logo-mark`, `.font-serif`, `.scrollbar-discrete`).
@@ -94,6 +94,7 @@ Google Drive `04_IDENTITE-MARQUE`. Marque carrée (favicon/avatars) = « L » DM
 | Date | Décision | Raison |
 |------|----------|--------|
 | 2026-11-02 | `StatTile` : tuile de chiffre 64 px, libellé + chiffre (24 px) centrés, décomposition sur le CÔTÉ, information hors tunnel en pointillé et écartée par `FunnelDivider` | Maquette des cartes de l'écran Appels validée par Florent ; tout écran de chiffres refait la reprend. |
+| 2026-11-13 | `StatTile` devient LA carte de chiffre : 88 px au moins (plus 64), chiffre calé en bas, titre sur plusieurs lignes jamais coupé, ⓘ de 15 px (`InfoDot`, `StatTileTitle`) à côté du titre | Règle « Cartes de chiffres » validée par Florent le 12/11 sur maquette : une seule carte et un seul geste dans tout le CRM. Le CRM posait ces mesures par-dessus la tuile ; elles remontent ici, le CRM garde le geste (détail au survol, fenêtre au clic). |
 | 2026-06-24 | Architecture assets de marque : registre + masters dans le repo, bibliothèque lourde sur Drive `04_IDENTITE-MARQUE`, génération par rendu déterministe (cf. `brand/`) | Logo = code typographique ; séparer le registre machine (repo, lu par les agents) des exports lourds (Drive). |
 | 2026-06-08 | Système « Latitude, élevé » créé via /design-consultation | Codifier + élever la marque existante (terracotta + DM Serif + crème/anthracite), dé-dupliquée dans @latitude/ui. |
 | 2026-06-08 | Thème clair + sombre natifs, toggle data-theme | Demande explicite : les deux versions disponibles partout. |

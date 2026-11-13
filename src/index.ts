@@ -6,6 +6,8 @@ export {
   StatCard,
   StatTile,
   StatTileAside,
+  StatTileTitle,
+  InfoDot,
   FunnelArrow,
   FunnelDivider,
   ProgressBar,
