@@ -43,7 +43,7 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 ```json
 {
   "titre": "Vous déléguez déjà. Alors pourquoi tout vous revient encore ?",
-  "fond": "carte",
+  "fond": "courbe",
   "signature": "Florent Lecerf",
   "scenes": [
     { "type": "accroche", "lignes": ["Vous déléguez déjà.", "Alors pourquoi *tout vous revient* encore ?"], "sous": "Ce que votre organigramme ne dit pas" },
@@ -68,23 +68,44 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 | `phrase` | `texte`, `taille` facultative | Une phrase seule, pour un pivot entre deux scènes. |
 | `bulle` | `texte`, `legende` facultative | Une parole tapée lettre à lettre dans une bulle, puis qui l'a dite ou quand. |
 | `dialogue` | `repliques` (2 à 4 : `qui` = `lui` ou `moi`, `texte`), `legende` facultative | Un échange : l'autre à gauche en bulle claire, Florent à droite en bulle terracotta. |
-| `etiquettes` | `titre`, `items` (3 à 6), `chute` facultative | Une liste courte, chaque point en étiquette qui saute en place. |
+| `etiquettes` | `titre`, `items` (3 à 6), `chute` facultative | Une liste courte : des rangs numérotés qui glissent en place l'un après l'autre. |
 | `chiffre` | `valeur`, `label`, `avant` et `contexte` facultatifs | Un grand chiffre qui compte jusqu'à sa valeur, son libellé. |
 | `organigramme` | `titre`, `haut`, `bas` (2 à 5), `chute` facultative, `remontee` (0 à 15, défaut 12) | Un haut et des bas reliés, puis des points qui remontent des bas et s'entassent sur le haut. |
 | `chute` | `texte`, `signature` facultative (`false` pour aucune) | La dernière image : le décor s'inverse, la phrase qui reste, le nom. Toujours en dernier. |
 
-### Fonds
+### Fonds : le style « performance »
 
-| Fond | Thème | Ce que c'est |
+Direction donnée par Florent le 17/11/2026, après avoir vu les premiers fonds : « ce n'est pas assez orienté
+performance […] c'est trop lisse ». Latitude fait travailler le dirigeant sur lui pour améliorer sa performance,
+donc celle de son entreprise : le décor **mesure** (quadrillage, règles graduées) et **monte** (une courbe, des
+barres, une aiguille qui tient son cap). Sans champ `fond`, le moteur prend `courbe`.
+
+| Fond | Ton par défaut | Ce que c'est |
 |---|---|---|
-| `carte` | clair | Crème chaud, courbes de niveau qui dérivent. |
-| `carnet` | clair | Papier clair pointillé, comme un carnet de notes. |
-| `aube` | clair | Dégradé chaud, parallèles, lueur terracotta qui monte du bas. |
-| `nuit` | sombre | Anthracite, courbes de niveau crème. |
-| `cretes` | sombre | Lignes de crêtes en couches au bas du cadre, soleil terracotta. |
+| `courbe` | sombre | Deux séries qui grimpent au fil de la vidéo : la terracotta devant, l'autre qui la suit (le dirigeant, puis l'entreprise). Elle décolle à droite juste avant la chute. |
+| `barres` | clair | Un histogramme qui se construit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres. |
+| `cap` | sombre | L'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction. |
 | `photo` | sombre | Une vraie photo (`"photo": "<chemin>"`, `"cadrage": "50% 50%"`), en noir et blanc chaud, assombrie. HEIC accepté. |
 
-La `chute` inverse toujours le thème : fond clair, chute anthracite ; fond sombre, chute crème.
+- **Deux tons par fond** : `"ton": "clair"` ou `"ton": "sombre"` dans le scénario donne l'autre version de
+  `courbe`, `barres` et `cap`. Trois décors, six ambiances.
+- **Le décor vit dans une bande au bas du cadre, sous les textes** (240 px réservés, `BANDE` dans `moteur.html`) :
+  il ne passe jamais derrière une phrase. Une courbe ou un trait qui traverse un texte le rend illisible, et
+  Florent lit déjà la vidéo « un tout petit peu vite ».
+- **Ce que le style change aussi dans les scènes** : une barre de progression en haut (un segment par scène) ;
+  l'accent `*entre étoiles*` devient un aplat terracotta qui balaie les mots, texte blanc ; les bulles et les
+  cartes ont des angles nets et un filet fin, sans ombre (la carte de référence de `DESIGN.md`) ; les étiquettes
+  deviennent des rangs numérotés 01, 02, 03 ; rien ne rebondit ; la chute arrive par un volet en biais précédé
+  d'une lame terracotta.
+- **Aucun chiffre dans le décor** : les graduations n'ont pas de valeur, la courbe n'a pas d'unité. Un chiffre à
+  l'écran est toujours un chiffre que Florent a donné, dans une scène `chiffre`.
+- La typographie de la marque ne change pas (DM Serif Display pour la voix, DM Sans pour les repères).
+
+Les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`) sont encore dans le moteur, avec leur
+style d'origine, parce que la première vidéo validée tourne sur `carte`. Florent les a jugés trop lisses : on ne
+les choisit plus pour une nouvelle vidéo, et ils sortent du moteur s'il valide le style performance.
+
+La `chute` inverse toujours le ton : fond clair, chute anthracite ; fond sombre, chute crème.
 
 ### Scène sur mesure
 
@@ -92,7 +113,7 @@ Un schéma propre à une vidéo s'écrit dans `<scénario>.scenes.js`, posé à 
 
 ```js
 window.SCENES_SUR_MESURE = {
-  // sc : la scène du scénario ; s : son <section> (colonne flex, 888 px de large) ; ctx : { theme, format, H }
+  // sc : la scène du scénario ; s : son <section> (colonne flex, 888 px de large, 1 000 px de haut au-dessus de la bande du décor) ; ctx : { theme, format, H }
   balance(sc, s, ctx) {
     const { el, svgEl, mots, monte, p, E } = window.M;
     const titre = mots(el("h2", "serif", s), sc.titre);
@@ -108,5 +129,9 @@ Couleurs à prendre dans les variables du thème (`var(--encre)`, `var(--doux)`,
 
 - **Pas de logo Latitude dans une vidéo animée** (Florent, 17/11/2026 : « on peut enlever le logo
   Latitude. Je trouve que ça fait trop pro »). La seule marque est la signature « Florent Lecerf » de la chute.
+- **Orienté performance, jamais « lisse »** (Florent, 17/11/2026) : un nouveau fond ou une nouvelle scène
+  mesure ou monte, avec des angles nets ; pas de dégradé pastel, pas de forme molle qui dérive, pas de rebond.
+  Performance d'entreprise (courbe, indicateur, cap), pas performance sportive (chrono, dossard) : le séminaire
+  se présente justement comme « pas une performance sportive ».
 - Jamais de rouge (cf. `DESIGN.md`) ; le terracotta `#E07855` reste l'unique accent.
 - Sully en photo : interdit. Une photo de fond vient du Drive `03_MARKETING-CONTENU/Photos-Pro`.
