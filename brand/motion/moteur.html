@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<!--
+  Moteur des vidéos animées Latitude (motion design par code).
+  Aucune animation CSS : tout est calculé par window.image(t), donc chaque image est exacte et rejouable.
+  Piloté par rendre.ts : window.demarrer(scenario, format) puis window.image(t) pour chaque image.
+  Mode d'emploi, types de scènes et fonds : README.md de ce dossier.
+-->
+<style>
+  @font-face { font-family: "DM Serif Display"; font-weight: 400; src: url("../tools/fonts/DMSerifDisplay-Regular.ttf"); }
+  @font-face { font-family: "DM Sans"; font-weight: 500; src: url("../tools/fonts/dm-sans-500.woff"); }
+  @font-face { font-family: "DM Sans"; font-weight: 700; src: url("../tools/fonts/dm-sans-700.woff"); }
+  :root { --terra: #E07855; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow: hidden; background: #000; }
+  body { position: relative; font-family: "DM Sans", sans-serif; font-weight: 500; -webkit-font-smoothing: antialiased; }
+  #fond, #voile { position: absolute; inset: 0; overflow: hidden; }
+  #voile { z-index: 2; clip-path: circle(0px at 50% 50%); }
+  .plateau { position: absolute; left: 0; width: 1080px; height: 1350px; }
+  #plateau { z-index: 1; }
+  #plateau2 { z-index: 3; }
+  .scene { position: absolute; inset: 0; opacity: 0; padding: 110px 96px 120px; display: flex; flex-direction: column; justify-content: center; color: var(--encre); transform-origin: 50% 50%; }
+  .serif { font-family: "DM Serif Display", serif; font-weight: 400; letter-spacing: -0.012em; }
+  /* mot masqué qui monte : le masque garde de la place pour les accents et les jambages */
+  .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .12em 0 .2em; margin: -.12em 0 -.2em; }
+  .w > span { display: inline-block; transform: translateY(118%); }
+  .hot { color: var(--terra); }
+  .caps { font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; }
+  .reste { color: transparent; }
+  .legende { margin-top: 64px; font-size: 36px; line-height: 1.35; color: var(--doux); opacity: 0; }
+
+  .accroche .filet { width: 0; height: 5px; background: var(--terra); margin-bottom: 30px; }
+  .accroche h1 { line-height: 1.07; }
+  .accroche .sous { margin-top: 64px; color: var(--terra); opacity: 0; }
+
+  .phrase p { line-height: 1.1; }
+
+  .bulle .boite { position: relative; margin: 0 -24px; padding: 58px 60px 66px; background: var(--carte); border-radius: 40px; border: 1.5px solid var(--bord); box-shadow: 0 26px 64px var(--ombre); transform-origin: 14% 100%; opacity: 0; }
+  .bulle .boite::after { content: ""; position: absolute; left: 86px; bottom: -21px; width: 44px; height: 44px; background: var(--carte); transform: rotate(45deg); border-radius: 0 0 9px 0; }
+  .bulle .citation { line-height: 1.1; }
+
+  .dialogue .rep { max-width: 790px; padding: 34px 42px 38px; border-radius: 34px; line-height: 1.14; opacity: 0; margin-bottom: 30px; border: 1.5px solid var(--bord); box-shadow: 0 18px 44px var(--ombre); }
+  .dialogue .rep.lui { align-self: flex-start; background: var(--carte); border-bottom-left-radius: 8px; transform-origin: 0 100%; }
+  .dialogue .rep.moi { align-self: flex-end; background: var(--terra); color: #FFFFFF; border-color: transparent; border-bottom-right-radius: 8px; transform-origin: 100% 100%; }
+  .dialogue .legende { margin-top: 34px; }
+
+  .etiquettes h2 { line-height: 1.1; margin-bottom: 54px; }
+  .pastille { align-self: flex-start; padding: 0 56px 0 44px; display: flex; align-items: center; gap: 26px; border-radius: 80px; background: var(--carte); border: 1.5px solid var(--bord); box-shadow: 0 14px 34px var(--ombre); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; transform-origin: 0 50%; }
+  .pastille::before { content: ""; width: 20px; height: 20px; border-radius: 50%; background: var(--terra); flex: none; }
+  .etiquettes .chute { margin-top: 30px; line-height: 1.12; }
+
+  .organigramme h2 { line-height: 1.09; margin-bottom: 34px; }
+  .organigramme svg { flex: none; overflow: visible; }
+  .organigramme .chute { margin-top: 40px; line-height: 1.12; }
+
+  .chiffre .avant { font-size: 44px; line-height: 1.2; margin-bottom: 18px; }
+  .chiffre .grand { line-height: .95; color: var(--terra); letter-spacing: -0.03em; white-space: nowrap; }
+  .chiffre .label { line-height: 1.1; margin-top: 26px; }
+  .chiffre .contexte { font-size: 36px; color: var(--doux); margin-top: 36px; line-height: 1.35; opacity: 0; }
+
+  .chute-finale .citation { line-height: 1.07; }
+  .chute-finale .trait { width: 0; height: 2px; background: var(--bord-fort); margin-top: 64px; }
+  .chute-finale .nom { margin-top: 44px; color: var(--doux); font-weight: 500; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; opacity: 0; }
+</style></head>
+<body>
+<div id="fond"></div>
+<div class="plateau" id="plateau"></div>
+<div id="voile"></div>
+<div class="plateau" id="plateau2"></div>
+
+<script>
+(() => {
+const TERRA = "#E07855", W = 1080, PH = 1350, NS = "http://www.w3.org/2000/svg";
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const E = {
+  lin: (t) => t,
+  out: (t) => 1 - Math.pow(1 - t, 3),
+  out5: (t) => 1 - Math.pow(1 - t, 5),
+  io: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+  back: (t) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); },
+};
+const p = (t, s, d, e = E.out) => e(clamp((t - s) / d));
+const el = (tag, cls, parent) => { const e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
+const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+// ---------- texte ----------
+// apostrophes courbes, espaces insécables devant ? ! : ; » et après «
+const typo = (s) => String(s).replace(/'/g, "’").replace(/[  ]+([?!:;»])/g, " $1").replace(/«[  ]+/g, "« ");
+const brut = (s) => typo(s).replace(/\*/g, "");
+const nbMots = (s) => brut(s).split(/\s+/).filter(Boolean).length;
+// découpe en mots masqués ; *un passage entre étoiles* passe en terracotta
+function mots(cible, texte) {
+  const out = []; let hot = false;
+  typo(texte).split("*").forEach((seg) => {
+    seg.split(" ").filter(Boolean).forEach((w) => out.push(`<span class="w"><span${hot ? ' class="hot"' : ""}>${w}</span></span>`));
+    hot = !hot;
+  });
+  cible.innerHTML = out.join(" ");
+  return [...cible.querySelectorAll(".w > span")];
+}
+const monte = (spans, t, s, pas = 0.07, d = 0.75) =>
+  spans.forEach((sp, i) => { sp.style.transform = `translateY(${(1 - p(t, s + i * pas, d, E.out5)) * 118}%)`; });
+const finMonte = (spans, s, pas = 0.07, d = 0.75) => s + Math.max(0, spans.length - 1) * pas + d;
+const apparait = (e, t, s, d = 0.6, dy = 26) => { const k = p(t, s, d); e.style.opacity = k; e.style.transform = `translateY(${(1 - k) * dy}px)`; };
+// réduit le corps jusqu'à ce que le bloc tienne dans la hauteur donnée, sans mot qui déborde
+function ajuste(e, max, min, hauteur) {
+  let s = max; e.style.fontSize = s + "px";
+  while (s > min && (e.scrollHeight > hauteur || e.scrollWidth > e.clientWidth + 1)) { s -= 2; e.style.fontSize = s + "px"; }
+  return s;
+}
+// texte tapé : la phrase entière est posée d'avance (invisible), donc la mise en lignes ne bouge jamais
+function tape(cible, texte) {
+  const T = typo(texte);
+  cible.innerHTML = '<span class="tape"></span><span class="reste"></span>';
+  const a = cible.firstChild, b = cible.lastChild;
+  b.textContent = T;
+  return { n: T.length, a, poser(k) { const n = Math.round(clamp(k) * T.length); a.textContent = T.slice(0, n); b.textContent = T.slice(n); return n >= T.length; } };
+}
+
+// ---------- bruit et courbes ----------
+function bruit(seed) {
+  let a = seed >>> 0;
+  const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const tab = Array.from({ length: 512 }, rnd);
+  const val = (x) => { const i = Math.floor(x), f = x - i, sm = f * f * (3 - 2 * f); const A = tab[((i % 512) + 512) % 512], B = tab[(((i + 1) % 512) + 512) % 512]; return A + (B - A) * sm; };
+  return (x, o = 4) => { let amp = 1, fr = 1, sum = 0, n = 0; for (let k = 0; k < o; k++) { sum += amp * val(x * fr); n += amp; amp *= 0.5; fr *= 2.03; } return sum / n; };
+}
+function lisse(pts) {
+  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)], k = 0.21;
+    d += ` C${(p1[0] + (p2[0] - p0[0]) * k).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) * k).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) * k).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) * k).toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+const toile = (parent, H) => { const s = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, parent); s.style.cssText = "position:absolute;left:0;top:0"; return s; };
+// courbes de niveau : le motif de carte de Latitude
+function topo(svg, stroke, op, cx, cy) {
+  const f = bruit(12);
+  for (let k = 0; k < 22; k++) {
+    const r = 46 + k * 52, pts = [];
+    for (let i = 0; i < 96; i++) {
+      const a = (i / 96) * Math.PI * 2;
+      const wob = 1 + (f(Math.cos(a) * 1.4 + 9 + k * 0.11) - 0.5) * 0.5 + (f(Math.sin(a) * 1.4 + 41 + k * 0.11) - 0.5) * 0.5;
+      pts.push([cx + Math.cos(a) * r * wob * 1.2, cy + Math.sin(a) * r * wob * 0.85]);
+    }
+    pts.push(pts[0]);
+    svgEl("path", { d: lisse(pts) + " Z", fill: "none", stroke, "stroke-opacity": op * (k % 4 === 0 ? 1.7 : 1), "stroke-width": k % 4 === 0 ? 2 : 1.3 }, svg);
+  }
+}
+// une ligne de crête, plus large que le cadre pour pouvoir dériver
+function crete(seed, baseY, amp, freq, H) {
+  const f = bruit(seed), g = bruit(seed + 7), pts = [];
+  for (let x = -260; x <= W + 260; x += 8) {
+    const u = (x / W) * freq;
+    const h = 0.55 * f(u + 3.7, 5) + 0.45 * Math.pow(1 - Math.abs(2 * g(u * 0.8 + 1.3, 5) - 1), 2);
+    pts.push([x, baseY - amp * h]);
+  }
+  return "M" + pts.map((q) => `${q[0]} ${q[1].toFixed(1)}`).join(" L") + ` L${W + 260} ${H + 20} L-260 ${H + 20} Z`;
+}
+
+// ---------- thèmes ----------
+const THEMES = {
+  clair: { encre: "#3A3A3A", doux: "#6E6E6E", carte: "#FFFFFF", bord: "rgba(58,58,58,.12)", ombre: "rgba(58,58,58,.11)", plein: "#3A3A3A", "plein-texte": "#FBF8F4", "bord-fort": "rgba(58,58,58,.3)", base: "#F5F0EB" },
+  sombre: { encre: "#FBF8F4", doux: "#B8B0A8", carte: "#403C3A", bord: "rgba(255,255,255,.14)", ombre: "rgba(0,0,0,.32)", plein: "#FBF8F4", "plein-texte": "#2E2E2E", "bord-fort": "rgba(255,255,255,.32)", base: "#2E2E2E" },
+};
+const poser = (e, nom) => { for (const k in THEMES[nom]) if (k !== "base") e.style.setProperty("--" + k, THEMES[nom][k]); };
+
+// ---------- fonds : chacun pose son décor et rend la fonction qui le fait vivre ----------
+const FONDS = {
+  // crème chaud et courbes de niveau qui dérivent
+  carte: { theme: "clair", monter(f, H) {
+    f.style.background = "#F5F0EB";
+    const s = toile(f, H), cx = W * 0.74, cy = H * 0.75; s.style.transformOrigin = `${cx}px ${cy}px`;
+    topo(s, "#3A3A3A", 0.085, cx, cy);
+    return (T) => { s.style.transform = `rotate(${T * 0.4}deg) scale(${1 + T * 0.0045})`; };
+  } },
+  // anthracite et courbes de niveau crème
+  nuit: { theme: "sombre", monter(f, H) {
+    f.style.background = "#2E2E2E";
+    const s = toile(f, H), cx = W * 0.26, cy = H * 0.72; s.style.transformOrigin = `${cx}px ${cy}px`;
+    topo(s, "#FBF8F4", 0.07, cx, cy);
+    return (T) => { s.style.transform = `rotate(${-T * 0.4}deg) scale(${1 + T * 0.0045})`; };
+  } },
+  // papier clair pointillé, comme un carnet de notes
+  carnet: { theme: "clair", monter(f) {
+    f.style.background = "#FAFAF8";
+    const g = el("div", "", f); g.style.cssText = "position:absolute;inset:-80px;background-image:radial-gradient(rgba(58,58,58,.17) 1.7px,transparent 2px);background-size:46px 46px";
+    const l = el("div", "", f); l.style.cssText = "position:absolute;inset:0;background:radial-gradient(circle at 90% 6%,rgba(224,120,85,.17),rgba(224,120,85,0) 46%)";
+    return (T) => { g.style.transform = `translate(${-T * 1.4}px,${-T}px)`; };
+  } },
+  // lever du jour : dégradé chaud, parallèles, lueur terracotta qui monte du bas
+  aube: { theme: "clair", monter(f, H) {
+    f.style.background = "linear-gradient(to bottom,#F8F4EE 0%,#F6EEE5 52%,#F0D9C9 100%)";
+    const sol = el("div", "", f); sol.style.cssText = `position:absolute;left:${W / 2 - 620}px;width:1240px;height:1240px;border-radius:50%;background:radial-gradient(circle,rgba(224,120,85,.6) 0%,rgba(224,120,85,.28) 38%,rgba(224,120,85,0) 68%)`;
+    const s = toile(f, H);
+    for (let i = 0; i < 9; i++) { const y = H * 0.1 + i * H * 0.105; svgEl("path", { d: `M-20 ${y} Q ${W / 2} ${y - 30 + i * 3} ${W + 20} ${y}`, fill: "none", stroke: "#3A3A3A", "stroke-opacity": 0.07, "stroke-width": 1.5 }, s); }
+    return (T) => { sol.style.top = H * 0.78 - T * 6 + "px"; };
+  } },
+  // nuit de montagne : crêtes en couches au bas du cadre, soleil terracotta derrière
+  cretes: { theme: "sombre", monter(f, H) {
+    f.style.background = "linear-gradient(to bottom,#242424 0%,#2F2B29 55%,#463A34 100%)";
+    const s = toile(f, H);
+    // le soleil reste bas et à droite, hors de la zone où tombe le texte (aligné à gauche)
+    svgEl("circle", { cx: W * 0.85, cy: H * 0.86, r: 260, fill: TERRA, opacity: 0.14 }, s);
+    const soleil = svgEl("circle", { cx: W * 0.85, cy: H * 0.87, r: 96, fill: TERRA, opacity: 0.9 }, s);
+    const couches = [
+      [101, H * 0.86, H * 0.13, 2.4, "#6A554C", 0.7], [202, H * 0.9, H * 0.12, 3.1, "#54463F", 0.95],
+      [303, H * 0.96, H * 0.1, 3.6, "#2A2726", 1], [404, H * 1.0, H * 0.07, 4.8, "#1C1B1B", 1],
+    ].map(([seed, y, amp, fr, fill, opacity]) => svgEl("path", { d: crete(seed, y, amp, fr, H), fill, opacity }, s));
+    return (T) => { couches.forEach((c, i) => c.setAttribute("transform", `translate(${-T * (1.2 + i * 1.5)} 0)`)); soleil.setAttribute("cy", H * 0.87 - T * 0.8); };
+  } },
+  // une vraie photo de Florent, passée en noir et blanc chaud et assombrie pour porter le texte
+  photo: { theme: "sombre", monter(f, H, sc) {
+    if (!sc.photo) throw new Error("le fond « photo » demande le champ « photo » (chemin d'une image)");
+    f.style.background = "#1E1C1B"; f.style.isolation = "isolate";
+    const couche = (css) => { const d = el("div", "", f); d.style.cssText = "position:absolute;inset:0;" + css; return d; };
+    const img = couche(`background:url("${encodeURI("file://" + sc.photo)}") ${sc.cadrage || "50% 50%"} / cover no-repeat;filter:grayscale(1) contrast(1.15) brightness(.95);transform-origin:50% 60%`);
+    couche("background:#F5F0EB;mix-blend-mode:multiply");
+    couche("background:#26211F;mix-blend-mode:lighten");
+    couche("background:linear-gradient(to bottom,rgba(24,21,20,.86) 0%,rgba(24,21,20,.7) 45%,rgba(24,21,20,.84) 100%)");
+    return (T) => { img.style.transform = `scale(${1.05 + T * 0.003})`; };
+  } },
+};
+
+// ---------- scènes : chacune construit son contenu et rend { d (durée), jouer(t) } ----------
+// LE RYTHME : le seul endroit où ralentir ou accélérer toutes les vidéos.
+//   mots, legende : vitesse de lecture comptée, en mots par seconde (plus bas = plus lent)
+//   pause : temps ajouté à la fin de chaque scène, une fois tout affiché
+//   Réglé le 17/11/2026 sur le retour de Florent (« ça va un tout petit peu vite, mais pas de beaucoup ») :
+//   4.6 → 4.2, 5.2 → 4.6, pause 0 → 0.3. Un cran à la fois : 0.2 mot par seconde, 0.1 s de pause.
+const RYTHME = { mots: 4.2, legende: 4.6, pause: 0.3 };
+const lecture = (n) => 0.7 + n / RYTHME.mots; // temps pour lire n mots à l'écran
+const SCENES = {
+  accroche(sc, s) {
+    el("div", "filet", s);
+    const h1 = el("h1", "serif", s);
+    const lignes = [].concat(sc.lignes).map((l) => mots(el("div", "", h1), l));
+    ajuste(h1, 104, 60, 640);
+    const sous = sc.sous ? el("p", "caps sous", s) : null; if (sous) sous.textContent = typo(sc.sous);
+    let t0 = 0.3; const dep = lignes.map((sp) => { const a = t0; t0 += sp.length * 0.085 + 0.35; return a; });
+    const tSous = t0 + 0.2, n = nbMots([].concat(sc.lignes).join(" ")) + (sc.sous ? nbMots(sc.sous) : 0);
+    return { d: Math.max(tSous + (sous ? 1.5 : 0.7), lecture(n)), jouer(t) {
+      s.querySelector(".filet").style.width = p(t, 0.15, 0.6) * 64 + "px";
+      lignes.forEach((sp, i) => monte(sp, t, dep[i], 0.085));
+      if (sous) apparait(sous, t, tSous);
+    } };
+  },
+  phrase(sc, s) {
+    const para = el("p", "serif", s), sp = mots(para, sc.texte); ajuste(para, sc.taille || 84, 50, 900);
+    return { d: Math.max(finMonte(sp, 0.2) + 0.9, lecture(sp.length) + 0.3), jouer(t) { monte(sp, t, 0.2); } };
+  },
+  bulle(sc, s) {
+    const boite = el("div", "boite", s), cit = el("p", "citation serif", boite), tp = tape(cit, sc.texte);
+    ajuste(cit, 74, 46, 560);
+    const leg = sc.legende ? el("p", "legende", s) : null; if (leg) leg.textContent = typo(sc.legende);
+    const tFin = 0.7 + tp.n / 28, tLeg = tFin + 0.15;
+    return { d: leg ? tLeg + 0.85 + nbMots(sc.legende) / RYTHME.legende : tFin + 1.7, jouer(t) {
+      boite.style.opacity = p(t, 0.1, 0.25);
+      boite.style.transform = `scale(${0.86 + 0.14 * p(t, 0.1, 0.6, E.back)})`;
+      const fini = tp.poser((t - 0.7) / (tFin - 0.7));
+      const visible = t > 0.6 && (!fini || Math.floor((t - tFin) / 0.45) % 2 === 0);
+      tp.a.style.boxShadow = visible ? `7px 0 0 var(--carte), 12px 0 0 ${TERRA}` : "none";
+      if (leg) apparait(leg, t, tLeg);
+    } };
+  },
+  dialogue(sc, s) {
+    let t0 = 0.2;
+    const reps = sc.repliques.map((r) => {
+      const b = el("div", "rep serif " + (r.qui === "moi" ? "moi" : "lui"), s), tp = tape(b, r.texte);
+      return { b, tp };
+    });
+    const corps = sc.repliques.length > 3 ? 42 : 48; reps.forEach((r) => (r.b.style.fontSize = corps + "px"));
+    reps.forEach((r) => { r.s = t0; r.f = t0 + 0.35 + r.tp.n / 34; t0 = r.f + 0.45; });
+    const leg = sc.legende ? el("p", "legende", s) : null; if (leg) leg.textContent = typo(sc.legende);
+    return { d: leg ? t0 + 0.7 + nbMots(sc.legende) / RYTHME.legende : t0 + 1.1, jouer(t) {
+      reps.forEach((r) => {
+        r.b.style.opacity = p(t, r.s, 0.25);
+        r.b.style.transform = `scale(${0.8 + 0.2 * p(t, r.s, 0.5, E.back)})`;
+        r.tp.poser((t - r.s - 0.35) / (r.f - r.s - 0.35));
+      });
+      if (leg) apparait(leg, t, t0);
+    } };
+  },
+  etiquettes(sc, s) {
+    const h2 = el("h2", "serif", s), titre = mots(h2, sc.titre); ajuste(h2, 66, 46, 160);
+    const n = sc.items.length, haut = n > 4 ? 100 : 120, corps = n > 4 ? 50 : 60;
+    const pastilles = sc.items.map((it) => { const d = el("div", "pastille", s); d.textContent = typo(it); d.style.cssText = `height:${haut}px;font-size:${corps}px;margin-bottom:${n > 4 ? 22 : 28}px`; return d; });
+    pastilles.forEach((d) => { let c = corps; while (c > 30 && d.scrollWidth > 888) { c -= 2; d.style.fontSize = c + "px"; } });
+    const chuteEl = sc.chute ? el("p", "chute serif", s) : null, chute = chuteEl ? mots(chuteEl, sc.chute) : null; if (chuteEl) ajuste(chuteEl, 56, 40, 200);
+    const PAS = 0.5, tChute = 0.85 + (n - 1) * PAS + 0.95;
+    return { d: chute ? tChute + lecture(chute.length) + 1.0 : tChute + 0.8, jouer(t) {
+      monte(titre, t, 0.1, 0.06);
+      pastilles.forEach((d, i) => { const a = 0.85 + i * PAS; d.style.opacity = p(t, a, 0.25); d.style.transform = `translateX(${(1 - p(t, a, 0.6)) * -46}px) scale(${0.72 + 0.28 * p(t, a, 0.6, E.back)})`; });
+      if (chute) monte(chute, t, tChute, 0.06);
+    } };
+  },
+  // un haut, des bas, et ce qui remonte : des points qui partent des bas et s'entassent sur le haut
+  organigramme(sc, s) {
+    const h2 = el("h2", "serif", s), titre = mots(h2, sc.titre); ajuste(h2, 68, 46, 160);
+    const svg = svgEl("svg", { viewBox: "0 0 888 620", width: 888, height: 620 }, s);
+    const gL = svgEl("g", { fill: "none", "stroke-width": 3.5, "stroke-linecap": "round", style: "stroke:var(--encre)" }, svg), gP = svgEl("g", {}, svg), gN = svgEl("g", {}, svg);
+    const chuteEl = sc.chute ? el("p", "chute serif", s) : null, chute = chuteEl ? mots(chuteEl, sc.chute) : null; if (chuteEl) ajuste(chuteEl, 52, 38, 190);
+    const bas = sc.bas, n = bas.length, lw = Math.min(204, (888 - (n - 1) * 24) / n);
+    const XS = bas.map((_, i) => (n === 1 ? 444 : lw / 2 + (i * (888 - lw)) / (n - 1)));
+    const CH = { x: 444, y: 190, w: 340, h: 108 }, BUS = 400, HAUT = 500, hh = 104, mid = (n - 1) / 2;
+    const liens = [
+      { d: `M444 ${CH.y + CH.h / 2} V${BUS}`, a: 1.0 }, { d: `M444 ${BUS} H${XS[0]}`, a: 1.3 }, { d: `M444 ${BUS} H${XS[n - 1]}`, a: 1.3 },
+      ...XS.map((x, i) => ({ d: `M${x} ${BUS} V${HAUT}`, a: 1.65 + Math.abs(i - mid) * 0.12 })),
+    ].map((l) => { const e = svgEl("path", { d: l.d }, gL), len = e.getTotalLength() || 1; e.style.strokeDasharray = len; return { ...l, e, len }; });
+    const noeud = (x, y, w, h, label, plein) => {
+      const g = svgEl("g", {}, gN), L = typo(label), fs = Math.min(plein ? 37 : 28, Math.floor((w - 28) / (L.length * 0.56)));
+      svgEl("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: 18, style: plein ? "fill:var(--plein)" : "fill:var(--carte);stroke:var(--bord);stroke-width:1.5" }, g);
+      svgEl("text", { x: 0, y: fs * 0.35, "text-anchor": "middle", "font-family": "DM Sans", "font-weight": 500, "font-size": fs, style: plein ? "fill:var(--plein-texte)" : "fill:var(--encre)" }, g).textContent = L;
+      return { g, x, y };
+    };
+    const chef = noeud(CH.x, CH.y, CH.w, CH.h, sc.haut, true), services = bas.map((b, i) => noeud(XS[i], HAUT + hh / 2, lw, hh, b, false));
+    const N = sc.remontee === undefined ? 12 : sc.remontee, places = [];
+    [5, 4, 3, 2, 1].forEach((k, r) => { for (let j = 0; j < k; j++) places.push([444 + (j - (k - 1) / 2) * 37, CH.y - CH.h / 2 - 26 - r * 32]); });
+    const ordre = [...XS.keys()].filter((i) => i % 2 === 0).concat([...XS.keys()].filter((i) => i % 2 === 1));
+    const tPts = chute ? 2.75 + 0.3 + chute.length / 11 : 2.6;
+    const points = Array.from({ length: Math.min(N, places.length) }, (_, k) => {
+      const x = XS[ordre[k % n]];
+      return { e: svgEl("circle", { r: 15, fill: TERRA, opacity: 0 }, gP), a: tPts + k * 0.24, pts: [[x, HAUT + hh / 2], [x, BUS], [444, BUS], [444, CH.y], places[k]] };
+    });
+    const sur = (pts, u) => {
+      const seg = []; let L = 0;
+      for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]); seg.push(l); L += l; }
+      let d = u * L;
+      for (let i = 0; i < seg.length; i++) {
+        if (d <= seg[i] || i === seg.length - 1) { const k = seg[i] ? clamp(d / seg[i]) : 0; return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k]; }
+        d -= seg[i];
+      }
+    };
+    const fin = points.length ? tPts + (points.length - 1) * 0.24 + 1.5 + 0.95 : Math.max(3.4, 2.75 + (chute ? lecture(chute.length) : 0) + 0.6);
+    return { d: fin, jouer(t) {
+      monte(titre, t, 0.1, 0.06);
+      const pop = (nd, a) => { nd.g.setAttribute("transform", `translate(${nd.x} ${nd.y}) scale(${0.7 + 0.3 * p(t, a, 0.55, E.back)})`); nd.g.setAttribute("opacity", p(t, a, 0.3)); };
+      pop(chef, 0.6);
+      liens.forEach((l) => { l.e.style.strokeDashoffset = l.len * (1 - p(t, l.a, 0.5, E.io)); l.e.style.opacity = t > l.a ? 1 : 0; });
+      services.forEach((nd, i) => pop(nd, 1.95 + Math.abs(i - mid) * 0.14));
+      if (chute) monte(chute, t, 2.75, 0.05);
+      points.forEach((pt) => { const [x, y] = sur(pt.pts, p(t, pt.a, 1.5, E.io)); pt.e.setAttribute("cx", x); pt.e.setAttribute("cy", y); pt.e.setAttribute("opacity", t >= pt.a ? 1 : 0); });
+    } };
+  },
+  // un grand chiffre qui compte, son libellé, un contexte facultatif
+  chiffre(sc, s) {
+    const avant = sc.avant ? el("p", "avant serif", s) : null; if (avant) avant.textContent = typo(sc.avant);
+    const grand = el("div", "grand serif", s), lab = el("p", "label serif", s), labM = mots(lab, sc.label);
+    const m = String(sc.valeur).match(/^(\D*)(\d+)(.*)$/), cible = m ? parseInt(m[2], 10) : null;
+    grand.textContent = String(sc.valeur); ajuste(grand, 320, 140, 400); ajuste(lab, 64, 42, 240);
+    const ctx = sc.contexte ? el("p", "contexte", s) : null; if (ctx) ctx.textContent = typo(sc.contexte);
+    const n = nbMots(sc.label) + (sc.contexte ? nbMots(sc.contexte) : 0);
+    return { d: Math.max(3.4, 1.3 + lecture(n) + 0.5), jouer(t) {
+      if (avant) apparait(avant, t, 0.1);
+      grand.style.opacity = p(t, 0.25, 0.3);
+      grand.style.transform = `translateY(${(1 - p(t, 0.25, 0.7)) * 40}px)`;
+      grand.textContent = m ? m[1] + Math.round(cible * p(t, 0.3, 1.2, E.out)) + m[3] : String(sc.valeur);
+      monte(labM, t, 1.15, 0.06);
+      if (ctx) apparait(ctx, t, 1.9);
+    } };
+  },
+  // la dernière image : le décor s'inverse, la phrase qui reste, la signature (jamais de logo)
+  chute(sc, s, ctx) {
+    s.classList.add("chute-finale"); poser(s, ctx.inverse);
+    const cit = el("p", "citation serif", s), sp = mots(cit, sc.texte); ajuste(cit, 104, 56, 620);
+    const trait = el("div", "trait", s);
+    const sig = sc.signature === false ? null : sc.signature || ctx.signature;
+    const nom = sig ? el("p", "nom", s) : null; if (nom) nom.textContent = sig;
+    const fin = finMonte(sp, 0.55, 0.1, 0.85), tTrait = fin - 0.05, tNom = tTrait + 0.35;
+    return { voile: true, d: Math.max(tNom + 2.4, 0.55 + sp.length / 3 + 1.5), jouer(t) {
+      monte(sp, t, 0.55, 0.1, 0.85);
+      trait.style.width = p(t, tTrait, 0.7) * 120 + "px";
+      if (nom) apparait(nom, t, tNom);
+    } };
+  },
+};
+
+// ---------- montage ----------
+let ETAT = null;
+window.demarrer = async (sc, format = "4x5") => {
+  const H = format === "9x16" ? 1920 : PH;
+  for (const e of [document.documentElement, document.body]) { e.style.width = W + "px"; e.style.height = H + "px"; }
+  await Promise.all(['400 10px "DM Serif Display"', '500 10px "DM Sans"', '700 10px "DM Sans"'].map((f) => document.fonts.load(f)));
+  const fond = FONDS[sc.fond || "carte"]; if (!fond) throw new Error(`fond inconnu : « ${sc.fond} » (fonds : ${Object.keys(FONDS).join(", ")})`);
+  const inverse = fond.theme === "clair" ? "sombre" : "clair";
+  poser(document.body, fond.theme);
+  const vivre = fond.monter(document.getElementById("fond"), H, sc);
+  const voile = document.getElementById("voile"); voile.style.background = THEMES[inverse].base;
+  const haut = (H - PH) / 2, p1 = document.getElementById("plateau"), p2 = document.getElementById("plateau2");
+  p1.style.top = p2.style.top = haut + "px";
+  const types = { ...SCENES, ...(window.SCENES_SUR_MESURE || {}) }, ctx = { theme: fond.theme, inverse, signature: sc.signature, format, H };
+  if (!Array.isArray(sc.scenes) || !sc.scenes.length) throw new Error("le scénario n'a aucune scène");
+  let a = 0;
+  const scenes = sc.scenes.map((def, i) => {
+    const faire = types[def.type]; if (!faire) throw new Error(`scène ${i + 1} : type inconnu « ${def.type} » (types : ${Object.keys(types).join(", ")})`);
+    const s = el("section", "scene " + def.type, def.type === "chute" ? p2 : p1);
+    const jeu = faire(def, s, ctx), d = def.duree || jeu.d + RYTHME.pause, sc1 = { ...jeu, s, a, d, type: def.type };
+    a += d; return sc1;
+  });
+  ETAT = { scenes, vivre, voile, duree: a };
+  window.image(0);
+  return { duree: a, scenes: scenes.map((x) => ({ type: x.type, debut: +x.a.toFixed(2), duree: +x.d.toFixed(2) })), reperes: scenes.flatMap((x) => [x.a + x.d * 0.5, x.a + x.d - 0.45]) };
+};
+window.image = (T) => {
+  const { scenes, vivre, voile } = ETAT;
+  vivre(T);
+  let r = 0;
+  scenes.forEach((x, i) => {
+    const t = T - x.a, dernier = i === scenes.length - 1;
+    if (t < 0 || (!dernier && t > x.d)) { x.s.style.opacity = 0; return; }
+    const entree = x.voile ? 1 : p(t, 0, 0.3), sortie = dernier ? 0 : p(t, x.d - 0.38, 0.38, E.io);
+    x.s.style.opacity = entree * (1 - sortie);
+    x.s.style.transform = `translateY(${-sortie * 22}px) scale(${1 + 0.016 * clamp(t / x.d)})`;
+    if (x.voile) r = p(t, 0, 0.75, E.io) * 1500 * (1 - sortie);
+    x.jouer(t);
+  });
+  voile.style.clipPath = `circle(${r}px at 50% 50%)`;
+  return T;
+};
+// la boîte à outils offerte aux scènes sur mesure (fichier <scénario>.scenes.js)
+window.M = { p, E, clamp, el, svgEl, mots, monte, finMonte, apparait, ajuste, tape, typo, nbMots, lecture, TERRA };
+})();
+</script>
+</body></html>
