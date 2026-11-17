@@ -25,7 +25,7 @@ Polices : `../tools/fonts/` (DM Serif Display, DM Sans 500 et 700). Couleurs : `
 
 ```sh
 bun "/Users/lecerf/Projets Claude AI/latitude-ui/brand/motion/rendre.ts" <scenario.md> \
-  --sortie "<dossier du Drive>" --nom "<Titre>" [--formats 4x5,9x16] [--planche]
+  --sortie "<dossier du Drive>" --nom "<Titre>" [--formats 4x5,9x16] [--planche | --miniatures]
 ```
 
 - `--planche` ne sort que la planche d'images repères (deux par scène : le milieu et la fin), en
@@ -34,6 +34,9 @@ bun "/Users/lecerf/Projets Claude AI/latitude-ui/brand/motion/rendre.ts" <scenar
   Shorts). En 9:16 la composition reste la même, centrée, et le fond remplit le cadre.
 - Sorties : avec `--planche`, seulement `<nom>-planche.png` (à poser dans un dossier temporaire, pas sur
   le Drive) ; sans, `<nom>-4x5.mp4` et `<nom>-9x16.mp4`. H.264, 30 images par seconde, sans son.
+- Miniatures : chaque format sort aussi `<nom>-<format>-miniature.jpg` (LinkedIn exige une miniature pour
+  une vidéo). C'est la fin de la scène 1 ; `"miniature": N` dans le scénario prend la fin de la scène N.
+  `--miniatures` ne sort qu'elles, sans refaire les MP4 (vidéo déjà rendue).
 - Il faut le Mac : Chrome, ffmpeg (`brew install ffmpeg`) et bun. Un seul rendu à la fois.
 
 ## Le scénario

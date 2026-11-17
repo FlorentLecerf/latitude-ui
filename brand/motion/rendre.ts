@@ -1,12 +1,16 @@
 #!/usr/bin/env bun
 // Rend un scénario de vidéo animée Latitude en MP4, avec le Chrome installé et ffmpeg.
 //
-//   bun rendre.ts <scenario.md|scenario.json> --sortie <dossier> [--nom <base>] [--formats 4x5,9x16] [--planche]
+//   bun rendre.ts <scenario.md|scenario.json> --sortie <dossier> [--nom <base>] [--formats 4x5,9x16] [--planche | --miniatures]
 //
 //   --sortie   dossier où poser les fichiers (obligatoire ; jamais un dépôt git : un MP4 va sur le Drive)
 //   --nom      nom de base des fichiers (défaut : celui du scénario)
 //   --formats  4x5 (1080×1350 : LinkedIn, fil Instagram) et/ou 9x16 (1080×1920 : Reels, TikTok, Shorts)
 //   --planche  ne sort que la planche d'images repères (deux par scène), pour vérifier avant le rendu
+//
+// Chaque format sort aussi sa miniature « <nom>-<format>-miniature.jpg » (LinkedIn l'exige pour une vidéo) :
+// la fin de la scène 1 (l'accroche entière à l'écran), ou de la scène « "miniature": N » du scénario.
+//   --miniatures  ne sort que les miniatures, sans refaire les vidéos (pour une vidéo déjà rendue)
 //
 // Le scénario est un JSON, seul ou dans le premier bloc ```json d'un fichier Markdown.
 // Un fichier « <scénario>.scenes.js » posé à côté ajoute des scènes sur mesure (voir README.md).
@@ -113,13 +117,14 @@ if (import.meta.main) {
   const opt = (nom: string) => { const i = args.indexOf("--" + nom); return i >= 0 ? args[i + 1] : undefined; };
   const fichier = args.find((a, i) => !a.startsWith("--") && !(args[i - 1] || "").match(/^--(sortie|nom|formats)$/));
   if (!fichier || !opt("sortie")) {
-    console.error("usage : bun rendre.ts <scenario.md|json> --sortie <dossier> [--nom <base>] [--formats 4x5,9x16] [--planche]");
+    console.error("usage : bun rendre.ts <scenario.md|json> --sortie <dossier> [--nom <base>] [--formats 4x5,9x16] [--planche | --miniatures]");
     process.exit(2);
   }
   const chemin = resolve(fichier), sortie = resolve(opt("sortie")!.replace(/^~/, process.env.HOME || "~"));
   const nom = opt("nom") || basename(chemin, extname(chemin));
   const formats = (opt("formats") || "4x5,9x16").split(",").map((f) => f.trim());
   const seulementPlanche = args.includes("--planche");
+  const seulementMiniatures = args.includes("--miniatures");
   const debut = Date.now();
   let c: Page | undefined;
   try {
@@ -141,6 +146,12 @@ if (import.meta.main) {
           break;
         }
       }
+      const n1 = Number(scenario.miniature ?? 1);
+      if (!Number.isInteger(n1) || n1 < 1 || n1 > info.scenes.length) throw new Error(`« miniature » doit être un numéro de scène entre 1 et ${info.scenes.length}`);
+      const jpg = join(sortie, `${nom}-${format}-miniature.jpg`);
+      await Bun.write(jpg, await image(c, info.reperes[2 * n1 - 1]));
+      console.log(`miniature ${format} (scène ${n1}) : ${jpg}`);
+      if (seulementMiniatures) continue;
       const mp4 = join(sortie, `${nom}-${format}.mp4`);
       const f = ffmpeg(["-framerate", String(FPS), "-i", "-", "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4]);
       const n = Math.round(info.duree * FPS);
