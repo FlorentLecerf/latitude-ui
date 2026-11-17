@@ -86,6 +86,11 @@ arrondi).
       rendu depuis le master, hébergé sur latitude-web. Brief : QG `editorial/signature-email-brief.md`.
 - [x] Favicon CRM distinct (13/07/2026) — master `crm-mark.svg` + exports déposés dans
       `latitude-crm/src/app/` (favicon.ico, icon.png, apple-icon.png).
+- [x] Vidéos animées (17/11/2026) — `brand/motion/` : moteur de motion design (page HTML capturée image
+      par image par Chrome, montée par ffmpeg), mode d'emploi dans son README. **Piloté depuis le QG** : la
+      commande `/video-animee` de latitude-marque écrit le scénario et lance le rendu elle-même ; il n'y a rien à
+      faire ici pour produire une vidéo. Avant de toucher `motion/moteur.html`, lire son README : le style
+      « performance » et le rythme y sont réglés sur les retours de Florent.
 - [ ] Sous-dossiers Drive `Social/` + `Signature-Email/` — à créer (rangement Drive).
 - [ ] Template de rendu + pipeline d'export généralisé (depuis les masters → formats du registre) —
       premier exemplaire : `signature-email/render-logo.html`.

@@ -68,7 +68,7 @@
   #lame { position: absolute; inset: 0; z-index: 2; background: var(--terra); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
   #hud { position: absolute; left: 96px; width: 888px; z-index: 4; display: none; gap: 8px; }
   .perf #hud { display: flex; }
-  #hud i { flex: 1; height: 5px; background: var(--bord); overflow: hidden; }
+  #hud i { flex: 1; height: 6px; background: var(--bord); overflow: hidden; }
   #hud b { display: block; width: 0; height: 100%; background: var(--terra); }
   .perf .caps { font-weight: 800; }
   .perf .w.c { margin-left: -.13em; margin-right: -.13em; }
@@ -210,6 +210,7 @@ const poser = (e, nom) => { for (const k in THEMES[nom]) if (k !== "base") e.sty
 // ---------- motifs « performance » : la mesure, et ce qui monte ----------
 const trait = (svg, x1, y1, x2, y2, stroke, op, w = 1) => svgEl("line", { x1, y1, x2, y2, stroke, "stroke-opacity": op, "stroke-width": w }, svg);
 const pose = (e, a) => { for (const k in a) e.setAttribute(k, a[k]); };
+const brise = (pts) => "M" + pts.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" L");
 // quadrillage fin, un trait sur quatre plus marqué
 function grille(svg, H, pas, stroke, op) {
   for (let x = pas, i = 1; x < W; x += pas, i++) trait(svg, x, 0, x, H, stroke, i % 4 === 0 ? op * 1.9 : op);
@@ -221,80 +222,180 @@ function regle(svg, H, stroke, op) {
   for (let x = 36, i = 0; x < W - 10; x += 18, i++) trait(svg, x, H, x, H - (i % 5 === 0 ? 30 : 15), stroke, op, 2);
 }
 const lueur = (f, css) => { el("div", "", f).style.cssText = "position:absolute;inset:0;background:" + css; };
-// les deux tons d'un fond performance : fd = le fond, tr = la couleur des traits, k = dosage des opacités, lu = force de la lueur
-const TONS = { sombre: { fd: "#262523", tr: "#FBF8F4", k: 1, lu: 0.2 }, clair: { fd: "#F5F0EB", tr: "#3A3A3A", k: 1.25, lu: 0.07 } };
+// le socle commun : quadrillage et règles graduées
+const socle = (f, H, c) => { const s = toile(f, H); grille(s, H, 54, c.tr, 0.04 * c.k); regle(s, H, c.tr, 0.42 * c.k); return s; };
+// le repère qui avance : un anneau terracotta et son halo qui bat
+function repere(s, c) {
+  const halo = svgEl("circle", { r: 32, fill: TERRA, opacity: 0.24 }, s), pointe = svgEl("circle", { r: 12, fill: c.fd, stroke: TERRA, "stroke-width": 7 }, s);
+  return (x, y, T) => { pose(pointe, { cx: x, cy: y }); pose(halo, { cx: x, cy: y, r: 30 + 8 * Math.sin(T * 3) }); };
+}
+// l'objectif, visible dès la première image : un anneau en pointillé là où le décor doit arriver
+const objectif = (s, x, y) => svgEl("circle", { cx: x, cy: y, r: 24, fill: "none", stroke: TERRA, "stroke-width": 3, "stroke-dasharray": "5 6" }, s);
+// les deux tons d'un fond performance : fd = le fond, tr = la couleur des traits, k = dosage des opacités,
+// lu = force de la lueur terracotta (franche sur sombre, à peine posée sur clair : sinon le crème vire au pêche), carte = fond d'une tuile
+const TONS = { sombre: { fd: "#262523", tr: "#FBF8F4", k: 1, lu: 0.3, carte: "#3B3835" }, clair: { fd: "#F5F0EB", tr: "#3A3A3A", k: 1.25, lu: 0.1, carte: "#FFFFFF" } };
 // hauteur de la bande réservée au décor, sous les textes
 const BANDE = 240;
 
 // ---------- fonds : chacun pose son décor et rend la fonction qui le fait vivre ----------
-// monter(f, H, sc, c) : c = { fd, tr, k, sol } (ton du fond et ligne de base de la bande, fonds performance seulement)
+// monter(f, H, sc, c) : c = { fd, tr, k, lu, carte, sol } (ton du fond et ligne de base de la bande, fonds performance seulement)
 // vivre(T, D) : T = temps de la vidéo, D = moment où la chute arrive (le décor a fini de monter à ce moment-là)
 const FONDS = {
   // ===== style « performance » (17/11/2026) : des décors qui mesurent et qui montent =====
-  // Le décor vit dans une bande au bas du cadre, sous les textes (bas: BANDE) : il ne passe jamais derrière eux.
-  // Chaque fond existe en deux tons : le sien, et l'autre avec "ton": "clair" ou "sombre" dans le scénario.
+  // Le décor vit dans une bande au bas du cadre, sous les textes (bas: BANDE), et monte dans la marge droite :
+  // il ne passe jamais derrière une phrase. L'objectif est tracé en pointillé dès la première image, le réalisé
+  // le rattrape pendant la vidéo. Chaque fond existe en deux tons : le sien, et l'autre avec "ton" dans le scénario.
 
   // la courbe : deux séries qui grimpent, le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle décolle à droite
   courbe: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
     const G = 14, N = 27;
-    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
-    const s = toile(f, H); grille(s, H, 54, c.tr, 0.03 * c.k); regle(s, H, c.tr, 0.3 * c.k);
-    const X = (i) => -G + (i / (N - 1)) * (W + 2 * G);
+    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 54%)`);
+    const s = socle(f, H, c), X = (i) => -G + (i / (N - 1)) * (W + 2 * G);
     const serie = (b, retard, bas, amp) => Array.from({ length: N }, (_, i) => {
       const u = Math.max(0, i / (N - 1) - retard);
       return [X(i), c.sol + bas - PH * (0.06 * u + 0.5 * Math.pow(u, 5.5)) - (b(i * 0.9, 3) - 0.5) * PH * amp * (0.45 + u)];
     });
     const dir = serie(bruit(31), 0, 0, 0.05), ent = serie(bruit(77), 0.07, 30, 0.035);
     ent.forEach((q, i) => { q[1] = Math.max(q[1], dir[i][1] + 24); });
-    const chemin = (pts) => "M" + pts.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" L");
+    const yEn = (x) => { const u = clamp((x + G) / (W + 2 * G)) * (N - 1), i = Math.min(N - 2, Math.floor(u)); return dir[i][1] + (dir[i + 1][1] - dir[i][1]) * (u - i); };
+    const xFin = -G + 0.96 * (W + 2 * G);
+    svgEl("path", { d: brise(dir), fill: "none", stroke: c.tr, "stroke-opacity": 0.36 * c.k, "stroke-width": 2.5, "stroke-dasharray": "2 10", "stroke-linecap": "round" }, s);
+    objectif(s, xFin, yEn(xFin));
     const defs = svgEl("defs", {}, s), grad = svgEl("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-    svgEl("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.3 }, grad); svgEl("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, grad);
+    svgEl("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.44 }, grad); svgEl("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, grad);
     const masque = svgEl("rect", { x: 0, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "avance" }, defs));
     const g = svgEl("g", { "clip-path": "url(#avance)" }, s);
-    svgEl("path", { d: chemin(dir) + ` L${W + G} ${H} L${-G} ${H} Z`, fill: "url(#aire)" }, g);
-    svgEl("path", { d: chemin(ent), fill: "none", stroke: c.tr, "stroke-opacity": 0.5, "stroke-width": 3, "stroke-linejoin": "round" }, g);
-    svgEl("path", { d: chemin(dir), fill: "none", stroke: TERRA, "stroke-width": 5, "stroke-linejoin": "round" }, g);
-    dir.forEach((q) => svgEl("circle", { cx: q[0], cy: q[1], r: 5.5, fill: c.fd, stroke: TERRA, "stroke-width": 3 }, g));
-    const visee = svgEl("line", { stroke: c.tr, "stroke-opacity": 0.36, "stroke-width": 1.5, "stroke-dasharray": "5 8" }, s);
-    const halo = svgEl("circle", { r: 30, fill: TERRA, opacity: 0.22 }, s), pointe = svgEl("circle", { r: 11, fill: c.fd, stroke: TERRA, "stroke-width": 6 }, s);
-    const yEn = (x) => { const u = clamp((x + G) / (W + 2 * G)) * (N - 1), i = Math.min(N - 2, Math.floor(u)); return dir[i][1] + (dir[i + 1][1] - dir[i][1]) * (u - i); };
+    svgEl("path", { d: brise(dir) + ` L${W + G} ${H} L${-G} ${H} Z`, fill: "url(#aire)" }, g);
+    svgEl("path", { d: brise(ent), fill: "none", stroke: c.tr, "stroke-opacity": 0.6, "stroke-width": 3.5, "stroke-linejoin": "round" }, g);
+    svgEl("path", { d: brise(dir), fill: "none", stroke: TERRA, "stroke-width": 6.5, "stroke-linejoin": "round" }, g);
+    dir.forEach((q) => svgEl("circle", { cx: q[0], cy: q[1], r: 6.5, fill: c.fd, stroke: TERRA, "stroke-width": 3.5 }, g));
+    const visee = svgEl("line", { stroke: c.tr, "stroke-opacity": 0.4, "stroke-width": 1.5, "stroke-dasharray": "5 8" }, s), ici = repere(s, c);
     return (T, D) => {
-      const x = -G + (0.1 + 0.86 * clamp(T / D)) * (W + 2 * G), y = yEn(x);
-      masque.setAttribute("width", Math.max(0, x));
-      pose(pointe, { cx: x, cy: y }); pose(halo, { cx: x, cy: y, r: 27 + 7 * Math.sin(T * 3) });
-      pose(visee, { x1: x, y1: y + 24, x2: x, y2: H });
+      const x = -G + (0.12 + 0.84 * clamp(T / D)) * (W + 2 * G), y = yEn(x);
+      masque.setAttribute("width", Math.max(0, x)); ici(x, y, T);
+      pose(visee, { x1: x, y1: y + 26, x2: x, y2: H });
     };
   } },
-  // les barres : un histogramme qui se construit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres
+  // les barres : un histogramme qui se remplit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres
   barres: { theme: "clair", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
-    lueur(f, `radial-gradient(circle at 100% 44%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
-    const s = toile(f, H); grille(s, H, 54, c.tr, 0.03 * c.k); regle(s, H, c.tr, 0.3 * c.k);
-    const n = 15, pas = (W - 60) / n, l = pas * 0.62, b = bruit(5);
+    lueur(f, `radial-gradient(circle at 100% 44%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
+    const s = socle(f, H, c), n = 15, pas = (W - 60) / n, l = pas * 0.64, b = bruit(5);
     const barres = Array.from({ length: n }, (_, i) => {
-      const u = i / (n - 1), fin = i === n - 1, h = fin ? PH * 0.44 : (30 + 140 * Math.pow(u, 1.5)) * (0.84 + 0.32 * b(i * 1.7, 2));
-      return { e: svgEl("rect", { x: 30 + i * pas + (pas - l) / 2, y: c.sol, width: l, height: 0, fill: fin ? TERRA : c.tr, opacity: fin ? 1 : (0.13 + 0.15 * u) * c.k }, s), h, u };
+      const u = i / (n - 1), fin = i === n - 1, h = fin ? PH * 0.46 : (34 + 140 * Math.pow(u, 1.5)) * (0.84 + 0.3 * b(i * 1.7, 2)), x = 30 + i * pas + (pas - l) / 2;
+      svgEl("rect", { x, y: c.sol - h, width: l, height: h, fill: "none", stroke: fin ? TERRA : c.tr, "stroke-opacity": fin ? 1 : 0.34 * c.k, "stroke-width": fin ? 3 : 1.5, "stroke-dasharray": fin ? "6 7" : "none" }, s);
+      return { e: svgEl("rect", { x, y: c.sol, width: l, height: 0, fill: fin ? TERRA : c.tr, opacity: fin ? 1 : (0.2 + 0.24 * u) * c.k }, s), h, u };
     });
-    trait(s, 0, c.sol, W, c.sol, c.tr, 0.5 * c.k, 2);
+    trait(s, 0, c.sol, W, c.sol, c.tr, 0.6 * c.k, 2.5);
     return (T, D) => barres.forEach((q) => { const k = p(T, 0.1 + (q.u - 0.14) * D * 0.98, 0.9, E.out5); pose(q.e, { y: c.sol - q.h * k, height: q.h * k }); });
   } },
-  // le cap : un grand cadran gradué dont on voit l'arc au bas du cadre ; il tourne, l'aiguille terracotta cherche puis tient sa direction
+  // le cap : l'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée
   cap: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
-    const cx = W / 2, cy = c.sol + 376, R = 560;
-    lueur(f, `radial-gradient(circle at ${cx}px ${cy - R * 0.6}px,rgba(224,120,85,${c.lu * 1.1}),rgba(224,120,85,0) 40%)`);
-    const s = toile(f, H); grille(s, H, 54, c.tr, 0.025 * c.k); regle(s, H, c.tr, 0.3 * c.k);
-    const cadran = svgEl("g", {}, s);
+    const cx = W / 2, cy = c.sol + 376, R = 560, CAP = 12, rad = (a) => ((a - 90) * Math.PI) / 180;
+    lueur(f, `radial-gradient(circle at ${cx}px ${cy - R * 0.6}px,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 42%)`);
+    const s = socle(f, H, c), cadran = svgEl("g", {}, s);
     for (let a = 0; a < 360; a += 2) {
-      const long = a % 30 === 0, moyen = a % 10 === 0, r2 = R - (long ? 58 : moyen ? 36 : 20), co = Math.cos((a * Math.PI) / 180), si = Math.sin((a * Math.PI) / 180);
-      trait(cadran, cx + R * co, cy + R * si, cx + r2 * co, cy + r2 * si, c.tr, (long ? 0.62 : moyen ? 0.4 : 0.2) * c.k, long ? 4 : 2);
+      const long = a % 30 === 0, moyen = a % 10 === 0, r2 = R - (long ? 64 : moyen ? 40 : 22), co = Math.cos((a * Math.PI) / 180), si = Math.sin((a * Math.PI) / 180);
+      trait(cadran, cx + R * co, cy + R * si, cx + r2 * co, cy + r2 * si, c.tr, (long ? 0.75 : moyen ? 0.5 : 0.26) * c.k, long ? 5 : 2.5);
     }
-    svgEl("circle", { cx, cy, r: R + 1, fill: "none", stroke: c.tr, "stroke-opacity": 0.34 * c.k, "stroke-width": 2 }, s);
-    svgEl("circle", { cx, cy, r: R - 92, fill: "none", stroke: c.tr, "stroke-opacity": 0.12 * c.k, "stroke-width": 1.5 }, s);
+    svgEl("circle", { cx, cy, r: R + 1, fill: "none", stroke: c.tr, "stroke-opacity": 0.42 * c.k, "stroke-width": 2.5 }, s);
+    svgEl("circle", { cx, cy, r: R - 100, fill: "none", stroke: c.tr, "stroke-opacity": 0.14 * c.k, "stroke-width": 1.5 }, s);
+    // la zone visée : un segment terracotta sur le bord du cadran, là où l'aiguille finit par se poser
+    const arc = (a1, a2, r) => `M${cx + r * Math.cos(rad(a1))} ${cy + r * Math.sin(rad(a1))} A${r} ${r} 0 0 1 ${cx + r * Math.cos(rad(a2))} ${cy + r * Math.sin(rad(a2))}`;
+    svgEl("path", { d: arc(CAP - 5, CAP + 5, R - 6), fill: "none", stroke: TERRA, "stroke-width": 12 }, s);
     const aiguille = svgEl("g", {}, s);
-    svgEl("line", { x1: cx, y1: cy, x2: cx, y2: cy - R + 70, stroke: TERRA, "stroke-width": 7 }, aiguille);
-    svgEl("path", { d: `M${cx} ${cy - R + 14} L${cx - 24} ${cy - R + 78} L${cx + 24} ${cy - R + 78} Z`, fill: TERRA }, aiguille);
+    svgEl("line", { x1: cx, y1: cy, x2: cx, y2: cy - R + 84, stroke: TERRA, "stroke-width": 9 }, aiguille);
+    svgEl("path", { d: `M${cx} ${cy - R + 20} L${cx - 30} ${cy - R + 96} L${cx + 30} ${cy - R + 96} Z`, fill: TERRA }, aiguille);
     return (T) => {
       cadran.setAttribute("transform", `rotate(${-T * 1.1} ${cx} ${cy})`);
-      aiguille.setAttribute("transform", `rotate(${12 + 24 * Math.exp(-T * 0.4) * Math.cos(T * 1.9)} ${cx} ${cy})`);
+      aiguille.setAttribute("transform", `rotate(${CAP + 26 * Math.exp(-T * 0.4) * Math.cos(T * 1.9)} ${cx} ${cy})`);
+    };
+  } },
+  // le sommet : une crête dessinée comme un relevé, basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte
+  sommet: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+    lueur(f, `radial-gradient(circle at 96% 50%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
+    const s = socle(f, H, c);
+    const xs = [-14, 64, 142, 210, 296, 366, 452, 520, 608, 686, 762, 836, 896, 946, 988, 1030, 1062, W + 14];
+    const hs = [30, 84, 62, 122, 104, 78, 148, 118, 176, 124, 158, 192, 146, 256, 428, PH * 0.47, 470, 380];
+    const crete = xs.map((x, i) => [x, c.sol - hs[i]]), iS = 15, pied = ` L${W + 14} ${H} L-14 ${H} Z`;
+    // un second plan derrière, plus pâle
+    svgEl("path", { d: brise(xs.map((x, i) => [x - 46, c.sol - hs[i] * 0.72 - 26])) + pied, fill: c.tr, opacity: 0.05 * c.k }, s);
+    svgEl("path", { d: brise(crete) + pied, fill: c.fd }, s);
+    svgEl("path", { d: brise(crete) + pied, fill: c.tr, opacity: 0.08 * c.k }, s);
+    // les hachures du relevé, coupées par la crête
+    const defs = svgEl("defs", {}, s); svgEl("path", { d: brise(crete) + pied }, svgEl("clipPath", { id: "massif" }, defs));
+    const h = svgEl("g", { "clip-path": "url(#massif)" }, s);
+    for (let x = 6; x < W; x += 13) trait(h, x, c.sol - PH * 0.5, x, H, c.tr, 0.16 * c.k, 1.5);
+    // les arêtes : de chaque pointe, un trait qui redescend
+    crete.forEach((q, i) => { if ([1, 3, 6, 8, 11, iS].includes(i)) trait(s, q[0], q[1], q[0] + hs[i] * 0.3, c.sol, c.tr, 0.2 * c.k, 1.5); });
+    svgEl("path", { d: brise(crete), fill: "none", stroke: c.tr, "stroke-opacity": 0.62 * c.k, "stroke-width": 2.5, "stroke-linejoin": "round" }, s);
+    objectif(s, crete[iS][0], crete[iS][1]);
+    const voie = crete.slice(0, iS + 1), route = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 6.5, "stroke-linejoin": "round" }, s), L = route.getTotalLength();
+    route.style.strokeDasharray = L;
+    const [sx, sy] = crete[iS], fanion = svgEl("g", { opacity: 0 }, s);
+    svgEl("line", { x1: sx, y1: sy, x2: sx, y2: sy - 70, stroke: TERRA, "stroke-width": 5 }, fanion);
+    svgEl("path", { d: `M${sx} ${sy - 70} L${sx - 44} ${sy - 54} L${sx} ${sy - 38} Z`, fill: TERRA }, fanion);
+    const ici = repere(s, c);
+    return (T, D) => {
+      const k = 0.1 + 0.9 * clamp(T / D), [x, y] = sur(voie, k);
+      route.style.strokeDashoffset = L * (1 - k); ici(x, y, T);
+      fanion.setAttribute("opacity", p(T, D - 0.5, 0.4));
+    };
+  } },
+  // les paliers : des marches larges dans la bande, puis hautes et serrées dans la marge droite ; ils s'enchaînent de plus en plus vite
+  paliers: { theme: "clair", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
+    const s = socle(f, H, c), pts = [[-14, c.sol - 24]]; let x = -14, y = c.sol - 24;
+    for (let i = 0; i < 7; i++) { x += 139; pts.push([x, y]); y -= 24; pts.push([x, y]); }
+    for (let i = 0; i < 3; i++) { x += 36; pts.push([x, y]); y -= 124; pts.push([x, y]); }
+    pts.push([W + 14, y]);
+    const pied = ` L${W + 14} ${H} L-14 ${H} Z`, defs = svgEl("defs", {}, s);
+    svgEl("path", { d: brise(pts) + pied, fill: c.tr, opacity: 0.07 * c.k }, s);
+    svgEl("path", { d: brise(pts), fill: "none", stroke: c.tr, "stroke-opacity": 0.42 * c.k, "stroke-width": 2.5, "stroke-dasharray": "2 10", "stroke-linecap": "round" }, s);
+    objectif(s, pts[pts.length - 2][0], pts[pts.length - 2][1]);
+    const masque = svgEl("rect", { x: -14, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "gravi" }, defs));
+    svgEl("path", { d: brise(pts) + pied, fill: c.tr, opacity: 0.2 * c.k, "clip-path": "url(#gravi)" }, s);
+    const voie = pts.slice(0, pts.length - 1), fait = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 7 }, s), L = fait.getTotalLength();
+    fait.style.strokeDasharray = L;
+    const ici = repere(s, c);
+    return (T, D) => {
+      const k = 0.1 + 0.9 * clamp(T / D), [px, py] = sur(voie, k);
+      fait.style.strokeDashoffset = L * (1 - k); masque.setAttribute("width", Math.max(0, px + 14)); ici(px, py, T);
+    };
+  } },
+  // le tableau de bord : quatre tuiles d'indicateurs qui vivent pendant la vidéo (une tendance, un anneau, des barres, une flèche)
+  tableau: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+    lueur(f, `radial-gradient(circle at 50% ${c.sol - 70}px,rgba(224,120,85,${c.lu * 0.8}),rgba(224,120,85,0) 48%)`);
+    const s = socle(f, H, c), ecart = 24, w = (888 - 3 * ecart) / 4, h = 184, y0 = c.sol - h + 12, defs = svgEl("defs", {}, s);
+    const tuile = (i) => {
+      const x = 96 + i * (w + ecart);
+      svgEl("rect", { x, y: y0, width: w, height: h, rx: 10, fill: c.carte, stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 1.5 }, s);
+      svgEl("rect", { x: 20 + x, y: y0 + 20, width: 10, height: 10, fill: TERRA }, s);
+      svgEl("rect", { x: 40 + x, y: y0 + 21, width: [74, 56, 86, 64][i], height: 8, rx: 4, fill: c.tr, opacity: 0.3 * c.k }, s);
+      return { x: x + 20, y: y0 + 52, l: w - 40, ht: h - 72 }; // la zone de dessin de la tuile
+    };
+    // 1. une tendance qui se trace
+    const a = tuile(0), ba = bruit(3), tend = Array.from({ length: 9 }, (_, i) => [a.x + (i / 8) * a.l, a.y + a.ht - 8 - (i / 8) * (a.ht - 22) * (0.55 + 0.45 * (i / 8)) - (ba(i * 1.3, 2) - 0.5) * 20]);
+    const mA = svgEl("rect", { x: a.x - 8, y: y0, width: 0, height: h }, svgEl("clipPath", { id: "tendance" }, defs));
+    svgEl("path", { d: brise(tend), fill: "none", stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 2, "stroke-dasharray": "2 7", "stroke-linecap": "round" }, s);
+    svgEl("path", { d: brise(tend), fill: "none", stroke: TERRA, "stroke-width": 7, "stroke-linejoin": "round", "clip-path": "url(#tendance)" }, s);
+    // 2. un anneau qui se remplit
+    const b = tuile(1), r = 46, bx = b.x + b.l / 2, by = b.y + b.ht / 2 + 2, tour = 2 * Math.PI * r;
+    svgEl("circle", { cx: bx, cy: by, r, fill: "none", stroke: c.tr, "stroke-opacity": 0.2 * c.k, "stroke-width": 18 }, s);
+    const anneau = svgEl("circle", { cx: bx, cy: by, r, fill: "none", stroke: TERRA, "stroke-width": 18, "stroke-dasharray": tour, transform: `rotate(-90 ${bx} ${by})` }, s);
+    // 3. des barres qui montent
+    const d = tuile(2), nb = 6, lb = d.l / nb, bd = bruit(8);
+    const cols = Array.from({ length: nb }, (_, i) => ({ e: svgEl("rect", { x: d.x + i * lb + 4, y: d.y + d.ht, width: lb - 8, height: 0, fill: i === nb - 1 ? TERRA : c.tr, opacity: i === nb - 1 ? 1 : (0.24 + 0.08 * i) * c.k }, s), h: d.ht * (0.3 + 0.7 * Math.pow((i + 1) / nb, 1.4)) * (i === nb - 1 ? 1 : 0.84 + 0.2 * bd(i * 2.1, 2)), u: i / (nb - 1) }));
+    // 4. une flèche qui part vers le haut
+    const g = tuile(3), fx1 = g.x + 6, fy1 = g.y + g.ht - 4, fx2 = g.x + g.l - 14, fy2 = g.y + 14, Lf = Math.hypot(fx2 - fx1, fy2 - fy1);
+    trait(s, g.x, g.y + g.ht, g.x + g.l, g.y + g.ht, c.tr, 0.3 * c.k, 2);
+    const fleche = svgEl("line", { x1: fx1, y1: fy1, x2: fx2, y2: fy2, stroke: TERRA, "stroke-width": 11, "stroke-dasharray": Lf }, s);
+    const tete = svgEl("path", { d: `M${fx2 + 12} ${fy2 - 9} L${fx2 - 30} ${fy2 - 4} L${fx2 + 6} ${fy2 + 31} Z`, fill: TERRA, opacity: 0 }, s);
+    return (T, D) => {
+      const u = clamp(T / D);
+      mA.setAttribute("width", (a.l + 16) * (0.14 + 0.86 * u));
+      anneau.style.strokeDashoffset = tour * (1 - (0.12 + 0.66 * u));
+      cols.forEach((q) => { const k = p(T, (q.u - 0.2) * D * 0.9, 0.8, E.out5); pose(q.e, { y: d.y + d.ht - q.h * k, height: q.h * k }); });
+      const kf = p(T, D * 0.18, D * 0.72, E.io); fleche.style.strokeDashoffset = Lf * (1 - kf); tete.setAttribute("opacity", p(T, D * 0.86, 0.3));
     };
   } },
 

@@ -78,19 +78,28 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 Direction donnée par Florent le 17/11/2026, après avoir vu les premiers fonds : « ce n'est pas assez orienté
 performance […] c'est trop lisse ». Latitude fait travailler le dirigeant sur lui pour améliorer sa performance,
 donc celle de son entreprise : le décor **mesure** (quadrillage, règles graduées) et **monte** (une courbe, des
-barres, une aiguille qui tient son cap). Sans champ `fond`, le moteur prend `courbe`.
+barres, une aiguille qui tient son cap). Sans champ `fond`, le moteur prend `courbe`. Il a validé la direction le
+même jour sur planche (« c'est nettement mieux. En effet, on est plus orienté performance, ça me va bien ») et
+demandé d'aller plus loin : « on peut encore accentuer davantage », « en créer d'autres pour avoir encore plus de
+matière, plus de diversité, mais vraiment orienté performance […] toujours en adéquation avec le branding Latitude ».
 
 | Fond | Ton par défaut | Ce que c'est |
 |---|---|---|
 | `courbe` | sombre | Deux séries qui grimpent au fil de la vidéo : la terracotta devant, l'autre qui la suit (le dirigeant, puis l'entreprise). Elle décolle à droite juste avant la chute. |
 | `barres` | clair | Un histogramme qui se construit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres. |
-| `cap` | sombre | L'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction. |
+| `cap` | sombre | L'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée. |
+| `sommet` | sombre | Une crête dessinée comme un relevé (hachures, arêtes), basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte et plante son fanion juste avant la chute. La montagne de la marque, en version mesurée. |
+| `paliers` | clair | Un escalier : des marches larges, puis hautes et serrées dans la marge droite. Le trait terracotta les franchit une à une. |
+| `tableau` | sombre | Un tableau de bord : quatre tuiles d'indicateurs qui vivent pendant la vidéo (une tendance, un anneau, des barres, une flèche). Aucun élément haut : le plus discret des six. |
 | `photo` | sombre | Une vraie photo (`"photo": "<chemin>"`, `"cadrage": "50% 50%"`), en noir et blanc chaud, assombrie. HEIC accepté. |
 
-- **Deux tons par fond** : `"ton": "clair"` ou `"ton": "sombre"` dans le scénario donne l'autre version de
-  `courbe`, `barres` et `cap`. Trois décors, six ambiances.
-- **Le décor vit dans une bande au bas du cadre, sous les textes** (240 px réservés, `BANDE` dans `moteur.html`) :
-  il ne passe jamais derrière une phrase. Une courbe ou un trait qui traverse un texte le rend illisible, et
+- **Deux tons par fond** : `"ton": "clair"` ou `"ton": "sombre"` dans le scénario donne l'autre version des six
+  décors (pas de `photo`). Six décors, douze ambiances.
+- **L'objectif est tracé dès la première image** : la trajectoire en pointillé, le contour des barres, l'anneau
+  terracotta là où le décor doit arriver. Le réalisé le rattrape pendant la vidéo et l'atteint juste avant la
+  chute. C'est ce qui rend le décor présent dès l'accroche, là où se décide si on regarde la suite.
+- **Le décor vit dans une bande au bas du cadre, sous les textes** (240 px réservés, `BANDE` dans `moteur.html`),
+  et son élément le plus haut monte dans la marge droite (96 px) : il ne passe jamais derrière une phrase. Une courbe ou un trait qui traverse un texte le rend illisible, et
   Florent lit déjà la vidéo « un tout petit peu vite ».
 - **Ce que le style change aussi dans les scènes** : une barre de progression en haut (un segment par scène) ;
   l'accent `*entre étoiles*` devient un aplat terracotta qui balaie les mots, texte blanc ; les bulles et les
@@ -100,10 +109,14 @@ barres, une aiguille qui tient son cap). Sans champ `fond`, le moteur prend `cou
 - **Aucun chiffre dans le décor** : les graduations n'ont pas de valeur, la courbe n'a pas d'unité. Un chiffre à
   l'écran est toujours un chiffre que Florent a donné, dans une scène `chiffre`.
 - La typographie de la marque ne change pas (DM Serif Display pour la voix, DM Sans pour les repères).
+- **Ajouter un fond** : partir de `socle()` (quadrillage et règles), dessiner l'objectif d'abord (`objectif()`,
+  pointillés), puis le réalisé en terracotta, suivi par `repere()` ; tout se pose depuis `c.sol` (la ligne de base
+  de la bande) et se colore avec `c.tr` et `c.fd`, pour tenir dans les deux tons. Vérifier en 4x5 et en 9x16.
 
 Les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`) sont encore dans le moteur, avec leur
-style d'origine, parce que la première vidéo validée tourne sur `carte`. Florent les a jugés trop lisses : on ne
-les choisit plus pour une nouvelle vidéo, et ils sortent du moteur s'il valide le style performance.
+style d'origine, parce que la première version de la première vidéo tourne sur `carte`. Florent les a jugés trop
+lisses et a validé la direction performance : on ne les choisit plus. Ils sortiront du moteur, avec le code de
+l'ancien style (pastilles rondes, rebond, voile rond), quand il aura rendu son retour sur la vidéo.
 
 La `chute` inverse toujours le ton : fond clair, chute anthracite ; fond sombre, chute crème.
 
