@@ -15,40 +15,50 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { overflow: hidden; background: #000; }
   body { position: relative; font-family: "DM Sans", sans-serif; font-weight: 500; -webkit-font-smoothing: antialiased; }
-  #fond, #voile { position: absolute; inset: 0; overflow: hidden; }
-  #voile { z-index: 2; clip-path: circle(0px at 50% 50%); }
+  /* les couches, de bas en haut : le décor, les scènes, la lame et le voile de la chute, la chute, la barre de progression */
+  #fond, #voile, #lame { position: absolute; inset: 0; overflow: hidden; }
+  #lame { z-index: 2; background: var(--terra); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+  #voile { z-index: 2; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
   .plateau { position: absolute; left: 0; width: 1080px; height: 1350px; }
   #plateau { z-index: 1; }
   #plateau2 { z-index: 3; }
+  #hud { position: absolute; left: 96px; width: 888px; z-index: 4; display: flex; gap: 8px; }
+  #hud i { flex: 1; height: 6px; background: var(--bord); overflow: hidden; }
+  #hud b { display: block; width: 0; height: 100%; background: var(--terra); }
+  /* --bas : la place réservée au décor sous les textes (posée par le fond) */
   .scene { position: absolute; inset: 0; opacity: 0; padding: 110px 96px var(--bas, 120px); display: flex; flex-direction: column; justify-content: center; color: var(--encre); transform-origin: 50% 50%; }
   .scene.chute { padding-bottom: 120px; }
   .serif { font-family: "DM Serif Display", serif; font-weight: 400; letter-spacing: -0.012em; }
   /* mot masqué qui monte : le masque garde de la place pour les accents et les jambages */
   .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .12em 0 .2em; margin: -.12em 0 -.2em; }
   .w > span { display: inline-block; transform: translateY(118%); }
+  /* l'accent : terracotta, puis un aplat qui balaie le mot (le masque s'élargit pour que les aplats se touchent) */
   .hot { color: var(--terra); }
-  .caps { font-weight: 700; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; }
+  .w.c { margin-left: -.13em; margin-right: -.13em; }
+  .w.c > span { padding: 0 .13em; background: linear-gradient(var(--terra), var(--terra)) no-repeat 0 50% / 0% 100%; }
+  .caps { font-weight: 800; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; }
   .reste { color: transparent; }
   .legende { margin-top: 64px; font-size: 36px; line-height: 1.35; color: var(--doux); opacity: 0; }
 
-  .accroche .filet { width: 0; height: 5px; background: var(--terra); margin-bottom: 30px; }
+  .accroche .filet { width: 0; height: 12px; background: var(--terra); margin-bottom: 34px; }
   .accroche h1 { line-height: 1.07; }
   .accroche .sous { margin-top: 64px; color: var(--terra); opacity: 0; }
 
   .phrase p { line-height: 1.1; }
 
-  .bulle .boite { position: relative; margin: 0 -24px; padding: 58px 60px 66px; background: var(--carte); border-radius: 40px; border: 1.5px solid var(--bord); box-shadow: 0 26px 64px var(--ombre); transform-origin: 14% 100%; opacity: 0; }
-  .bulle .boite::after { content: ""; position: absolute; left: 86px; bottom: -21px; width: 44px; height: 44px; background: var(--carte); transform: rotate(45deg); border-radius: 0 0 9px 0; }
+  /* bulles et cartes : angles nets, filet fin, pas d'ombre (la carte de référence de DESIGN.md) */
+  .bulle .boite { position: relative; margin: 0; padding: 54px 54px 60px; background: var(--carte); border-radius: 12px; border: 2px solid var(--bord-fort); transform-origin: 14% 100%; opacity: 0; }
+  .bulle .boite::after { content: ""; position: absolute; left: 70px; bottom: -22px; width: 40px; height: 40px; background: var(--carte); transform: rotate(45deg); border-radius: 0 0 4px 0; border-right: 2px solid var(--bord-fort); border-bottom: 2px solid var(--bord-fort); }
   .bulle .citation { line-height: 1.1; }
 
-  .dialogue .rep { max-width: 790px; padding: 34px 42px 38px; border-radius: 34px; line-height: 1.14; opacity: 0; margin-bottom: 30px; border: 1.5px solid var(--bord); box-shadow: 0 18px 44px var(--ombre); }
-  .dialogue .rep.lui { align-self: flex-start; background: var(--carte); border-bottom-left-radius: 8px; transform-origin: 0 100%; }
-  .dialogue .rep.moi { align-self: flex-end; background: var(--terra); color: #FFFFFF; border-color: transparent; border-bottom-right-radius: 8px; transform-origin: 100% 100%; }
+  .dialogue .rep { max-width: 790px; padding: 34px 42px 38px; border-radius: 12px; line-height: 1.14; opacity: 0; margin-bottom: 30px; border: 2px solid var(--bord); }
+  .dialogue .rep.lui { align-self: flex-start; background: var(--carte); border-color: var(--bord-fort); border-bottom-left-radius: 2px; transform-origin: 0 100%; }
+  .dialogue .rep.moi { align-self: flex-end; background: var(--terra); color: #FFFFFF; border-color: transparent; border-bottom-right-radius: 2px; transform-origin: 100% 100%; }
   .dialogue .legende { margin-top: 34px; }
 
   .etiquettes h2 { line-height: 1.1; margin-bottom: 54px; }
-  .pastille { align-self: flex-start; padding: 0 56px 0 44px; display: flex; align-items: center; gap: 26px; border-radius: 80px; background: var(--carte); border: 1.5px solid var(--bord); box-shadow: 0 14px 34px var(--ombre); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; transform-origin: 0 50%; }
-  .pastille::before { content: ""; width: 20px; height: 20px; border-radius: 50%; background: var(--terra); flex: none; }
+  .rang { display: flex; align-items: center; gap: 30px; padding: 0 40px 0 36px; border-radius: 10px; background: var(--carte); border: 1.5px solid var(--bord); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; }
+  .rang b { flex: none; width: 62px; font-family: "DM Sans", sans-serif; font-weight: 800; font-size: 35px; letter-spacing: .04em; color: var(--terra); font-variant-numeric: tabular-nums; }
   .etiquettes .chute { margin-top: 30px; line-height: 1.12; }
 
   .organigramme h2 { line-height: 1.09; margin-bottom: 34px; }
@@ -61,28 +71,8 @@
   .chiffre .contexte { font-size: 36px; color: var(--doux); margin-top: 36px; line-height: 1.35; opacity: 0; }
 
   .chute-finale .citation { line-height: 1.07; }
-  .chute-finale .trait { width: 0; height: 2px; background: var(--bord-fort); margin-top: 64px; }
-  .chute-finale .nom { margin-top: 44px; color: var(--doux); font-weight: 500; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; opacity: 0; }
-
-  /* ---------- style « performance » (fonds marqués perf) : angles nets, filets fins, accent en aplat, progression mesurée ---------- */
-  #lame { position: absolute; inset: 0; z-index: 2; background: var(--terra); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
-  #hud { position: absolute; left: 96px; width: 888px; z-index: 4; display: none; gap: 8px; }
-  .perf #hud { display: flex; }
-  #hud i { flex: 1; height: 6px; background: var(--bord); overflow: hidden; }
-  #hud b { display: block; width: 0; height: 100%; background: var(--terra); }
-  .perf .caps { font-weight: 800; }
-  .perf .w.c { margin-left: -.13em; margin-right: -.13em; }
-  .perf .w.c > span { padding: 0 .13em; background: linear-gradient(var(--terra), var(--terra)) no-repeat 0 50% / 0% 100%; }
-  .perf .accroche .filet { height: 12px; margin-bottom: 34px; }
-  .perf .bulle .boite { margin: 0; padding: 54px 54px 60px; border-radius: 12px; border: 2px solid var(--bord-fort); box-shadow: none; }
-  .perf .bulle .boite::after { left: 70px; bottom: -22px; width: 40px; height: 40px; border-radius: 0 0 4px 0; border-right: 2px solid var(--bord-fort); border-bottom: 2px solid var(--bord-fort); }
-  .perf .dialogue .rep { border-radius: 12px; border-width: 2px; box-shadow: none; }
-  .perf .dialogue .rep.lui { border-color: var(--bord-fort); border-bottom-left-radius: 2px; }
-  .perf .dialogue .rep.moi { border-bottom-right-radius: 2px; }
-  .rang { display: flex; align-items: center; gap: 30px; padding: 0 40px 0 36px; border-radius: 10px; background: var(--carte); border: 1.5px solid var(--bord); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; }
-  .rang b { flex: none; width: 62px; font-family: "DM Sans", sans-serif; font-weight: 800; font-size: 35px; letter-spacing: .04em; color: var(--terra); font-variant-numeric: tabular-nums; }
-  .perf .chute-finale .trait { height: 8px; background: var(--terra); }
-  .perf .chute-finale .nom { font-weight: 800; color: var(--encre); }
+  .chute-finale .trait { width: 0; height: 8px; background: var(--terra); margin-top: 64px; }
+  .chute-finale .nom { margin-top: 44px; color: var(--encre); font-weight: 800; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; opacity: 0; }
 </style></head>
 <body>
 <div id="fond"></div>
@@ -101,7 +91,6 @@ const E = {
   out: (t) => 1 - Math.pow(1 - t, 3),
   out5: (t) => 1 - Math.pow(1 - t, 5),
   io: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-  back: (t) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); },
 };
 const p = (t, s, d, e = E.out) => e(clamp((t - s) / d));
 const el = (tag, cls, parent) => { const e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
@@ -122,15 +111,12 @@ function mots(cible, texte) {
   cible.innerHTML = out.join(" ");
   return [...cible.querySelectorAll(".w > span")];
 }
-// vrai quand le fond est du style « performance » : rien ne rebondit, l'accent passe en aplat terracotta
-let PERF = false;
 const monte = (spans, t, s, pas = 0.07, d = 0.75) =>
   spans.forEach((sp, i) => {
     sp.style.transform = `translateY(${(1 - p(t, s + i * pas, d, E.out5)) * 118}%)`;
     // une fois le mot monté, l'aplat le balaie de gauche à droite et le mot passe en blanc
-    if (PERF && sp.className === "hot") { const k = p(t, s + i * pas + d * 0.62, 0.3, E.io); sp.style.backgroundSize = `${(k * 100).toFixed(1)}% 100%`; sp.style.color = k > 0.5 ? "#FFFFFF" : ""; }
+    if (sp.className === "hot") { const k = p(t, s + i * pas + d * 0.62, 0.3, E.io); sp.style.backgroundSize = `${(k * 100).toFixed(1)}% 100%`; sp.style.color = k > 0.5 ? "#FFFFFF" : ""; }
   });
-const rebond = (t, s, d) => p(t, s, d, PERF ? E.out5 : E.back);
 // un point qui avance le long d'une ligne brisée : u de 0 à 1
 const sur = (pts, u) => {
   const seg = []; let L = 0;
@@ -158,7 +144,7 @@ function tape(cible, texte) {
   return { n: T.length, a, poser(k) { const n = Math.round(clamp(k) * T.length); a.textContent = T.slice(0, n); b.textContent = T.slice(n); return n >= T.length; } };
 }
 
-// ---------- bruit et courbes ----------
+// ---------- bruit ----------
 function bruit(seed) {
   let a = seed >>> 0;
   const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -166,46 +152,14 @@ function bruit(seed) {
   const val = (x) => { const i = Math.floor(x), f = x - i, sm = f * f * (3 - 2 * f); const A = tab[((i % 512) + 512) % 512], B = tab[(((i + 1) % 512) + 512) % 512]; return A + (B - A) * sm; };
   return (x, o = 4) => { let amp = 1, fr = 1, sum = 0, n = 0; for (let k = 0; k < o; k++) { sum += amp * val(x * fr); n += amp; amp *= 0.5; fr *= 2.03; } return sum / n; };
 }
-function lisse(pts) {
-  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)], k = 0.21;
-    d += ` C${(p1[0] + (p2[0] - p0[0]) * k).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) * k).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) * k).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) * k).toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
-  }
-  return d;
-}
 const toile = (parent, H) => { const s = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, parent); s.style.cssText = "position:absolute;left:0;top:0"; return s; };
-// courbes de niveau : le motif de carte de Latitude
-function topo(svg, stroke, op, cx, cy) {
-  const f = bruit(12);
-  for (let k = 0; k < 22; k++) {
-    const r = 46 + k * 52, pts = [];
-    for (let i = 0; i < 96; i++) {
-      const a = (i / 96) * Math.PI * 2;
-      const wob = 1 + (f(Math.cos(a) * 1.4 + 9 + k * 0.11) - 0.5) * 0.5 + (f(Math.sin(a) * 1.4 + 41 + k * 0.11) - 0.5) * 0.5;
-      pts.push([cx + Math.cos(a) * r * wob * 1.2, cy + Math.sin(a) * r * wob * 0.85]);
-    }
-    pts.push(pts[0]);
-    svgEl("path", { d: lisse(pts) + " Z", fill: "none", stroke, "stroke-opacity": op * (k % 4 === 0 ? 1.7 : 1), "stroke-width": k % 4 === 0 ? 2 : 1.3 }, svg);
-  }
-}
-// une ligne de crête, plus large que le cadre pour pouvoir dériver
-function crete(seed, baseY, amp, freq, H) {
-  const f = bruit(seed), g = bruit(seed + 7), pts = [];
-  for (let x = -260; x <= W + 260; x += 8) {
-    const u = (x / W) * freq;
-    const h = 0.55 * f(u + 3.7, 5) + 0.45 * Math.pow(1 - Math.abs(2 * g(u * 0.8 + 1.3, 5) - 1), 2);
-    pts.push([x, baseY - amp * h]);
-  }
-  return "M" + pts.map((q) => `${q[0]} ${q[1].toFixed(1)}`).join(" L") + ` L${W + 260} ${H + 20} L-260 ${H + 20} Z`;
-}
 
 // ---------- thèmes ----------
 const THEMES = {
-  clair: { encre: "#3A3A3A", doux: "#6E6E6E", carte: "#FFFFFF", bord: "rgba(58,58,58,.12)", ombre: "rgba(58,58,58,.11)", plein: "#3A3A3A", "plein-texte": "#FBF8F4", "bord-fort": "rgba(58,58,58,.3)", base: "#F5F0EB" },
-  sombre: { encre: "#FBF8F4", doux: "#B8B0A8", carte: "#403C3A", bord: "rgba(255,255,255,.14)", ombre: "rgba(0,0,0,.32)", plein: "#FBF8F4", "plein-texte": "#2E2E2E", "bord-fort": "rgba(255,255,255,.32)", base: "#2E2E2E" },
+  clair: { encre: "#3A3A3A", doux: "#6E6E6E", carte: "#FFFFFF", bord: "rgba(58,58,58,.12)", plein: "#3A3A3A", "plein-texte": "#FBF8F4", "bord-fort": "rgba(58,58,58,.3)" },
+  sombre: { encre: "#FBF8F4", doux: "#B8B0A8", carte: "#403C3A", bord: "rgba(255,255,255,.14)", plein: "#FBF8F4", "plein-texte": "#2E2E2E", "bord-fort": "rgba(255,255,255,.32)" },
 };
-const poser = (e, nom) => { for (const k in THEMES[nom]) if (k !== "base") e.style.setProperty("--" + k, THEMES[nom][k]); };
+const poser = (e, nom) => { for (const k in THEMES[nom]) e.style.setProperty("--" + k, THEMES[nom][k]); };
 
 // ---------- motifs « performance » : la mesure, et ce qui monte ----------
 const trait = (svg, x1, y1, x2, y2, stroke, op, w = 1) => svgEl("line", { x1, y1, x2, y2, stroke, "stroke-opacity": op, "stroke-width": w }, svg);
@@ -247,7 +201,7 @@ const FONDS = {
   // le rattrape pendant la vidéo. Chaque fond existe en deux tons : le sien, et l'autre avec "ton" dans le scénario.
 
   // la courbe : deux séries qui grimpent, le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle décolle à droite
-  courbe: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  courbe: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
     const G = 14, N = 27;
     lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 54%)`);
     const s = socle(f, H, c), X = (i) => -G + (i / (N - 1)) * (W + 2 * G);
@@ -277,7 +231,7 @@ const FONDS = {
     };
   } },
   // les barres : un histogramme qui se remplit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres
-  barres: { theme: "clair", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  barres: { theme: "clair", tons: true, bas: BANDE, monter(f, H, sc, c) {
     lueur(f, `radial-gradient(circle at 100% 44%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
     const s = socle(f, H, c), n = 15, pas = (W - 60) / n, l = pas * 0.64, b = bruit(5);
     const barres = Array.from({ length: n }, (_, i) => {
@@ -289,7 +243,7 @@ const FONDS = {
     return (T, D) => barres.forEach((q) => { const k = p(T, 0.1 + (q.u - 0.14) * D * 0.98, 0.9, E.out5); pose(q.e, { y: c.sol - q.h * k, height: q.h * k }); });
   } },
   // le cap : l'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée
-  cap: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  cap: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
     const cx = W / 2, cy = c.sol + 376, R = 560, CAP = 12, rad = (a) => ((a - 90) * Math.PI) / 180;
     lueur(f, `radial-gradient(circle at ${cx}px ${cy - R * 0.6}px,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 42%)`);
     const s = socle(f, H, c), cadran = svgEl("g", {}, s);
@@ -311,7 +265,7 @@ const FONDS = {
     };
   } },
   // le sommet : une crête dessinée comme un relevé, basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte
-  sommet: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  sommet: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
     lueur(f, `radial-gradient(circle at 96% 50%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
     const s = socle(f, H, c);
     const xs = [-14, 64, 142, 210, 296, 366, 452, 520, 608, 686, 762, 836, 896, 946, 988, 1030, 1062, W + 14];
@@ -342,7 +296,7 @@ const FONDS = {
     };
   } },
   // les paliers : des marches larges dans la bande, puis hautes et serrées dans la marge droite ; ils s'enchaînent de plus en plus vite
-  paliers: { theme: "clair", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  paliers: { theme: "clair", tons: true, bas: BANDE, monter(f, H, sc, c) {
     lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
     const s = socle(f, H, c), pts = [[-14, c.sol - 24]]; let x = -14, y = c.sol - 24;
     for (let i = 0; i < 7; i++) { x += 139; pts.push([x, y]); y -= 24; pts.push([x, y]); }
@@ -363,7 +317,7 @@ const FONDS = {
     };
   } },
   // le tableau de bord : quatre tuiles d'indicateurs qui vivent pendant la vidéo (une tendance, un anneau, des barres, une flèche)
-  tableau: { theme: "sombre", perf: true, tons: true, bas: BANDE, monter(f, H, sc, c) {
+  tableau: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
     lueur(f, `radial-gradient(circle at 50% ${c.sol - 70}px,rgba(224,120,85,${c.lu * 0.8}),rgba(224,120,85,0) 48%)`);
     const s = socle(f, H, c), ecart = 24, w = (888 - 3 * ecart) / 4, h = 184, y0 = c.sol - h + 12, defs = svgEl("defs", {}, s);
     const tuile = (i) => {
@@ -399,52 +353,8 @@ const FONDS = {
     };
   } },
 
-  // ===== premiers fonds (jugés « trop lisses » par Florent le 17/11/2026) : gardés tant qu'il n'a pas vu
-  //       le style performance, à retirer s'il le valide. La commande /video-animee ne les propose plus. =====
-  // crème chaud et courbes de niveau qui dérivent
-  carte: { theme: "clair", monter(f, H) {
-    f.style.background = "#F5F0EB";
-    const s = toile(f, H), cx = W * 0.74, cy = H * 0.75; s.style.transformOrigin = `${cx}px ${cy}px`;
-    topo(s, "#3A3A3A", 0.085, cx, cy);
-    return (T) => { s.style.transform = `rotate(${T * 0.4}deg) scale(${1 + T * 0.0045})`; };
-  } },
-  // anthracite et courbes de niveau crème
-  nuit: { theme: "sombre", monter(f, H) {
-    f.style.background = "#2E2E2E";
-    const s = toile(f, H), cx = W * 0.26, cy = H * 0.72; s.style.transformOrigin = `${cx}px ${cy}px`;
-    topo(s, "#FBF8F4", 0.07, cx, cy);
-    return (T) => { s.style.transform = `rotate(${-T * 0.4}deg) scale(${1 + T * 0.0045})`; };
-  } },
-  // papier clair pointillé, comme un carnet de notes
-  carnet: { theme: "clair", monter(f) {
-    f.style.background = "#FAFAF8";
-    const g = el("div", "", f); g.style.cssText = "position:absolute;inset:-80px;background-image:radial-gradient(rgba(58,58,58,.17) 1.7px,transparent 2px);background-size:46px 46px";
-    const l = el("div", "", f); l.style.cssText = "position:absolute;inset:0;background:radial-gradient(circle at 90% 6%,rgba(224,120,85,.17),rgba(224,120,85,0) 46%)";
-    return (T) => { g.style.transform = `translate(${-T * 1.4}px,${-T}px)`; };
-  } },
-  // lever du jour : dégradé chaud, parallèles, lueur terracotta qui monte du bas
-  aube: { theme: "clair", monter(f, H) {
-    f.style.background = "linear-gradient(to bottom,#F8F4EE 0%,#F6EEE5 52%,#F0D9C9 100%)";
-    const sol = el("div", "", f); sol.style.cssText = `position:absolute;left:${W / 2 - 620}px;width:1240px;height:1240px;border-radius:50%;background:radial-gradient(circle,rgba(224,120,85,.6) 0%,rgba(224,120,85,.28) 38%,rgba(224,120,85,0) 68%)`;
-    const s = toile(f, H);
-    for (let i = 0; i < 9; i++) { const y = H * 0.1 + i * H * 0.105; svgEl("path", { d: `M-20 ${y} Q ${W / 2} ${y - 30 + i * 3} ${W + 20} ${y}`, fill: "none", stroke: "#3A3A3A", "stroke-opacity": 0.07, "stroke-width": 1.5 }, s); }
-    return (T) => { sol.style.top = H * 0.78 - T * 6 + "px"; };
-  } },
-  // nuit de montagne : crêtes en couches au bas du cadre, soleil terracotta derrière
-  cretes: { theme: "sombre", monter(f, H) {
-    f.style.background = "linear-gradient(to bottom,#242424 0%,#2F2B29 55%,#463A34 100%)";
-    const s = toile(f, H);
-    // le soleil reste bas et à droite, hors de la zone où tombe le texte (aligné à gauche)
-    svgEl("circle", { cx: W * 0.85, cy: H * 0.86, r: 260, fill: TERRA, opacity: 0.14 }, s);
-    const soleil = svgEl("circle", { cx: W * 0.85, cy: H * 0.87, r: 96, fill: TERRA, opacity: 0.9 }, s);
-    const couches = [
-      [101, H * 0.86, H * 0.13, 2.4, "#6A554C", 0.7], [202, H * 0.9, H * 0.12, 3.1, "#54463F", 0.95],
-      [303, H * 0.96, H * 0.1, 3.6, "#2A2726", 1], [404, H * 1.0, H * 0.07, 4.8, "#1C1B1B", 1],
-    ].map(([seed, y, amp, fr, fill, opacity]) => svgEl("path", { d: crete(seed, y, amp, fr, H), fill, opacity }, s));
-    return (T) => { couches.forEach((c, i) => c.setAttribute("transform", `translate(${-T * (1.2 + i * 1.5)} 0)`)); soleil.setAttribute("cy", H * 0.87 - T * 0.8); };
-  } },
   // une vraie photo de Florent, passée en noir et blanc chaud et assombrie pour porter le texte
-  photo: { theme: "sombre", perf: true, monter(f, H, sc) {
+  photo: { theme: "sombre", monter(f, H, sc) {
     if (!sc.photo) throw new Error("le fond « photo » demande le champ « photo » (chemin d'une image)");
     f.style.background = "#1E1C1B"; f.style.isolation = "isolate";
     const couche = (css) => { const d = el("div", "", f); d.style.cssText = "position:absolute;inset:0;" + css; return d; };
@@ -474,7 +384,7 @@ const SCENES = {
     let t0 = 0.3; const dep = lignes.map((sp) => { const a = t0; t0 += sp.length * 0.085 + 0.35; return a; });
     const tSous = t0 + 0.2, n = nbMots([].concat(sc.lignes).join(" ")) + (sc.sous ? nbMots(sc.sous) : 0);
     return { d: Math.max(tSous + (sous ? 1.5 : 0.7), lecture(n)), jouer(t) {
-      s.querySelector(".filet").style.width = p(t, 0.15, 0.6) * (PERF ? 132 : 64) + "px";
+      s.querySelector(".filet").style.width = p(t, 0.15, 0.6) * 132 + "px";
       lignes.forEach((sp, i) => monte(sp, t, dep[i], 0.085));
       if (sous) apparait(sous, t, tSous);
     } };
@@ -490,7 +400,7 @@ const SCENES = {
     const tFin = 0.7 + tp.n / 28, tLeg = tFin + 0.15;
     return { d: leg ? tLeg + 0.85 + nbMots(sc.legende) / RYTHME.legende : tFin + 1.7, jouer(t) {
       boite.style.opacity = p(t, 0.1, 0.25);
-      boite.style.transform = `scale(${PERF ? 0.95 + 0.05 * rebond(t, 0.1, 0.45) : 0.86 + 0.14 * rebond(t, 0.1, 0.6)})`;
+      boite.style.transform = `scale(${0.95 + 0.05 * p(t, 0.1, 0.45, E.out5)})`;
       const fini = tp.poser((t - 0.7) / (tFin - 0.7));
       const visible = t > 0.6 && (!fini || Math.floor((t - tFin) / 0.45) % 2 === 0);
       tp.a.style.boxShadow = visible ? `7px 0 0 var(--carte), 12px 0 0 ${TERRA}` : "none";
@@ -509,7 +419,7 @@ const SCENES = {
     return { d: leg ? t0 + 0.7 + nbMots(sc.legende) / RYTHME.legende : t0 + 1.1, jouer(t) {
       reps.forEach((r) => {
         r.b.style.opacity = p(t, r.s, 0.25);
-        r.b.style.transform = `scale(${PERF ? 0.95 + 0.05 * rebond(t, r.s, 0.4) : 0.8 + 0.2 * rebond(t, r.s, 0.5)})`;
+        r.b.style.transform = `scale(${0.95 + 0.05 * p(t, r.s, 0.4, E.out5)})`;
         r.tp.poser((t - r.s - 0.35) / (r.f - r.s - 0.35));
       });
       if (leg) apparait(leg, t, t0);
@@ -518,20 +428,20 @@ const SCENES = {
   etiquettes(sc, s) {
     const h2 = el("h2", "serif", s), titre = mots(h2, sc.titre); ajuste(h2, 66, 46, 160);
     const n = sc.items.length, haut = n > 4 ? 100 : 120, corps = n > 4 ? 50 : 60;
-    // style performance : des rangs numérotés, pleine largeur, à la place des pastilles rondes
-    const pastilles = sc.items.map((it, i) => {
-      const d = el("div", PERF ? "rang" : "pastille", s);
-      if (PERF) { el("b", "", d).textContent = String(i + 1).padStart(2, "0"); el("span", "", d).textContent = typo(it); } else d.textContent = typo(it);
-      d.style.cssText = `height:${PERF ? haut - 8 : haut}px;font-size:${corps}px;margin-bottom:${PERF ? (n > 4 ? 14 : 18) : n > 4 ? 22 : 28}px`; return d;
+    // des rangs numérotés, pleine largeur
+    const rangs = sc.items.map((it, i) => {
+      const d = el("div", "rang", s);
+      el("b", "", d).textContent = String(i + 1).padStart(2, "0"); el("span", "", d).textContent = typo(it);
+      d.style.cssText = `height:${haut - 8}px;font-size:${corps}px;margin-bottom:${n > 4 ? 14 : 18}px`; return d;
     });
-    pastilles.forEach((d) => { let c = corps; while (c > 30 && d.scrollWidth > 888) { c -= 2; d.style.fontSize = c + "px"; } });
+    rangs.forEach((d) => { let c = corps; while (c > 30 && d.scrollWidth > 888) { c -= 2; d.style.fontSize = c + "px"; } });
     const chuteEl = sc.chute ? el("p", "chute serif", s) : null, chute = chuteEl ? mots(chuteEl, sc.chute) : null; if (chuteEl) ajuste(chuteEl, 56, 40, 200);
     const PAS = 0.5, tChute = 0.85 + (n - 1) * PAS + 0.95;
     return { d: chute ? tChute + lecture(chute.length) + 1.0 : tChute + 0.8, jouer(t) {
       monte(titre, t, 0.1, 0.06);
-      pastilles.forEach((d, i) => {
+      rangs.forEach((d, i) => {
         const a = 0.85 + i * PAS; d.style.opacity = p(t, a, 0.25);
-        d.style.transform = PERF ? `translateX(${(1 - p(t, a, 0.5, E.out5)) * -90}px)` : `translateX(${(1 - p(t, a, 0.6)) * -46}px) scale(${0.72 + 0.28 * p(t, a, 0.6, E.back)})`;
+        d.style.transform = `translateX(${(1 - p(t, a, 0.5, E.out5)) * -90}px)`;
       });
       if (chute) monte(chute, t, tChute, 0.06);
     } };
@@ -551,7 +461,7 @@ const SCENES = {
     ].map((l) => { const e = svgEl("path", { d: l.d }, gL), len = e.getTotalLength() || 1; e.style.strokeDasharray = len; return { ...l, e, len }; });
     const noeud = (x, y, w, h, label, plein) => {
       const g = svgEl("g", {}, gN), L = typo(label), fs = Math.min(plein ? 37 : 28, Math.floor((w - 28) / (L.length * 0.56)));
-      svgEl("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: PERF ? 10 : 18, style: plein ? "fill:var(--plein)" : "fill:var(--carte);stroke:var(--bord);stroke-width:1.5" }, g);
+      svgEl("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: 10, style: plein ? "fill:var(--plein)" : "fill:var(--carte);stroke:var(--bord);stroke-width:1.5" }, g);
       svgEl("text", { x: 0, y: fs * 0.35, "text-anchor": "middle", "font-family": "DM Sans", "font-weight": 500, "font-size": fs, style: plein ? "fill:var(--plein-texte)" : "fill:var(--encre)" }, g).textContent = L;
       return { g, x, y };
     };
@@ -567,7 +477,7 @@ const SCENES = {
     const fin = points.length ? tPts + (points.length - 1) * 0.24 + 1.5 + 0.95 : Math.max(3.4, 2.75 + (chute ? lecture(chute.length) : 0) + 0.6);
     return { d: fin, jouer(t) {
       monte(titre, t, 0.1, 0.06);
-      const pop = (nd, a) => { nd.g.setAttribute("transform", `translate(${nd.x} ${nd.y}) scale(${PERF ? 0.9 + 0.1 * rebond(t, a, 0.45) : 0.7 + 0.3 * rebond(t, a, 0.55)})`); nd.g.setAttribute("opacity", p(t, a, 0.3)); };
+      const pop = (nd, a) => { nd.g.setAttribute("transform", `translate(${nd.x} ${nd.y}) scale(${0.9 + 0.1 * p(t, a, 0.45, E.out5)})`); nd.g.setAttribute("opacity", p(t, a, 0.3)); };
       pop(chef, 0.6);
       liens.forEach((l) => { l.e.style.strokeDashoffset = l.len * (1 - p(t, l.a, 0.5, E.io)); l.e.style.opacity = t > l.a ? 1 : 0; });
       services.forEach((nd, i) => pop(nd, 1.95 + Math.abs(i - mid) * 0.14));
@@ -617,12 +527,11 @@ window.demarrer = async (sc, format = "4x5") => {
   const fond = FONDS[sc.fond || "courbe"]; if (!fond) throw new Error(`fond inconnu : « ${sc.fond} » (fonds : ${Object.keys(FONDS).join(", ")})`);
   // un fond performance existe en deux tons : le sien, ou celui que le scénario demande ("ton")
   const ton = fond.tons && (sc.ton === "clair" || sc.ton === "sombre") ? sc.ton : fond.theme, inverse = ton === "clair" ? "sombre" : "clair";
-  PERF = !!fond.perf; document.body.classList.toggle("perf", PERF);
   poser(document.body, ton); document.body.style.setProperty("--bas", (fond.bas || 120) + "px");
   const decor = document.getElementById("fond"), c = { ...TONS[ton], sol: (H + PH) / 2 - 46 };
   if (fond.tons) decor.style.background = c.fd;
   const vivre = fond.monter(decor, H, sc, c);
-  const voile = document.getElementById("voile"); voile.style.background = PERF ? TONS[inverse].fd : THEMES[inverse].base;
+  const voile = document.getElementById("voile"); voile.style.background = TONS[inverse].fd;
   const haut = (H - PH) / 2, p1 = document.getElementById("plateau"), p2 = document.getElementById("plateau2");
   p1.style.top = p2.style.top = haut + "px";
   const types = { ...SCENES, ...(window.SCENES_SUR_MESURE || {}) }, ctx = { theme: ton, inverse, signature: sc.signature, format, H };
@@ -645,7 +554,7 @@ window.demarrer = async (sc, format = "4x5") => {
 window.image = (T) => {
   const { scenes, vivre, voile, hud, lame, theme, inverse, cap } = ETAT;
   vivre(T, cap);
-  let r = 0, q = 0;
+  let q = 0;
   scenes.forEach((x, i) => {
     const t = T - x.a, dernier = i === scenes.length - 1;
     x.jauge.style.width = clamp(t / x.d) * 100 + "%";
@@ -653,15 +562,13 @@ window.image = (T) => {
     const entree = x.voile ? 1 : p(t, 0, 0.3), sortie = dernier ? 0 : p(t, x.d - 0.38, 0.38, E.io);
     x.s.style.opacity = entree * (1 - sortie);
     x.s.style.transform = `translateY(${-sortie * 22}px) scale(${1 + 0.016 * clamp(t / x.d)})`;
-    if (x.voile) { r = p(t, 0, 0.75, E.io) * 1500 * (1 - sortie); q = p(t, 0, 0.62, E.io) * (1 - sortie); }
+    if (x.voile) q = p(t, 0, 0.62, E.io) * (1 - sortie);
     x.jouer(t);
   });
-  if (PERF) {
-    // la chute arrive par un volet en biais, précédé d'une lame terracotta (le voile rond est celui des premiers fonds)
-    const biais = (avance) => { const x = -300 + q * (W + 640) + avance; return `polygon(0 0, ${x + 150}px 0, ${x - 150}px 100%, 0 100%)`; };
-    voile.style.clipPath = biais(0); lame.style.clipPath = biais(q > 0 ? 64 : 0);
-    poser(hud, q > 0.5 ? inverse : theme);
-  } else voile.style.clipPath = `circle(${r}px at 50% 50%)`;
+  // la chute arrive par un volet en biais, précédé d'une lame terracotta
+  const biais = (avance) => { const x = -300 + q * (W + 640) + avance; return `polygon(0 0, ${x + 150}px 0, ${x - 150}px 100%, 0 100%)`; };
+  voile.style.clipPath = biais(0); lame.style.clipPath = biais(q > 0 ? 64 : 0);
+  poser(hud, q > 0.5 ? inverse : theme);
   return T;
 };
 // la boîte à outils offerte aux scènes sur mesure (fichier <scénario>.scenes.js)

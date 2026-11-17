@@ -113,10 +113,9 @@ matière, plus de diversité, mais vraiment orienté performance […] toujours 
   pointillés), puis le réalisé en terracotta, suivi par `repere()` ; tout se pose depuis `c.sol` (la ligne de base
   de la bande) et se colore avec `c.tr` et `c.fd`, pour tenir dans les deux tons. Vérifier en 4x5 et en 9x16.
 
-Les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`) sont encore dans le moteur, avec leur
-style d'origine, parce que la première version de la première vidéo tourne sur `carte`. Florent les a jugés trop
-lisses et a validé la direction performance : on ne les choisit plus. Ils sortiront du moteur, avec le code de
-l'ancien style (pastilles rondes, rebond, voile rond), quand il aura rendu son retour sur la vidéo.
+Les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`) et leur style (pastilles rondes, ombres
+douces, rebonds, voile rond) ont été retirés du moteur le 17/11/2026, une fois la vidéo validée dans le style
+performance. Ils restent dans l'historique git (avant ce retrait) si une forme devait être reprise.
 
 La `chute` inverse toujours le ton : fond clair, chute anthracite ; fond sombre, chute crème.
 
