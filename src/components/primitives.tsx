@@ -89,8 +89,11 @@ export function StatCard({ value, label, className, ...props }: StatCardProps) {
  * du CRM (maquette validée le 02/11/2026).
  *  - `label` et `value` acceptent un bouton (le titre déplie le détail, le
  *    chiffre ouvre la fenêtre de ce qu'il compte) : ils en héritent la
- *    typographie. Un titre long passe à la ligne, il n'est jamais coupé ; son
- *    ⓘ se pose par `StatTileTitle` ;
+ *    typographie. Un titre long passe à la ligne, il n'est jamais coupé ;
+ *  - `info` : le ⓘ qui EXPLIQUE le chiffre en une phrase (règle du 17/11) — un
+ *    bouton fourni par l'appelant, posé à droite du dernier mot du titre, hors
+ *    du centrage (le titre et le chiffre restent sur le même axe). Pas de
+ *    phrase, pas de ⓘ ;
  *  - `aside` : ce qui décompose le chiffre, sur le CÔTÉ (« 15 intéressés »),
  *    jamais dessous — la tuile reste basse : DEUX `StatTileAside` au plus ;
  *  - `dashed` : une information hors du tunnel ou de la période (le stock) ;
@@ -102,12 +105,13 @@ export interface StatTileProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   label: React.ReactNode;
   value: React.ReactNode;
   aside?: React.ReactNode;
+  info?: React.ReactNode;
   dashed?: boolean;
   active?: boolean;
   children?: React.ReactNode;
 }
 export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function StatTile(
-  { label, value, aside, dashed, active, className, children, ...props },
+  { label, value, aside, info, dashed, active, className, children, ...props },
   ref,
 ) {
   // Un tableau vide est « vrai » : compter, sinon un rail vide décentre le chiffre.
@@ -115,7 +119,14 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function
   return (
     <div ref={ref} className={cn("lt-tile", dashed && "lt-tile--dashed", active && "lt-tile--active", className)} {...props}>
       <div className="lt-tile__main">
-        <div className="lt-tile__k">{typeof label === "string" ? <span>{label}</span> : label}</div>
+        <div className="lt-tile__k">
+          {typeof label === "string" ? <span>{label}</span> : label}
+          {info ? (
+            <span className="lt-tile__info">
+              <span className="lt-tile__info-pos">{info}</span>
+            </span>
+          ) : null}
+        </div>
         <div className="lt-tile__v">{value}</div>
       </div>
       {aDuCote ? <div className="lt-tile__aside">{aside}</div> : null}
@@ -125,33 +136,16 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(function
 });
 
 /**
- * LE DESSIN DU ⓘ — un seul (15 px) : à côté d'un titre de carte comme d'un
- * titre de rubrique, il remplace toute phrase sous un chiffre. Décoratif : ce
- * qui le porte (un bouton) se nomme et lui donne sa zone de toucher. `active` :
- * son détail est ouvert.
+ * LE DESSIN DU ⓘ — un seul (option A du 17/11 : i droit, cercle fin de 12 px) :
+ * à côté d'un titre de carte comme d'un titre de rubrique, il EXPLIQUE en une
+ * phrase ce que compte le chiffre. Décoratif : ce qui le porte (un bouton) se
+ * nomme, montre la phrase et lui donne sa zone de toucher. `active` : sa
+ * phrase est ouverte.
  */
 export function InfoDot({ active, className }: { active?: boolean; className?: string }) {
   return (
     <span aria-hidden="true" className={cn("lt-info", active && "lt-info--active", className)}>
       i
-    </span>
-  );
-}
-
-/**
- * Le TITRE d'une `StatTile` et son ⓘ : le dernier mot ne quitte pas son ⓘ
- * (seul, le ⓘ passerait à la ligne). À poser dans le `label`, nu ou dans le
- * bouton qui déplie le détail.
- */
-export function StatTileTitle({ children, info = true, active }: { children: string; info?: boolean; active?: boolean }) {
-  const coupe = children.lastIndexOf(" ") + 1;
-  return (
-    <span>
-      {children.slice(0, coupe)}
-      <span className="lt-tile__last">
-        {children.slice(coupe)}
-        {info ? <InfoDot active={active} /> : null}
-      </span>
     </span>
   );
 }
