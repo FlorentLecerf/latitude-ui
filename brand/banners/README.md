@@ -19,7 +19,7 @@ n'est qu'un rendu local jetable.
 | `youtube-banner.html` | `youtube-banner` (2560×1440, safe 1546×423) | 2× → réduit à 2560×1440 | Drive `Social` |
 | `og-diagnostic.html` | `og-image` (1200×630) | 2× → réduit à 1200×630 | `latitude-diagnostic/src/app/opengraph-image.png` + Drive `Social` |
 | `og-home.html` | `og-image` (1200×630) | 2× → réduit à 1200×630 | `latitude-web/og-image.png` + Drive `Social` |
-| `fond-visio.html` (`?ton=clair` pour la version claire) | `visio-background` (1920×1080) | 2× → réduit à 1920×1080 | Drive `Social` (`fond-visio-sombre.png`, `fond-visio-clair.png`) |
+| `fond-visio-photo.py` (photo de loft + néon, mode d'emploi en tête du script) | `visio-background` (1920×1080) | recadrage natif 1920×1080 | Drive `Social` (`fond-visio-loft.jpg`) |
 
 **Favicons** : générés depuis la tuile carrée `linkedin-company-logo.png` (marque « L. » anthracite) via
 Pillow → `favicon.ico` (16/32/48) + `apple-touch-icon.png` (180, opaque) + `icon-192/512.png` (PWA) +
