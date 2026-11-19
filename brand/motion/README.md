@@ -76,6 +76,17 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 | `organigramme` | `titre`, `haut`, `bas` (2 à 5), `chute` facultative, `remontee` (0 à 15, défaut 12) | Un haut et des bas reliés, puis des points qui remontent des bas et s'entassent sur le haut. |
 | `chute` | `texte`, `signature` facultative (`false` pour aucune) | La dernière image : le décor s'inverse, la phrase qui reste, le nom. Toujours en dernier. |
 
+### L'avatar (facultatif, sur n'importe quelle scène sauf la `chute`)
+
+`"avatar": "perdu"` sur une scène fait entrer Florent dessiné, debout à droite, posé sur la bande du décor ; il
+glisse depuis la droite, net, sans rebond. La colonne de texte se resserre (padding droit 470 px) avant que la scène
+mesure ses textes : les corps se réduisent d'eux-mêmes, mais un texte écrit pour la pleine largeur doit être
+raccourci d'un tiers. La pose est le nom d'un fichier `avatar-<pose>.png` du Drive
+`03_MARKETING-CONTENU/Photos-Pro/AVATAR/` (constante `AVATARS` de `moteur.html`) ; un chemin absolu marche aussi.
+Pose introuvable : le rendu s'arrête en le disant. Règle de Florent (19/11/2026) : pas d'avatar partout, il
+n'entre que quand il sert le propos ; le décor suffit le reste du temps. Il ne va pas sur `organigramme` (le
+schéma prend toute la largeur).
+
 ### Fonds : le style « performance »
 
 Direction donnée par Florent le 17/11/2026, après avoir vu les premiers fonds : « ce n'est pas assez orienté

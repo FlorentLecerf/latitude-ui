@@ -70,6 +70,9 @@
   .chiffre .label { line-height: 1.1; margin-top: 26px; }
   .chiffre .contexte { font-size: 36px; color: var(--doux); margin-top: 36px; line-height: 1.35; opacity: 0; }
 
+  /* l'avatar (champ "avatar" d'une scène) : debout à droite, posé sur la bande du décor ; la colonne de texte se resserre */
+  .scene.avec-avatar { padding-right: 470px; }
+  .scene .avatar { position: absolute; right: -6px; bottom: calc(var(--bas, 120px) - 8px); height: 760px; width: auto; opacity: 0; pointer-events: none; }
   .chute-finale .citation { line-height: 1.07; }
   .chute-finale .trait { width: 0; height: 8px; background: var(--terra); margin-top: 64px; }
   .chute-finale .nom { margin-top: 44px; color: var(--encre); font-weight: 800; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; opacity: 0; }
@@ -188,6 +191,8 @@ const objectif = (s, x, y) => svgEl("circle", { cx: x, cy: y, r: 24, fill: "none
 // les deux tons d'un fond performance : fd = le fond, tr = la couleur des traits, k = dosage des opacités,
 // lu = force de la lueur terracotta (franche sur sombre, à peine posée sur clair : sinon le crème vire au pêche), carte = fond d'une tuile
 const TONS = { sombre: { fd: "#262523", tr: "#FBF8F4", k: 1, lu: 0.3, carte: "#3B3835" }, clair: { fd: "#F5F0EB", tr: "#3A3A3A", k: 1.25, lu: 0.1, carte: "#FFFFFF" } };
+// les poses de l'avatar : "avatar": "perdu" dans une scène prend avatar-perdu.png de ce dossier (ou un chemin absolu)
+const AVATARS = "/Users/lecerf/Library/CloudStorage/GoogleDrive-florent@latitude.coach/Mon Drive/03_MARKETING-CONTENU/Photos-Pro/AVATAR";
 // hauteur de la bande réservée au décor, sous les textes
 const BANDE = 240;
 
@@ -434,7 +439,7 @@ const SCENES = {
       el("b", "", d).textContent = String(i + 1).padStart(2, "0"); el("span", "", d).textContent = typo(it);
       d.style.cssText = `height:${haut - 8}px;font-size:${corps}px;margin-bottom:${n > 4 ? 14 : 18}px`; return d;
     });
-    rangs.forEach((d) => { let c = corps; while (c > 30 && d.scrollWidth > 888) { c -= 2; d.style.fontSize = c + "px"; } });
+    rangs.forEach((d) => { let c = corps; while (c > 30 && d.scrollWidth > d.clientWidth + 1) { c -= 2; d.style.fontSize = c + "px"; } });
     const chuteEl = sc.chute ? el("p", "chute serif", s) : null, chute = chuteEl ? mots(chuteEl, sc.chute) : null; if (chuteEl) ajuste(chuteEl, 56, 40, 200);
     const PAS = 0.5, tChute = 0.85 + (n - 1) * PAS + 0.95;
     return { d: chute ? tChute + lecture(chute.length) + 1.0 : tChute + 0.8, jouer(t) {
@@ -536,13 +541,22 @@ window.demarrer = async (sc, format = "4x5") => {
   p1.style.top = p2.style.top = haut + "px";
   const types = { ...SCENES, ...(window.SCENES_SUR_MESURE || {}) }, ctx = { theme: ton, inverse, signature: sc.signature, format, H };
   if (!Array.isArray(sc.scenes) || !sc.scenes.length) throw new Error("le scénario n'a aucune scène");
-  let a = 0;
+  let a = 0; const chargements = [];
   const scenes = sc.scenes.map((def, i) => {
     const faire = types[def.type]; if (!faire) throw new Error(`scène ${i + 1} : type inconnu « ${def.type} » (types : ${Object.keys(types).join(", ")})`);
     const s = el("section", "scene " + def.type, def.type === "chute" ? p2 : p1);
-    const jeu = faire(def, s, ctx), d = def.duree || jeu.d + RYTHME.pause, sc1 = { ...jeu, s, a, d, type: def.type };
+    // l'avatar, facultatif : la colonne se resserre avant que la scène mesure ses textes
+    let av = null;
+    if (def.avatar) {
+      if (def.type === "chute") throw new Error(`scène ${i + 1} : pas d'avatar sur la chute (la dernière image reste la phrase et le nom)`);
+      s.classList.add("avec-avatar");
+      av = el("img", "avatar", s); av.src = encodeURI("file://" + (def.avatar.startsWith("/") ? def.avatar : `${AVATARS}/avatar-${def.avatar}.png`));
+      chargements.push(av.decode().catch(() => { throw new Error(`scène ${i + 1} : pose d'avatar introuvable « ${def.avatar} » (fichiers avatar-<pose>.png de ${AVATARS})`); }));
+    }
+    const jeu = faire(def, s, ctx), d = def.duree || jeu.d + RYTHME.pause, sc1 = { ...jeu, s, a, d, type: def.type, av };
     a += d; return sc1;
   });
+  await Promise.all(chargements);
   // la barre de progression du style performance : un segment par scène, qui se remplit pendant sa scène
   const hud = document.getElementById("hud"); hud.innerHTML = ""; hud.style.top = haut + 56 + "px";
   scenes.forEach((x) => { x.jauge = el("b", "", el("i", "", hud)); });
@@ -564,6 +578,8 @@ window.image = (T) => {
     x.s.style.transform = `translateY(${-sortie * 22}px) scale(${1 + 0.016 * clamp(t / x.d)})`;
     if (x.voile) q = p(t, 0, 0.62, E.io) * (1 - sortie);
     x.jouer(t);
+    // l'avatar glisse depuis la droite, net, sans rebond
+    if (x.av) { const k = p(t, 0.12, 0.7, E.out5); x.av.style.opacity = k; x.av.style.transform = `translateX(${(1 - k) * 70}px)`; }
   });
   // la chute arrive par un volet en biais, précédé d'une lame terracotta
   const biais = (avance) => { const x = -300 + q * (W + 640) + avance; return `polygon(0 0, ${x + 150}px 0, ${x - 150}px 100%, 0 100%)`; };
