@@ -47,7 +47,6 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 {
   "titre": "Vous déléguez déjà. Alors pourquoi tout vous revient encore ?",
   "fond": "courbe",
-  "signature": "Florent Lecerf",
   "scenes": [
     { "type": "accroche", "lignes": ["Vous déléguez déjà.", "Alors pourquoi *tout vous revient* encore ?"], "sous": "Ce que votre organigramme ne dit pas" },
     { "type": "chute", "texte": "Déléguer *sans cap,* c'est déplacer du travail." }
