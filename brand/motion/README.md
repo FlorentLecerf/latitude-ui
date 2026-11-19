@@ -74,7 +74,7 @@ Un JSON, seul ou dans le premier bloc ```` ```json ```` d'un fichier Markdown :
 | `etiquettes` | `titre`, `items` (3 à 6), `chute` facultative | Une liste courte : des rangs numérotés qui glissent en place l'un après l'autre. |
 | `chiffre` | `valeur`, `label`, `avant` et `contexte` facultatifs | Un grand chiffre qui compte jusqu'à sa valeur, son libellé. |
 | `organigramme` | `titre`, `haut`, `bas` (2 à 5), `chute` facultative, `remontee` (0 à 15, défaut 12) | Un haut et des bas reliés, puis des points qui remontent des bas et s'entassent sur le haut. |
-| `chute` | `texte`, `signature` facultative (`false` pour aucune) | La dernière image : le décor s'inverse, la phrase qui reste, le nom. Toujours en dernier. |
+| `chute` | `texte`, `signature` facultative (aucune par défaut) | La dernière image : le décor s'inverse, la phrase qui reste. Toujours en dernier. |
 
 ### L'avatar (facultatif, sur n'importe quelle scène sauf la `chute`)
 
@@ -153,8 +153,11 @@ Couleurs à prendre dans les variables du thème (`var(--encre)`, `var(--doux)`,
 
 ## Règles
 
-- **Pas de logo Latitude dans une vidéo animée** (Florent, 17/11/2026 : « on peut enlever le logo
-  Latitude. Je trouve que ça fait trop pro »). La seule marque est la signature « Florent Lecerf » de la chute.
+- **Un petit logo Latitude discret sur toute la vidéo, sans signature** (Florent, 18/11/2026, après avoir retiré le logo
+  le 17/11 : la marque voyage dans l'image, comme PARADOX sur les vidéos de Laroche ; son nom est déjà l'auteur de la
+  publication). Le moteur pose « Latitude. » au bout de la barre de progression, aux couleurs du ton (il s'inverse avec
+  la chute). `"logo": false` dans le scénario l'enlève ; une signature ne s'affiche que si la `chute` porte
+  `"signature": "…"` (le champ `signature` du haut du scénario n'est plus lu).
 - **Orienté performance, jamais « lisse »** (Florent, 17/11/2026) : un nouveau fond ou une nouvelle scène
   mesure ou monte, avec des angles nets ; pas de dégradé pastel, pas de forme molle qui dérive, pas de rebond.
   Performance d'entreprise (courbe, indicateur, cap), pas performance sportive (chrono, dossard) : le séminaire
