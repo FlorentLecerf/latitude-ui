@@ -317,7 +317,7 @@ body {
   /* La teinte de `border-primary/45` (maquette validée). */
   .lt-tile:hover, .lt-tile--active { z-index: 20; border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
   /* Le ⓘ ouvert (au clic, au toucher) : la tuile passe devant ses voisines, sinon sa phrase glisserait dessous
-     dès que la souris la quitte (le `transform` de son emplacement l'enferme dans la tuile). */
+     dès que la souris la quitte. */
   .lt-tile:has(.lt-tile__info [aria-expanded="true"]) { z-index: 20; }
   .lt-tile--dashed { border-style: dashed; border-color: color-mix(in srgb, var(--foreground) 20%, transparent); }
   .lt-tile__main { display: flex; min-width: 0; max-width: 100%; flex-direction: column; align-items: center; gap: 4px; }
@@ -335,17 +335,17 @@ body {
      (La classe seule, posée hors d'une tuile par un écran pas encore passé à la carte, reste sur une ligne.) */
   .lt-tile .lt-tile__k { white-space: normal; text-align: center; line-height: 1.3; }
   .lt-tile .lt-tile__k > span, .lt-tile .lt-tile__k > :is(button, a) > span { overflow: visible; text-overflow: clip; }
-  /* LE ⓘ D'UNE CARTE (17/11, maquette v3.3) : à droite du dernier mot, HORS du centrage — mot et chiffre
-     sur le même axe. Son emplacement a une largeur NULLE (le centrage ne le voit pas) et ne quitte jamais
-     le dernier mot : la ligne du titre est en `nowrap`, le libellé seul passe à la ligne (il est `inline`).
-     La marge symétrique garde le ⓘ dans la carte sans décentrer le titre. */
-  /* 12 px : le ⓘ (6 + 12 px à droite du mot) finit 4 px avant le bord de la carte (son padding : 10 px). */
-  .lt-tile .lt-tile__k:has(> .lt-tile__info) { white-space: nowrap; padding-inline: 12px; }
-  .lt-tile .lt-tile__k:has(> .lt-tile__info) > :is(span, button, a):not(.lt-tile__info) { display: inline; white-space: normal; }
-  /* Hauteur des CAPITALES du titre (0,7 em) posée sur la ligne de base : le centre du ⓘ tombe au milieu des lettres. */
-  .lt-tile .lt-tile__k > span.lt-tile__info { position: relative; display: inline-block; width: 0; height: 0.7em; vertical-align: baseline; overflow: visible; }
+  /* LE ⓘ D'UNE CARTE, DANS LE COIN HAUT-DROIT (19/11, maquette v5 de Ventes › Rendez-vous du CRM) : même
+     place sur toutes les cartes, à 9 px des bords. Remplace « à droite du dernier mot » (17/11). Le titre
+     reste centré sur l'axe du chiffre, quelle que soit sa longueur, et le ⓘ ne touche jamais ni un mot ni le
+     bord : la carte prend 26 px de chaque côté (le ⓘ finit à 21 px du bord). */
+  .lt-tile:has(> .lt-tile__main .lt-tile__info) { padding-inline: 26px; }
+  .lt-tile .lt-tile__k:has(> .lt-tile__info) { white-space: normal; padding-inline: 0; }
+  .lt-tile .lt-tile__k:has(> .lt-tile__info) > :is(span, button, a):not(.lt-tile__info) { display: block; }
+  /* L'emplacement n'a plus de boîte : la position se prend sur la carte (`.lt-tile`, `relative`). */
+  .lt-tile .lt-tile__k > span.lt-tile__info { display: contents; }
   /* Une boîte À NOUS porte la position : celle que l'appelant fournit garde ses propres classes (`relative`…). */
-  .lt-tile__info-pos { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); display: flex; white-space: normal; }
+  .lt-tile__info-pos { position: absolute; top: 9px; right: 9px; display: flex; white-space: normal; }
   .lt-tile__v { font-family: var(--font-dm-serif), serif; font-size: 1.5rem; line-height: 1; color: var(--foreground); }
   .lt-tile__v > :is(button, a):hover { color: var(--primary); }
   .lt-tile__aside { display: flex; flex-shrink: 0; flex-direction: column; gap: 0; padding-left: 14px; border-left: 1px solid var(--border); font-size: 11px; line-height: 1.25; color: var(--muted); text-align: left; }
