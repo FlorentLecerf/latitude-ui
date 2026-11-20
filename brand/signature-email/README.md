@@ -19,7 +19,7 @@ Conséquences :
 Logo texte à gauche (26px) + filet vertical `#E5DFD6` + bloc droit : nom gras → poste + certif
 (même ligne, certif en gris) → devise italique → portes. **CTA principal : « Prendre rendez-vous »**
 (terracotta deep `#A8492E`, gras) → `https://crm.latitude.coach/rdv/cadrage` (page native entretien
-de cadrage du CRM) ; puis « Diagnostic gratuit » et « LinkedIn » en gris `#6E6E6E`. Séparateurs « · »
+de cadrage du CRM) ; puis « Le test du dirigeant » et « LinkedIn » en gris `#6E6E6E`. Séparateurs « · »
 terracotta (écho du point du logo). Aucune URL affichée, aucun soulignement.
 
 | Fichier | Rôle |
