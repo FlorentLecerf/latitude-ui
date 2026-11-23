@@ -35,10 +35,10 @@
   .hook{font-family:'DM Serif Display',serif;font-size:50px;line-height:1.12;letter-spacing:-0.01em;}
   .hook .ter{color:var(--terra);}
   .sub{margin-top:18px;font-weight:500;font-size:22px;line-height:1.4;color:var(--doux);letter-spacing:.005em;}
-  .cta{margin-top:30px;display:inline-flex;align-items:center;gap:16px;font-weight:500;font-size:16px;
-       letter-spacing:.16em;text-transform:uppercase;color:var(--tr);}
-  .cta .filet{width:44px;height:1px;background:var(--terra);}
-  .cta .fl{color:var(--terra);font-size:17px;letter-spacing:0;}
+  .cta{margin-top:30px;display:inline-flex;align-items:center;gap:18px;font-weight:700;font-size:21px;
+       letter-spacing:.14em;text-transform:uppercase;color:var(--terra);}
+  .cta .filet{width:64px;height:2px;background:var(--terra);}
+  .cta .fl{color:var(--terra);font-size:22px;letter-spacing:0;}
   .leg{position:absolute;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
 </style>
 </head>
@@ -82,11 +82,18 @@ const serie = (ret, bas, amp, haut = 1) => Array.from({ length: N }, (_, i) => {
   const u = i / (N - 1), v = Math.max(0, (u - ret) / (1 - ret));
   return [X0 + u * (X1 - X0), Y0 - 18 - bas - (Y0 - YT - 40) * haut * Math.pow(v, 2.1) + Math.sin(i * 2.1) * amp * (1 - v)];
 });
-const dir = serie(0, 0, 7), ent = serie(0.12, -8, 5, 0.72);
+const dir = serie(0, 0, 7);
+// l'entreprise : même départ, part plus tard, monte moins vite, et s'arrête avant le dirigeant (elle est derrière)
 // courbe lisse (Catmull-Rom → Bézier)
-const lisse = (p) => { let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
+const lisse = (p) => { if (p.length > 20) return "M" + p.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L"); let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
   const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)], t = 6;
   d += ` C${b[0] + (c[0] - a[0]) / t} ${b[1] + (c[1] - a[1]) / t} ${c[0] - (e[0] - b[0]) / t} ${c[1] - (e[1] - b[1]) / t} ${c[0]} ${c[1]}`; } return d; };
+// l'entreprise = la courbe du dirigeant décalée vers la droite (en retard) et vers le bas : toujours derrière et en dessous
+const RET = 30, ECART = 12, XE = X1 - 52;
+const gabarit = el("path", { d: lisse(dir), fill: "none" }), LG = gabarit.getTotalLength();
+const dirDense = Array.from({ length: 120 }, (_, j) => { const P = gabarit.getPointAtLength(LG * j / 119); return [P.x, P.y]; }); gabarit.remove();
+const ent = dirDense.map(q => [q[0] + RET, q[1] + ECART]).filter(q => q[0] <= XE);
+ent.unshift([X0, dir[0][1] + ECART]);
 
 // aire sous la courbe du dirigeant, en dégradé léger
 const ga = el("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
@@ -102,17 +109,20 @@ el("circle", { cx: cible[0], cy: cible[1], r: 2, fill: TERRA });
 
 // les deux séries
 el("path", { d: lisse(ent), fill: "none", stroke: TR, "stroke-opacity": 0.45 * Math.min(1, K), "stroke-width": 1.5, "stroke-linecap": "round" });
+// puis elle rejoint le dirigeant au point final, en pointillé, en arrivant par en dessous (jamais devant lui)
+const eF = ent[ent.length - 1], ePrev = ent[ent.length - 4], pente = (eF[1] - ePrev[1]) / (eF[0] - ePrev[0]);
+el("path", { d: `M${eF[0]} ${eF[1]} C${eF[0] + 28} ${eF[1] + pente * 28} ${fin[0] - 4} ${fin[1] + 46} ${fin[0]} ${fin[1] + 5}`, fill: "none", stroke: TR, "stroke-opacity": 0.55 * Math.min(1, K), "stroke-width": 1.5, "stroke-dasharray": "2 5", "stroke-linecap": "round" });
 el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" });
 
 // un seul repère, au bout du réalisé, et sa ligne de lecture
-line(fin[0], fin[1] + 10, fin[0], Y0, 0.3 * K, 1, "2 4");
+// (ligne de lecture verticale retirée : elle coupait la légende de l'entreprise)
 el("circle", { cx: fin[0], cy: fin[1], r: 10, fill: TERRA, "fill-opacity": 0.16 });
 el("circle", { cx: fin[0], cy: fin[1], r: 4, fill: FD, stroke: TERRA, "stroke-width": 2 });
 
 // légende en petites capitales, au bout de chaque série
-const l1 = document.getElementById("l1"), l2 = document.getElementById("l2"), e2 = ent[N - 1];
+const l1 = document.getElementById("l1"), l2 = document.getElementById("l2"), e2 = ent[ent.length - 1];
 l1.style.left = (fin[0] - 128) + "px"; l1.style.top = (fin[1] - 6) + "px";
-l2.style.left = (e2[0] + 16) + "px"; l2.style.top = (e2[1] - 7) + "px";
+l2.style.left = (e2[0] + 14) + "px"; l2.style.top = (e2[1] + 10) + "px";
 </script>
 </body>
 </html>
