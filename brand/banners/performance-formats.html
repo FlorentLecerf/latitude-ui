@@ -57,8 +57,10 @@
 const ACCROCHE = { l1: "Le vrai levier de votre entreprise,", l2: "c'est vous.", sub: "Vous prenez de la hauteur, votre entreprise aussi.", cta: "Le test du dirigeant, en 5 minutes", fl: "&#8595;" };
 // ch : X0 départ de la courbe, X1 bout du réalisé, YT haut, S échelle des traits ; Y0 = bas de l'image moins 10 px
 const FORMATS = {
-  facebook: { W: 1640, H: 624, wm: [60, 44, 40], dx: 0, dy: "-56%", hook: 52, sub: 23, subMt: 18, ctaMt: 32, cta: 15, ctaPad: "14px 28px 14px 30px", gap: 16,
-              ch: { X0: 640, X1: 1420, YT: 110, S: 1.35, filets: 1260 }, texte: ACCROCHE },
+  // Facebook agrandit la couverture et coupe le haut et le bas (et les côtés sur téléphone) : tout ce qui compte tient
+  // dans la bande centrale (y 15 % à 85 %, x 12 % à 88 %), le graphique compris (retour de Florent, 23/11)
+  facebook: { W: 1640, H: 624, wm: [370, 96, 34], dx: 0, dy: "-50%", hook: 45, sub: 21, subMt: 16, ctaMt: 26, cta: 14, ctaPad: "13px 26px 13px 28px", gap: 16,
+              ch: { X0: 700, X1: 1330, YT: 170, Y0: 520, S: 1.15, filets: 1250 }, texte: ACCROCHE },
   gbp:      { W: 1600, H: 900, wm: [80, 64, 48], dx: 0, dy: "-58%", hook: 56, sub: 25, subMt: 22, ctaMt: 38, cta: 16, ctaPad: "16px 30px 16px 32px", gap: 18,
               ch: { X0: 620, X1: 1400, YT: 150, S: 1.6, filets: 1240 }, texte: ACCROCHE },
   // YouTube : seule la zone centrale 1546 × 423 (x 507-2053, y 508-931) se voit partout ; la composition LinkedIn y est posée
