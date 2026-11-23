@@ -58,7 +58,7 @@
 </div>
 <script>
 const h = location.hash.slice(1) || "sombre";
-if (h === "clair") document.body.classList.add("clair");
+if (h.includes("clair")) document.body.classList.add("clair");
 const cs = getComputedStyle(document.body), TR = cs.getPropertyValue("--tr").trim(), K = parseFloat(cs.getPropertyValue("--k")), FD = cs.getPropertyValue("--fd").trim(), TERRA = "#E07855";
 const W = 1584, H = 396, NS = "http://www.w3.org/2000/svg", s = document.getElementById("deco");
 const el = (n, a, p = s) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
@@ -67,7 +67,7 @@ const defs = el("defs", {});
 
 // lueur terracotta très douce derrière le graphique
 const rg = el("radialGradient", { id: "lu", cx: "92%", cy: "20%", r: "40%" }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "clair" ? 0.07 : 0.13 }, rg);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h.includes("clair") ? 0.07 : 0.13 }, rg);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
 el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
 
@@ -80,20 +80,26 @@ for (let y = Y0, i = 0; y >= YT - 10; y -= 44, i++) line(i === 0 ? X0 - 30 : 123
 for (let x = X0 - 30, i = 0; x <= W; x += 16, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9), 0.22 * K, 1);
 
 // deux séries lisses : le dirigeant devant, l'entreprise qui suit (décalée, plus basse)
-const N = 12;
-const serie = (ret, bas, amp, haut = 1) => Array.from({ length: N }, (_, i) => {
-  const u = i / (N - 1), v = Math.max(0, (u - ret) / (1 - ret));
-  return [X0 + u * (X1 - X0), Y0 - 16 - bas - (Y0 - YT - 40) * haut * Math.pow(v, 3) + Math.sin(i * 2.1) * amp * (1 - v)];
-});
-const dir = serie(0, 0, 7), ent = serie(0.12, -8, 5, 0.72);
-// courbe lisse (Catmull-Rom → Bézier)
-const lisse = (p) => { let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
+// deux formes de courbe, au choix dans l'adresse : #lisse (défaut) ou #reel
+//  lisse : la « crosse de hockey » des rapports de croissance, sans aucune bosse : plate, puis elle décolle
+//  reel  : un relevé de données (petits mouvements réels autour d'une tendance qui accélère) ; l'entreprise refait
+//          les MÊMES mouvements que le dirigeant, avec un temps de retard : on voit qu'elle le suit
+const MODE = h.includes("reel") ? "reel" : "lisse";
+const N = MODE === "reel" ? 72 : 40, HH = Y0 - YT - 40, RET = MODE === "reel" ? 7 : 4;
+const f = (u) => Math.pow(Math.max(0, u), 2.7);
+let graine = 7; const alea = () => { graine = (graine * 16807) % 2147483647; return graine / 2147483647 - 0.5; };
+const bruit = []; let marche = 0; for (let i = 0; i < N + RET; i++) { marche = marche * 0.55 + alea() * 9; bruit.push(marche); }
+const ux = (i) => i / (N - 1);
+const dir = Array.from({ length: N }, (_, i) => [X0 + ux(i) * (X1 - X0), Y0 - 16 - HH * f(ux(i)) + (MODE === "reel" ? bruit[i + RET] : 0)]);
+const ent = Array.from({ length: N }, (_, i) => { const j = i - RET, uj = ux(j);
+  return [X0 + ux(i) * (X1 - X0), Y0 - 8 - HH * 0.72 * f(uj) + (MODE === "reel" ? bruit[Math.max(0, j) + RET] * 0.8 : 0)]; });
+const lisse = (p) => { if (MODE === "reel") return "M" + p.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L"); let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
   const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)], t = 6;
   d += ` C${b[0] + (c[0] - a[0]) / t} ${b[1] + (c[1] - a[1]) / t} ${c[0] - (e[0] - b[0]) / t} ${c[1] - (e[1] - b[1]) / t} ${c[0]} ${c[1]}`; } return d; };
 
 // aire sous la courbe du dirigeant, en dégradé léger
 const ga = el("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "clair" ? 0.16 : 0.22 }, ga);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h.includes("clair") ? 0.16 : 0.22 }, ga);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
 el("path", { d: lisse(dir) + ` L${X1} ${Y0} L${X0} ${Y0} Z`, fill: "url(#aire)" });
 
@@ -123,8 +129,10 @@ l1.style.left = (fin[0] - 128) + "px"; l1.style.top = (fin[1] - 6) + "px";
 // « L'entreprise » posée juste sous sa courbe, à mi-pente : collée à la ligne grise, loin des traits verticaux
 // écrite le long de la courbe grise, juste dessous (elle suit la pente : on voit tout de suite à quelle ligne elle appartient)
 l2.style.display = "none";
-const pe = el("path", { id: "pe", d: lisse(ent), fill: "none" }, defs);
-const te = el("text", { "font-family": "DM Sans", "font-weight": 500, "font-size": 11, "letter-spacing": "2", fill: cs.getPropertyValue("--doux").trim(), dy: 17 });
+// le texte suit la tendance de la courbe (sans ses petits mouvements, sinon les lettres se chevauchent)
+const tendance = ent.map((q, i) => [q[0], Y0 - 8 - HH * 0.72 * f(ux(i - RET))]);
+const pe = el("path", { id: "pe", d: "M" + tendance.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L"), fill: "none" }, defs);
+const te = el("text", { "font-family": "DM Sans", "font-weight": 500, "font-size": 11, "letter-spacing": "2", fill: cs.getPropertyValue("--doux").trim(), dy: MODE === "reel" ? 21 : 17 });
 const tp = el("textPath", { href: "#pe", startOffset: "70%" }, te); tp.textContent = "L'ENTREPRISE";
 // le bouton du test, centré sous la première ligne du titre
 // (texte centré : le bouton est centré avec lui)
