@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <!--
-  Bannière LinkedIn — profil perso, STYLE PERFORMANCE (proposition du 23/11/2026, à valider par Florent).
-  Format : linkedin-perso-banner (1584 × 396). Langage visuel repris du moteur vidéo (../motion/README.md
-  « Fonds : le style performance ») : quadrillage, règles graduées, objectif en pointillé, courbe qui monte,
-  accent en aplat terracotta, angles nets, rien d'arrondi.
-  Variantes par l'adresse : #sombre (défaut), #clair, #avatar (clair + avatar), #avatar-sombre.
+  Bannière LinkedIn — profil perso, STYLE PERFORMANCE, registre fin (23/11/2026, à valider par Florent).
+  Format : linkedin-perso-banner (1584 × 396).
+  Retour de Florent sur la version précédente : « pas assez raffiné, ça fait de gros points, […] pas assez fin
+  au niveau des traits, pas assez premium ». D'où : traits fins (1 à 2,5 px), une courbe lisse sans points,
+  un seul repère au bout, filets de mesure discrets, pas de barre de progression (c'est un code de la vidéo).
+  Référence de registre : les graphiques des rapports financiers haut de gamme (filets, deux séries, légende en
+  petites capitales), pas un tableau de bord.
+  Variantes par l'adresse : #sombre (défaut), #clair.
 
   RENDU (depuis brand/banners/) :
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
@@ -21,88 +24,95 @@
   @font-face{font-family:'DM Sans';src:url('../tools/fonts/dm-sans-700.woff') format('woff');font-weight:700;font-display:block;}
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{width:1584px;height:396px;}
-  :root{--fd:#262523;--tr:#FBF8F4;--doux:#D9D1C7;--k:1;--terra:#E07855;}
-  body.clair{--fd:#F5F0EB;--tr:#3A3A3A;--doux:#5A5652;--k:1.25;}
+  :root{--fd:#232220;--tr:#F5F0EB;--doux:#C9C1B8;--k:1;--terra:#E07855;}
+  body.clair{--fd:#F5F0EB;--tr:#2E2D2B;--doux:#6E6A66;--k:1.6;}
   .b{position:relative;width:1584px;height:396px;overflow:hidden;background:var(--fd);
      font-family:'DM Sans',sans-serif;color:var(--tr);}
   svg.deco{position:absolute;inset:0;}
-  .wordmark{position:absolute;top:34px;left:56px;font-family:'DM Serif Display',serif;font-size:42px;letter-spacing:-0.01em;}
+  .wordmark{position:absolute;top:38px;left:60px;font-family:'DM Serif Display',serif;font-size:38px;letter-spacing:-0.01em;}
   .wordmark .dot{color:var(--terra);}
-  /* barre de progression du style performance */
-  .prog{position:absolute;top:0;left:0;right:0;height:6px;display:flex;gap:6px;}
-  .prog i{flex:1;background:var(--tr);opacity:.14;}
-  .prog i.on{background:var(--terra);opacity:1;}
-  .txt{position:absolute;left:370px;top:50%;transform:translateY(-46%);width:900px;}
-  .hook{font-family:'DM Serif Display',serif;font-size:52px;line-height:1.08;letter-spacing:-0.005em;}
-  .acc{display:inline-block;background:var(--terra);color:#FBF8F4;padding:0 14px 4px;margin-top:6px;}
-  .sub{margin-top:16px;font-weight:500;font-size:25px;line-height:1.35;color:var(--doux);}
-  .cta{margin-top:26px;display:inline-flex;align-items:center;gap:14px;font-weight:700;font-size:23px;letter-spacing:.01em;
-       color:var(--terra);padding:13px 26px;border:2px solid var(--terra);}
-  .av{position:absolute;bottom:-190px;right:70px;height:600px;display:none;}
-  body.avec-avatar .av{display:block;}
+  .txt{position:absolute;left:380px;top:50%;transform:translateY(-50%);width:760px;}
+  .hook{font-family:'DM Serif Display',serif;font-size:50px;line-height:1.12;letter-spacing:-0.01em;}
+  .hook .ter{color:var(--terra);}
+  .sub{margin-top:18px;font-weight:500;font-size:22px;line-height:1.4;color:var(--doux);letter-spacing:.005em;}
+  .cta{margin-top:30px;display:inline-flex;align-items:center;gap:16px;font-weight:500;font-size:16px;
+       letter-spacing:.16em;text-transform:uppercase;color:var(--tr);}
+  .cta .filet{width:44px;height:1px;background:var(--terra);}
+  .cta .fl{color:var(--terra);font-size:17px;letter-spacing:0;}
+  .leg{position:absolute;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
 </style>
 </head>
 <body>
 <div class="b">
   <svg class="deco" id="deco" viewBox="0 0 1584 396"></svg>
-  <div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
   <div class="wordmark">Latitude<span class="dot">.</span></div>
   <div class="txt">
-    <div class="hook">Le vrai levier de votre entreprise,<br><span class="acc">c'est vous.</span></div>
+    <div class="hook">Le vrai levier de votre entreprise,<br><span class="ter">c'est vous.</span></div>
     <div class="sub">Vous prenez de la hauteur, votre entreprise aussi.</div>
-    <div class="cta">Le test du dirigeant, en 5 minutes <span>&#8595;</span></div>
+    <div class="cta"><span class="filet"></span>Le test du dirigeant, en 5 minutes <span class="fl">&#8595;</span></div>
   </div>
-  <img class="av" src="file:///Users/lecerf/Library/CloudStorage/GoogleDrive-florent@latitude.coach/Mon%20Drive/03_MARKETING-CONTENU/Photos-Pro/AVATAR/avatar-bras-croises.png">
+  <div class="leg" id="l1" style="color:var(--terra)">Le dirigeant</div>
+  <div class="leg" id="l2" style="color:var(--doux)">L'entreprise</div>
 </div>
 <script>
 const h = location.hash.slice(1) || "sombre";
-if (h === "clair" || h === "avatar") document.body.classList.add("clair");
-if (h.startsWith("avatar")) document.body.classList.add("avec-avatar");
-const av = h.startsWith("avatar");
-const cs = getComputedStyle(document.body), TR = cs.getPropertyValue("--tr").trim(), K = parseFloat(cs.getPropertyValue("--k")), TERRA = "#E07855", FD = cs.getPropertyValue("--fd").trim();
+if (h === "clair") document.body.classList.add("clair");
+const cs = getComputedStyle(document.body), TR = cs.getPropertyValue("--tr").trim(), K = parseFloat(cs.getPropertyValue("--k")), FD = cs.getPropertyValue("--fd").trim(), TERRA = "#E07855";
 const W = 1584, H = 396, NS = "http://www.w3.org/2000/svg", s = document.getElementById("deco");
 const el = (n, a, p = s) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
-const line = (x1, y1, x2, y2, op, w = 1) => el("line", { x1, y1, x2, y2, stroke: TR, "stroke-opacity": op, "stroke-width": w });
-// lueur terracotta à droite
+const line = (x1, y1, x2, y2, op, w = 1, dash) => el("line", Object.assign({ x1, y1, x2, y2, stroke: TR, "stroke-opacity": op, "stroke-width": w }, dash ? { "stroke-dasharray": dash } : {}));
 const defs = el("defs", {});
-const rg = el("radialGradient", { id: "lu", cx: "88%", cy: "35%", r: "50%" }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "sombre" || h === "avatar-sombre" ? 0.3 : 0.1 }, rg);
+
+// lueur terracotta très douce derrière le graphique
+const rg = el("radialGradient", { id: "lu", cx: "86%", cy: "30%", r: "42%" }, defs);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "clair" ? 0.07 : 0.13 }, rg);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
 el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
-// quadrillage, un trait sur quatre plus marqué
-const P = 44;
-for (let x = P, i = 1; x < W; x += P, i++) line(x, 0, x, H, (i % 4 ? 0.04 : 0.075) * K);
-for (let y = H - P, i = 1; y > 0; y -= P, i++) line(0, y, W, y, (i % 4 ? 0.04 : 0.075) * K);
-// règles graduées (gauche et bas)
-for (let y = H - 30, i = 0; y > 20; y -= 15, i++) line(0, y, i % 5 ? 12 : 24, y, 0.4 * K, 2);
-for (let x = 30, i = 0; x < W - 10; x += 15, i++) line(x, H, x, H - (i % 5 ? 12 : 24), 0.4 * K, 2);
-if (!av) {
-// la courbe : le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle part sous le texte (bas) et décolle à droite
-const x0 = 1170, x1 = av ? 1330 : 1515, N = 12;
-const pts = (dy, ret) => Array.from({ length: N }, (_, i) => { const u = Math.max(0, i / (N - 1) - ret) / (1 - ret);
-  const wig = Math.sin(i * 1.7) * 8 * (1 - u);
-  return [x0 + (i / (N - 1)) * (x1 - x0), 362 + dy - 280 * Math.pow(u, 2.2) + wig]; });
-const dir = pts(0, 0), ent = pts(30, 0.12);
-// des barres derrière la courbe : la mesure, qui monte avec elle
-dir.forEach((q, i) => { if (i % 1) return; const bw = (x1 - x0) / (N - 1) * 0.55; el("rect", { x: q[0] - bw / 2, y: q[1] + 18, width: bw, height: Math.max(0, H - 22 - q[1] - 18), fill: TR, "fill-opacity": 0.07 * K }); });
-const path = (p) => "M" + p.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L");
-// l'objectif, au-dessus : trajectoire en pointillé et anneau
-const goal = [x1 + 36, 34];
-el("path", { d: `M${dir[N - 3][0]} ${dir[N - 3][1]} L${goal[0]} ${goal[1]}`, stroke: TR, "stroke-opacity": 0.38 * K, "stroke-width": 2.5, "stroke-dasharray": "2 9", "stroke-linecap": "round", fill: "none" });
-el("circle", { cx: goal[0], cy: goal[1], r: 20, fill: "none", stroke: TERRA, "stroke-width": 3.5, "stroke-dasharray": "6 6" });
-// aire sous la courbe
+
+// zone du graphique
+const X0 = 1150, X1 = 1450, Y0 = 336, YT = 74;
+// filets horizontaux, très discrets, dans la zone du graphique seulement
+for (let y = Y0, i = 0; y >= YT - 10; y -= 44, i++) line(X0 - 30, y, W, y, (i === 0 ? 0.22 : 0.06) * K, 1);
+// graduations fines le long de l'axe bas
+for (let x = X0 - 30, i = 0; x <= W; x += 14, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9), 0.22 * K, 1);
+
+// deux séries lisses : le dirigeant devant, l'entreprise qui suit (décalée, plus basse)
+const N = 9;
+const serie = (ret, bas, amp, haut = 1) => Array.from({ length: N }, (_, i) => {
+  const u = i / (N - 1), v = Math.max(0, (u - ret) / (1 - ret));
+  return [X0 + u * (X1 - X0), Y0 - 18 - bas - (Y0 - YT - 40) * haut * Math.pow(v, 2.1) + Math.sin(i * 2.1) * amp * (1 - v)];
+});
+const dir = serie(0, 0, 7), ent = serie(0.12, -8, 5, 0.72);
+// courbe lisse (Catmull-Rom → Bézier)
+const lisse = (p) => { let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
+  const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)], t = 6;
+  d += ` C${b[0] + (c[0] - a[0]) / t} ${b[1] + (c[1] - a[1]) / t} ${c[0] - (e[0] - b[0]) / t} ${c[1] - (e[1] - b[1]) / t} ${c[0]} ${c[1]}`; } return d; };
+
+// aire sous la courbe du dirigeant, en dégradé léger
 const ga = el("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.6 }, ga); el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
-el("path", { d: path(dir) + ` L${x1} ${H} L${x0} ${H} Z`, fill: "url(#aire)" });
-el("path", { d: path(ent), fill: "none", stroke: TR, "stroke-opacity": 0.6, "stroke-width": 4, "stroke-linejoin": "round" });
-el("path", { d: path(dir), fill: "none", stroke: TERRA, "stroke-width": 8, "stroke-linejoin": "round" });
-dir.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 7.5, fill: FD, stroke: TERRA, "stroke-width": 4.5 }));
-// le repère au bout du réalisé
-const e = dir[N - 1];
-el("circle", { cx: e[0], cy: e[1], r: 32, fill: TERRA, opacity: 0.28 });
-el("circle", { cx: e[0], cy: e[1], r: 13, fill: FD, stroke: TERRA, "stroke-width": 7 });
-el("line", { x1: e[0], y1: e[1] + 22, x2: e[0], y2: H, stroke: TR, "stroke-opacity": 0.35, "stroke-width": 1.5, "stroke-dasharray": "5 7" });
-}
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "clair" ? 0.16 : 0.22 }, ga);
+el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
+el("path", { d: lisse(dir) + ` L${X1} ${Y0} L${X0} ${Y0} Z`, fill: "url(#aire)" });
+
+// l'objectif : un prolongement en pointillé fin vers une cible
+const fin = dir[N - 1], cible = [X1 + 44, YT - 46];
+el("path", { d: `M${fin[0]} ${fin[1]} Q${fin[0] + 24} ${fin[1] - 34} ${cible[0]} ${cible[1]}`, fill: "none", stroke: TERRA, "stroke-opacity": 0.7, "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round" });
+el("circle", { cx: cible[0], cy: cible[1], r: 7, fill: "none", stroke: TERRA, "stroke-width": 1.25 });
+el("circle", { cx: cible[0], cy: cible[1], r: 2, fill: TERRA });
+
+// les deux séries
+el("path", { d: lisse(ent), fill: "none", stroke: TR, "stroke-opacity": 0.45 * Math.min(1, K), "stroke-width": 1.5, "stroke-linecap": "round" });
+el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" });
+
+// un seul repère, au bout du réalisé, et sa ligne de lecture
+line(fin[0], fin[1] + 10, fin[0], Y0, 0.3 * K, 1, "2 4");
+el("circle", { cx: fin[0], cy: fin[1], r: 10, fill: TERRA, "fill-opacity": 0.16 });
+el("circle", { cx: fin[0], cy: fin[1], r: 4, fill: FD, stroke: TERRA, "stroke-width": 2 });
+
+// légende en petites capitales, au bout de chaque série
+const l1 = document.getElementById("l1"), l2 = document.getElementById("l2"), e2 = ent[N - 1];
+l1.style.left = (fin[0] - 128) + "px"; l1.style.top = (fin[1] - 6) + "px";
+l2.style.left = (e2[0] + 16) + "px"; l2.style.top = (e2[1] - 7) + "px";
 </script>
 </body>
 </html>
