@@ -8,6 +8,7 @@
     facebook  1640 × 624   couverture Facebook
     gbp       1600 × 900   couverture Google Business (16:9)
     youtube   2560 × 1440  bannière YouTube (zone visible partout : 1546 × 423 au centre)
+    page      2100 × 350   couverture de la page entreprise LinkedIn (rendu 2× = 4200 × 700)
     og        1200 × 630   image d'aperçu du lien du test (diag.latitude.coach)
   ton : sombre (défaut) ou clair.
 
@@ -63,6 +64,10 @@ const FORMATS = {
   // YouTube : seule la zone centrale 1546 × 423 (x 507-2053, y 508-931) se voit partout ; la composition LinkedIn y est posée
   youtube:  { W: 2560, H: 1440, wm: [540, 536, 38], dx: 0, dy: "-56%", hook: 50, sub: 22, subMt: 18, ctaMt: 28, cta: 14, ctaPad: "13px 26px 13px 28px", gap: 16,
               ch: { X0: 1190, X1: 1925, YT: 572, Y0: 921, S: 1.25, filets: 1690 }, texte: ACCROCHE },
+  // page entreprise LinkedIn : voix de marque, la thèse ; pas de bouton (la page a les siens) ; le logo carré recouvre le bas gauche
+  page:     { W: 2100, H: 350, wm: null, dx: 0, dy: "-50%", hook: 46, sub: 15, subMt: 18, ctaMt: 0, cta: 0, ctaPad: "", gap: 0, tag: true,
+              ch: { X0: 960, X1: 1880, YT: 76, Y0: 340, S: 1.1, filets: 1560 },
+              texte: { l1: "Une entreprise ne grandit qu'à la hauteur", l2html: "de <span class=\"ter\">son dirigeant.</span>", sub: "Coaching mindset et performance", cta: "" } },
   og:       { W: 1200, H: 630, wm: [56, 44, 36], dx: 0, dy: "-62%", hook: 56, sub: 0, subMt: 0, ctaMt: 34, cta: 14, ctaPad: "13px 26px 13px 28px", gap: 14,
               ch: { X0: 560, X1: 1060, YT: 120, S: 1.3, filets: 960 },
               texte: { l1: "Où en êtes-vous,", l2: "en tant que dirigeant ?", sub: "", cta: "Le test du dirigeant · 5 minutes", fl: "" } },
@@ -73,12 +78,14 @@ if (ton === "clair") document.body.classList.add("clair");
 const { W, H } = F;
 document.documentElement.style.cssText = document.body.style.cssText = `width:${W}px;height:${H}px`;
 const B = document.getElementById("b"); B.style.width = W + "px"; B.style.height = H + "px";
-const wm = document.getElementById("wm"); wm.style.left = F.wm[0] + "px"; wm.style.top = F.wm[1] + "px"; wm.style.fontSize = F.wm[2] + "px";
+const wm = document.getElementById("wm"); if (!F.wm) wm.remove(); else { wm.style.left = F.wm[0] + "px"; wm.style.top = F.wm[1] + "px"; wm.style.fontSize = F.wm[2] + "px"; }
 const T = F.texte, txt = document.getElementById("txt"); txt.style.transform = `translate(${F.dx}px,${F.dy})`;
 const hook = document.getElementById("hook"); hook.style.fontSize = F.hook + "px";
-hook.innerHTML = `${T.l1}<br><span class="ter">${T.l2}</span>`;
+hook.innerHTML = T.l2html ? `${T.l1}<br>${T.l2html}` : `${T.l1}<br><span class="ter">${T.l2}</span>`;
 const sub = document.getElementById("sub"); if (T.sub) { sub.textContent = T.sub; sub.style.fontSize = F.sub + "px"; sub.style.marginTop = F.subMt + "px"; } else sub.remove();
+if (F.tag) { sub.style.textTransform = "uppercase"; sub.style.letterSpacing = ".22em"; sub.style.fontWeight = 500; }
 const ctaw = document.getElementById("ctaw"), cta = document.getElementById("cta"); ctaw.style.marginTop = F.ctaMt + "px";
+if (!T.cta) ctaw.remove();
 cta.innerHTML = T.cta + (T.fl ? ` <span class="fl">${T.fl}</span>` : ""); cta.style.fontSize = F.cta + "px"; cta.style.padding = F.ctaPad; cta.style.gap = F.gap + "px";
 if (T.fl) cta.querySelector(".fl").style.fontSize = (F.cta + 2) + "px";
 
