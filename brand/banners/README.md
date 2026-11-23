@@ -12,6 +12,7 @@ n'est qu'un rendu local jetable.
 
 | Fichier | Format (registry) | Rendu (scale 2×) | Destination |
 |---|---|---|---|
+| `linkedin-perso-performance.html` + `performance-formats.html` (#facebook, #gbp, #og ; -sombre ou -clair) | **DA registre fin, validée le 23/11/2026** (voir `../../DESIGN.md`) : ces deux gabarits remplacent `linkedin-perso`, `facebook-cover`, `google-business-cover` et `og-diagnostic` | 2× (l'aperçu réduit à 1200×630) | Drive `Social` (2026-11-23-*) ; aperçu → `latitude-diagnostic/src/app/opengraph-image.png` et `twitter-image.png` |
 | `linkedin-perso.html` | `linkedin-perso-banner` (1584×396) | 3168×792 | Drive `Social` |
 | `linkedin-page-cover.html` | `linkedin-page-cover` (4200×700, 6:1) | base 2100×350 → 4200×700 | Drive `Social` |
 | `linkedin-company-logo.html` | `linkedin-company-logo` (carré) | base 800×800 → 1600×1600 | Drive `Logos` |
