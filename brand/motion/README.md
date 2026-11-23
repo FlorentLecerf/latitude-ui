@@ -88,6 +88,11 @@ schéma prend toute la largeur).
 
 ### Fonds : le style « performance »
 
+> **À REPRENDRE (23/11/2026)** : la DA marketing est désormais le **registre fin** de `../../DESIGN.md`
+> (« Supports marketing : style performance, registre fin »). Le moteur ci-dessous (traits épais, points sur les courbes,
+> barres, aplat de l'accent, barre de progression) date d'avant : il doit être repris dans ce registre avant la
+> prochaine vidéo.
+
 Direction donnée par Florent le 17/11/2026, après avoir vu les premiers fonds : « ce n'est pas assez orienté
 performance […] c'est trop lisse ». Latitude fait travailler le dirigeant sur lui pour améliorer sa performance,
 donc celle de son entreprise : le décor **mesure** (quadrillage, règles graduées) et **monte** (une courbe, des

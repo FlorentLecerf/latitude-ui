@@ -90,9 +90,33 @@ depuis ce master. Le registre des formats (dimensions par destination) et le mod
 d'emploi agents vivent dans [`brand/`](brand/README.md). Masters + exports lourds sur
 Google Drive `04_IDENTITE-MARQUE`. Marque carrée (favicon/avatars) = « L » DM Serif + point.
 
+## Supports marketing : style performance, registre fin (DA validée le 23/11/2026)
+Tout visuel marketing (bannières, images d'aperçu, vidéos animées, carrousels, illustrations, site) suit ce
+registre. Gabarit de référence : `brand/banners/linkedin-perso-performance.html`. Florent, 23/11 : « ce style
+"barre fine" intègre la DA de Latitude », tout ce qui a été produit depuis le positionnement « performance » est à
+reprendre dans ce style.
+- **Registre** : celui des graphiques des rapports financiers haut de gamme, pas un tableau de bord ni une infographie.
+  Ce qui a été rejeté : « pas assez raffiné, ça fait de gros points, […] pas assez fin au niveau des traits, pas assez
+  premium », « on dirait un truc d'amateur ».
+- **Traits fins** : 1 à 1,5 px pour les filets et la série secondaire, 2,5 px au plus pour la série terracotta.
+  Courbes lisses, jamais de points sur la courbe, un seul repère (anneau fin) au point qui compte.
+- **Mesure discrète** : quelques filets horizontaux très légers, une échelle graduée fine en bas ; pas de quadrillage
+  plein, pas de règle épaisse, pas de barre de progression (code propre à la vidéo, sans sens sur une image fixe).
+- **Le graphique dit la thèse** : « Le dirigeant » (terracotta) monte en tête ; « L'entreprise » (gris crème) le suit,
+  toujours en dessous et en retard, puis le rejoint en pointillé à la cible (objectif = anneau fin en pointillé, trait
+  vertical pointillé jusqu'à l'échelle). Légendes en petites capitales espacées, collées à leur courbe (« L'entreprise »
+  écrite le long de la sienne).
+- **Typo** : DM Serif pour l'accroche, accent terracotta en couleur de texte (pas d'aplat) ; DM Sans en petites
+  capitales espacées pour les repères.
+- **Appel à l'action** : bouton pilule, contour terracotta 1,5 px, fond terracotta à 10 %, texte en petites capitales
+  grasses, de taille mesurée, centré sous la première ligne du titre.
+- **Fond** : sombre par défaut (anthracite), lueur terracotta très douce derrière le graphique ; clair possible.
+- Aucun chiffre dans le décor (les graduations n'ont pas de valeur).
+
 ## Décisions
 | Date | Décision | Raison |
 |------|----------|--------|
+| 2026-11-23 | Style performance, **registre fin** : DA de tous les supports marketing (section ci-dessus), gabarit `brand/banners/linkedin-perso-performance.html` | Bannière LinkedIn validée par Florent après quatre allers-retours ; tout ce qui a été produit depuis le positionnement « performance » (vidéos animées, carrousels, illustrations) est à reprendre dans ce registre. |
 | 2026-11-02 | `StatTile` : tuile de chiffre 64 px, libellé + chiffre (24 px) centrés, décomposition sur le CÔTÉ, information hors tunnel en pointillé et écartée par `FunnelDivider` | Maquette des cartes de l'écran Appels validée par Florent ; tout écran de chiffres refait la reprend. |
 | 2026-11-17 | ⓘ option A (i droit DM Sans 600, cercle fin 12 px) ; `StatTile` reçoit `info` (le bouton ⓘ, posé à droite du dernier mot sur une largeur nulle : le titre et le chiffre restent sur le même axe) ; bas de tuile 22 px ; `StatTileTitle` retiré | Florent, maquette Conversion v3.3 : le ⓘ EXPLIQUE (une phrase), le survol de la carte détaille, le chiffre ouvre la liste ; carte sans phrase = pas de ⓘ. Le ⓘ dans le flux du titre centré décalait le mot. |
 | 2026-11-13 | `StatTile` devient LA carte de chiffre : 88 px au moins (plus 64), chiffre calé en bas, titre sur plusieurs lignes jamais coupé, ⓘ de 15 px (`InfoDot`, `StatTileTitle`) à côté du titre | Règle « Cartes de chiffres » validée par Florent le 12/11 sur maquette : une seule carte et un seul geste dans tout le CRM. Le CRM posait ces mesures par-dessus la tuile ; elles remontent ici, le CRM garde le geste (détail au survol, fenêtre au clic). |
