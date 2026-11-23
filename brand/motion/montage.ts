@@ -11,7 +11,8 @@
 // {
 //   "source": "/chemin/du/rush.mov",                      la prise de Florent, 9x16
 //   "coupes": [[0, 1.3], [94.35, 95.25]],                  passages à retirer, en secondes de la PRISE
-//   "titre": { "lignes": ["Tout était prêt.", "*Sauf moi.*"], "jusqua": 3.2 },   accroche en haut, *accent* terracotta
+//   "titre": { "lignes": ["Tout était prêt.", "*Sauf moi.*"], "jusqua": 5, "fin": 4 },   accroche en haut, *accent* terracotta :
+//            les « jusqua » premières secondes, puis de retour sur les « fin » dernières (0 : pas de retour)
 //   "sous_titres": { "decalage": 0.3, "corrections": { "boîtes en": "watts en" } },   false pour s'en passer
 //   "incrustations": [ { "fond": "plafond", "debut": 20.5, "duree": 6 } ],          en secondes de la vidéo COUPÉE
 //   "miniature": 1.0                                        instant de la miniature (défaut : 1 s, le titre à l'écran)
@@ -173,10 +174,16 @@ if (import.meta.main) {
       fc.push(`${v}[${n}:v]overlay=x=(W-w)/2:y=${Y_SOUS_TITRES}-h/2:enable='between(t,${g[0].toFixed(2)},${g[1].toFixed(2)})'[o${n}]`); v = `[o${n}]`; n++;
     });
     if (titrePng) {
-      // le titre et son voile, en fondu (0,3 s à l'entrée, 0,5 s à la sortie)
-      const fin = Number(m.titre.jusqua ?? 3.2);
-      entrees.push("-loop", "1", "-t", String(fin + 0.1), "-i", titrePng);
-      fc.push(`[${n}:v]format=rgba,fade=in:st=0:d=0.3:alpha=1,fade=out:st=${(fin - 0.5).toFixed(2)}:d=0.5:alpha=1[t${n}]`, `${v}[t${n}]overlay=0:0:eof_action=pass[o${n}]`); v = `[o${n}]`; n++;
+      // le titre et son voile, en fondu : au début (« jusqua », 5 s par défaut), puis de retour sur la fin (« fin » : les
+      // dernières secondes, 4 par défaut ; 0 pour ne pas le remettre). Florent, 23/11 : plus longtemps en haut, et à la fin.
+      const jusqua = Number(m.titre.jusqua ?? 5), retour = Number(m.titre.fin ?? 4);
+      entrees.push("-loop", "1", "-t", String(jusqua + 0.1), "-i", titrePng);
+      fc.push(`[${n}:v]format=rgba,fade=in:st=0:d=0.3:alpha=1,fade=out:st=${(jusqua - 0.5).toFixed(2)}:d=0.5:alpha=1[t${n}]`, `${v}[t${n}]overlay=0:0:eof_action=pass[o${n}]`); v = `[o${n}]`; n++;
+      if (retour > 0) {
+        const a = Math.max(jusqua + 1, D - retour);
+        entrees.push("-loop", "1", "-t", String(D - a + 0.1), "-i", titrePng);
+        fc.push(`[${n}:v]format=rgba,fade=in:st=0:d=0.5:alpha=1,setpts=PTS-STARTPTS+${a.toFixed(2)}/TB[t${n}]`, `${v}[t${n}]overlay=0:0:eof_action=pass[o${n}]`); v = `[o${n}]`; n++;
+      }
     }
     const graphe = join(travail, "graphe.txt"); writeFileSync(graphe, fc.join(";") || "[0:v]null[o0]");
     const mp4 = join(sortie, `${nom}.mp4`);

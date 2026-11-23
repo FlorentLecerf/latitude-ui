@@ -196,8 +196,8 @@ puis on rend. La procédure complète (où trouver la prise, quoi couper, où in
   noir aux angles arrondis, centrés à 1 380 px (sous le menton), par groupes de 4 mots ou 22 signes au plus, coupés
   après la ponctuation, retardés de 0,3 s ; titre au **registre fin** (Florent, 23/11 : le bandeau
   noir du 20/11 « pas assez raffiné ») : DM Serif Display 72 px, crème et accent terracotta en couleur de texte, sous un
-  filet terracotta de 2 px, sur un voile dégradé très doux en haut de l'image, sans aplat ; il entre et sort en fondu, les
-  3,2 premières secondes. Ces réglages sont en tête de `montage.ts`.
+  filet terracotta de 2 px, sur un voile dégradé très doux en haut de l'image, sans aplat ; il entre et sort en fondu ; il reste les 5 premières secondes et
+  revient sur les 4 dernières (Florent, 23/11), réglables par vidéo (`jusqua`, `fin`) selon le style de la vidéo. Ces réglages sont en tête de `montage.ts`.
 - Il faut whisper.cpp (`brew install whisper-cpp`) et son modèle medium dans `~/.cache/whisper.cpp/ggml-medium.bin`
   (le message d'erreur donne la commande pour le télécharger s'il manque).
 - Le travail intermédiaire (prise coupée, transcription, images des sous-titres, incrustations) reste dans
