@@ -9,6 +9,7 @@
     gbp       1600 × 900   couverture Google Business (16:9)
     youtube   2560 × 1440  bannière YouTube (zone visible partout : 1546 × 423 au centre)
     page      2100 × 350   couverture de la page entreprise LinkedIn (rendu 2× = 4200 × 700)
+    site      1200 × 630   image d'aperçu de latitude.coach et des pages publiques du CRM (rdv.)
     og        1200 × 630   image d'aperçu du lien du test (diag.latitude.coach)
   ton : sombre (défaut) ou clair.
 
@@ -70,6 +71,10 @@ const FORMATS = {
   page:     { W: 2100, H: 350, wm: null, dx: 0, dy: "-50%", hook: 46, sub: 15, subMt: 18, ctaMt: 0, cta: 0, ctaPad: "", gap: 0, tag: true,
               ch: { X0: 960, X1: 1880, YT: 76, Y0: 340, S: 1.1, filets: 1560 },
               texte: { l1: "Une entreprise ne grandit qu'à la hauteur", l2html: "de <span class=\"ter\">son dirigeant.</span>", sub: "Coaching mindset et performance", cta: "" } },
+  // image d'aperçu du site latitude.coach et des pages du CRM (rdv.latitude.coach) : la thèse, voix de marque, sans bouton
+  site:     { W: 1200, H: 630, wm: [56, 44, 36], dx: 0, dy: "-60%", hook: 50, sub: 14, subMt: 22, ctaMt: 0, cta: 0, ctaPad: "", gap: 0, tag: true,
+              ch: { X0: 560, X1: 1060, YT: 120, S: 1.3, filets: 960 },
+              texte: { l1: "Une entreprise", l2html: "ne grandit qu'à la hauteur<br>de <span class=\"ter\">son dirigeant.</span>", sub: "Coaching mindset et performance", cta: "" } },
   og:       { W: 1200, H: 630, wm: [56, 44, 36], dx: 0, dy: "-62%", hook: 56, sub: 0, subMt: 0, ctaMt: 34, cta: 14, ctaPad: "13px 26px 13px 28px", gap: 14,
               ch: { X0: 560, X1: 1060, YT: 120, S: 1.3, filets: 960 },
               texte: { l1: "Où en êtes-vous,", l2: "en tant que dirigeant ?", sub: "", cta: "Le test du dirigeant · 5 minutes", fl: "" } },
