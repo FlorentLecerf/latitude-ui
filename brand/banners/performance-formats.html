@@ -2,9 +2,10 @@
 <html lang="fr">
 <!--
   Couvertures et image d'aperçu au style performance, REGISTRE FIN (DA validée le 23/11/2026, ../../DESIGN.md).
-  Même graphique et mêmes règles que la bannière LinkedIn validée (linkedin-perso-performance.html), mis en page
-  pour chaque format. Le format et le ton se choisissent dans l'adresse : #<format>-<ton>.
-    facebook  1640 × 624   couverture Facebook (le mobile rogne les côtés : rien d'utile à moins de 180 px du bord)
+  Composition validée par Florent le 23/11 sur la bannière LinkedIn (linkedin-perso-performance.html) : texte centré,
+  grand graphique « crosse de hockey » lisse posé sur le bord bas et qui monte jusqu'au coin haut droit ; sa partie
+  basse passe sous le bouton sans jamais toucher le texte. Format et ton dans l'adresse : #<format>-<ton>.
+    facebook  1640 × 624   couverture Facebook
     gbp       1600 × 900   couverture Google Business (16:9)
     og        1200 × 630   image d'aperçu du lien du test (diag.latitude.coach)
   ton : sombre (défaut) ou clair.
@@ -29,14 +30,13 @@
   svg.deco{position:absolute;inset:0;}
   .wordmark{position:absolute;font-family:'DM Serif Display',serif;letter-spacing:-0.01em;}
   .wordmark .dot{color:var(--terra);}
-  .txt{position:absolute;top:50%;transform:translateY(-50%);}
+  .txt{position:absolute;left:0;right:0;top:50%;text-align:center;}
   .hook{font-family:'DM Serif Display',serif;line-height:1.12;letter-spacing:-0.01em;}
   .hook .ter{color:var(--terra);}
   .sub{font-weight:500;line-height:1.4;color:var(--doux);letter-spacing:.005em;}
   .cta{display:inline-flex;align-items:center;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tr);
        border:1.5px solid var(--terra);border-radius:999px;background:rgba(224,120,85,.10);white-space:nowrap;}
   .cta .fl{color:var(--terra);letter-spacing:0;}
-  .cta-wrap{text-align:center;}
   .leg{position:absolute;font-weight:500;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
 </style>
 </head>
@@ -47,20 +47,20 @@
   <div class="txt" id="txt">
     <div class="hook" id="hook"></div>
     <div class="sub" id="sub"></div>
-    <div class="cta-wrap" id="ctaw"><div class="cta" id="cta"></div></div>
+    <div id="ctaw"><div class="cta" id="cta"></div></div>
   </div>
   <div class="leg" id="l1" style="color:var(--terra)">Le dirigeant</div>
 </div>
 <script>
-// ---------- les formats : texte à gauche, graphique à droite ----------
 const ACCROCHE = { l1: "Le vrai levier de votre entreprise,", l2: "c'est vous.", sub: "Vous prenez de la hauteur, votre entreprise aussi.", cta: "Le test du dirigeant, en 5 minutes", fl: "&#8595;" };
+// ch : X0 départ de la courbe, X1 bout du réalisé, YT haut, S échelle des traits ; Y0 = bas de l'image moins 10 px
 const FORMATS = {
-  facebook: { W: 1640, H: 624, wm: [200, 56, 40], tx: 200, hook: 52, sub: 23, subMt: 18, ctaMt: 32, cta: 15, ctaPad: "14px 28px 14px 30px", gap: 16,
-              ch: { X0: 1020, X1: 1280, Y0: 470, YT: 190, s: 1.05 }, texte: ACCROCHE },
-  gbp:      { W: 1600, H: 900, wm: [150, 90, 48], tx: 150, hook: 56, sub: 26, subMt: 22, ctaMt: 40, cta: 16, ctaPad: "16px 30px 16px 32px", gap: 18,
-              ch: { X0: 1050, X1: 1350, Y0: 640, YT: 300, s: 1.2 }, texte: ACCROCHE },
-  og:       { W: 1200, H: 630, wm: [80, 62, 40], tx: 80, hook: 58, sub: 0, subMt: 0, ctaMt: 36, cta: 15, ctaPad: "14px 28px 14px 30px", gap: 14,
-              ch: { X0: 810, X1: 1010, Y0: 500, YT: 210, s: 1.1 },
+  facebook: { W: 1640, H: 624, wm: [60, 44, 40], dx: 0, dy: "-56%", hook: 52, sub: 23, subMt: 18, ctaMt: 32, cta: 15, ctaPad: "14px 28px 14px 30px", gap: 16,
+              ch: { X0: 640, X1: 1420, YT: 110, S: 1.35, filets: 1260 }, texte: ACCROCHE },
+  gbp:      { W: 1600, H: 900, wm: [80, 64, 48], dx: 0, dy: "-58%", hook: 56, sub: 25, subMt: 22, ctaMt: 38, cta: 16, ctaPad: "16px 30px 16px 32px", gap: 18,
+              ch: { X0: 620, X1: 1400, YT: 150, S: 1.6, filets: 1240 }, texte: ACCROCHE },
+  og:       { W: 1200, H: 630, wm: [56, 44, 36], dx: 0, dy: "-62%", hook: 56, sub: 0, subMt: 0, ctaMt: 34, cta: 14, ctaPad: "13px 26px 13px 28px", gap: 14,
+              ch: { X0: 560, X1: 1060, YT: 120, S: 1.3, filets: 960 },
               texte: { l1: "Où en êtes-vous,", l2: "en tant que dirigeant ?", sub: "", cta: "Le test du dirigeant · 5 minutes", fl: "" } },
 };
 const [fmt, ton] = (location.hash.slice(1) || "facebook-sombre").split("-");
@@ -70,40 +70,36 @@ const { W, H } = F;
 document.documentElement.style.cssText = document.body.style.cssText = `width:${W}px;height:${H}px`;
 const B = document.getElementById("b"); B.style.width = W + "px"; B.style.height = H + "px";
 const wm = document.getElementById("wm"); wm.style.left = F.wm[0] + "px"; wm.style.top = F.wm[1] + "px"; wm.style.fontSize = F.wm[2] + "px";
-const T = F.texte, txt = document.getElementById("txt"); txt.style.left = F.tx + "px";
-document.getElementById("hook").style.fontSize = F.hook + "px";
-document.getElementById("hook").innerHTML = `<span id="l1h">${T.l1}</span><br><span class="ter">${T.l2}</span>`;
+const T = F.texte, txt = document.getElementById("txt"); txt.style.transform = `translate(${F.dx}px,${F.dy})`;
+const hook = document.getElementById("hook"); hook.style.fontSize = F.hook + "px";
+hook.innerHTML = `${T.l1}<br><span class="ter">${T.l2}</span>`;
 const sub = document.getElementById("sub"); if (T.sub) { sub.textContent = T.sub; sub.style.fontSize = F.sub + "px"; sub.style.marginTop = F.subMt + "px"; } else sub.remove();
 const ctaw = document.getElementById("ctaw"), cta = document.getElementById("cta"); ctaw.style.marginTop = F.ctaMt + "px";
 cta.innerHTML = T.cta + (T.fl ? ` <span class="fl">${T.fl}</span>` : ""); cta.style.fontSize = F.cta + "px"; cta.style.padding = F.ctaPad; cta.style.gap = F.gap + "px";
 if (T.fl) cta.querySelector(".fl").style.fontSize = (F.cta + 2) + "px";
-// le bouton du test, centré sous la première ligne du titre
-ctaw.style.width = document.getElementById("l1h").getBoundingClientRect().width + "px";
 
-// ---------- le graphique (identique à la bannière LinkedIn validée, mis à l'échelle s) ----------
+// ---------- le graphique : crosse de hockey lisse (validée le 23/11) ----------
 const cs = getComputedStyle(document.body), TR = cs.getPropertyValue("--tr").trim(), K = parseFloat(cs.getPropertyValue("--k")), FD = cs.getPropertyValue("--fd").trim(), DOUX = cs.getPropertyValue("--doux").trim(), TERRA = "#E07855";
 const NS = "http://www.w3.org/2000/svg", s = document.getElementById("deco"); s.setAttribute("viewBox", `0 0 ${W} ${H}`); s.setAttribute("width", W); s.setAttribute("height", H);
 const el = (n, a, p = s) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
 const line = (x1, y1, x2, y2, op, w = 1, dash) => el("line", Object.assign({ x1, y1, x2, y2, stroke: TR, "stroke-opacity": op, "stroke-width": w }, dash ? { "stroke-dasharray": dash } : {}));
 const defs = el("defs", {});
-const { X0, X1, Y0, YT, s: S } = F.ch;
+const { X0, X1, YT, S, filets } = F.ch, Y0 = H - 10;
 
-const rg = el("radialGradient", { id: "lu", gradientUnits: "userSpaceOnUse", cx: X1, cy: YT + (Y0 - YT) * 0.25, r: (X1 - X0) * 1.5 }, defs);
+const rg = el("radialGradient", { id: "lu", gradientUnits: "userSpaceOnUse", cx: X1 + 40 * S, cy: YT, r: (X1 - X0) * 0.75 }, defs);
 el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": ton === "clair" ? 0.07 : 0.13 }, rg);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
 el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
 
-const pas = 44 * S, cible = [X1 + 44 * S, YT - 46 * S];
-const droite = Math.min(W, cible[0] + 170 * S);
-for (let y = Y0, i = 0; y >= cible[1] + 6; y -= pas, i++) line(X0 - 30 * S, y, droite, y, (i === 0 ? 0.22 : 0.06) * K, 1);
-for (let x = X0 - 30 * S, i = 0; x <= droite; x += 14 * S, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9) * S, 0.22 * K, 1);
+// filets : l'axe sur toute la largeur du graphique, les autres seulement à droite du texte ; graduations fines en bas
+const pas = 44 * S;
+for (let y = Y0, i = 0; y >= YT - 10 * S; y -= pas, i++) line(i === 0 ? X0 - 30 * S : filets, y, W, y, (i === 0 ? 0.22 : 0.06) * K, 1);
+for (let x = X0 - 30 * S, i = 0; x <= W; x += 16 * S, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9) * S, 0.22 * K, 1);
 
-const N = 9;
-const serie = (ret, bas, amp, haut = 1) => Array.from({ length: N }, (_, i) => {
-  const u = i / (N - 1), v = Math.max(0, (u - ret) / (1 - ret));
-  return [X0 + u * (X1 - X0), Y0 - 18 * S - bas * S - (Y0 - YT - 40 * S) * haut * Math.pow(v, 2.1) + Math.sin(i * 2.1) * amp * S * (1 - v)];
-});
-const dir = serie(0, 0, 7), ent = serie(0.12, -8, 5, 0.72);
+const N = 40, HH = Y0 - YT - 40 * S, RET = 4;
+const f = (u) => Math.pow(Math.max(0, u), 2.7), ux = (i) => i / (N - 1);
+const dir = Array.from({ length: N }, (_, i) => [X0 + ux(i) * (X1 - X0), Y0 - 16 * S - HH * f(ux(i))]);
+const ent = Array.from({ length: N }, (_, i) => [X0 + ux(i) * (X1 - X0), Y0 - 8 * S - HH * 0.72 * f(ux(i - RET))]);
 const lisse = (p) => { let d = `M${p[0][0]} ${p[0][1]}`; for (let i = 0; i < p.length - 1; i++) {
   const a = p[Math.max(0, i - 1)], b = p[i], c = p[i + 1], e = p[Math.min(p.length - 1, i + 2)], t = 6;
   d += ` C${b[0] + (c[0] - a[0]) / t} ${b[1] + (c[1] - a[1]) / t} ${c[0] - (e[0] - b[0]) / t} ${c[1] - (e[1] - b[1]) / t} ${c[0]} ${c[1]}`; } return d; };
@@ -113,7 +109,7 @@ el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": ton === "clair" ? 0
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
 el("path", { d: lisse(dir) + ` L${X1} ${Y0} L${X0} ${Y0} Z`, fill: "url(#aire)" });
 
-const fin = dir[N - 1];
+const fin = dir[N - 1], cible = [X1 + 52 * S, YT - 42 * S];
 el("path", { d: `M${fin[0]} ${fin[1]} Q${fin[0] + 24 * S} ${fin[1] - 34 * S} ${cible[0]} ${cible[1]}`, fill: "none", stroke: TERRA, "stroke-opacity": 0.7, "stroke-width": 1.25 * S, "stroke-dasharray": `${2 * S} ${5 * S}`, "stroke-linecap": "round" });
 el("circle", { cx: cible[0], cy: cible[1], r: 7 * S, fill: "none", stroke: TERRA, "stroke-width": 1.25 * S });
 el("circle", { cx: cible[0], cy: cible[1], r: 2 * S, fill: TERRA });
@@ -122,18 +118,17 @@ el("path", { d: lisse(ent), fill: "none", stroke: TR, "stroke-opacity": 0.45 * M
 const eF = ent[N - 1];
 el("path", { d: `M${eF[0]} ${eF[1]} Q${eF[0] + 34 * S} ${eF[1] - 60 * S} ${cible[0]} ${cible[1] + 8 * S}`, fill: "none", stroke: TR, "stroke-opacity": 0.6 * Math.min(1, K), "stroke-width": 1.25 * S, "stroke-dasharray": `${2 * S} ${5 * S}`, "stroke-linecap": "round" });
 line(cible[0], cible[1] + 10 * S, cible[0], Y0, 0.35 * K, 1, `${3 * S} ${5 * S}`);
-el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5 * S, "stroke-linecap": "round" });
+el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.75 * S, "stroke-linecap": "round" });
 
 line(fin[0], fin[1] + 10 * S, fin[0], Y0, 0.3 * K, 1, `${2 * S} ${4 * S}`);
-el("circle", { cx: fin[0], cy: fin[1], r: 10 * S, fill: TERRA, "fill-opacity": 0.16 });
-el("circle", { cx: fin[0], cy: fin[1], r: 4 * S, fill: FD, stroke: TERRA, "stroke-width": 2 * S });
+el("circle", { cx: fin[0], cy: fin[1], r: 12 * S, fill: TERRA, "fill-opacity": 0.16 });
+el("circle", { cx: fin[0], cy: fin[1], r: 5 * S, fill: FD, stroke: TERRA, "stroke-width": 2.25 * S });
 
-// légendes : « Le dirigeant » à gauche de son point, « L'entreprise » écrite le long de sa courbe
 const l1 = document.getElementById("l1"); l1.style.fontSize = (11 * S) + "px";
 l1.style.left = (fin[0] - 128 * S) + "px"; l1.style.top = (fin[1] - 6 * S) + "px";
 el("path", { id: "pe", d: lisse(ent), fill: "none" }, defs);
 const te = el("text", { "font-family": "DM Sans", "font-weight": 500, "font-size": 11 * S, "letter-spacing": 2 * S, fill: DOUX, dy: 17 * S });
-el("textPath", { href: "#pe", startOffset: "50%" }, te).textContent = "L'ENTREPRISE";
+el("textPath", { href: "#pe", startOffset: "70%" }, te).textContent = "L'ENTREPRISE";
 </script>
 </body>
 </html>
