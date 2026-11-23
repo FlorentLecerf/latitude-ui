@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  Bannière LinkedIn — profil perso, STYLE PERFORMANCE (proposition du 23/11/2026, à valider par Florent).
+  Format : linkedin-perso-banner (1584 × 396). Langage visuel repris du moteur vidéo (../motion/README.md
+  « Fonds : le style performance ») : quadrillage, règles graduées, objectif en pointillé, courbe qui monte,
+  accent en aplat terracotta, angles nets, rien d'arrondi.
+  Variantes par l'adresse : #sombre (défaut), #clair, #avatar (clair + avatar), #avatar-sombre.
+
+  RENDU (depuis brand/banners/) :
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --disable-gpu --force-device-scale-factor=2 --hide-scrollbars \
+      --virtual-time-budget=4000 --window-size=1584,396 \
+      --screenshot="linkedin-perso-performance.png" "file://$PWD/linkedin-perso-performance.html#sombre"
+-->
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{font-family:'DM Serif Display';src:url('../tools/fonts/DMSerifDisplay-Regular.ttf') format('truetype');font-weight:400;font-display:block;}
+  @font-face{font-family:'DM Sans';src:url('../tools/fonts/dm-sans-500.woff') format('woff');font-weight:500;font-display:block;}
+  @font-face{font-family:'DM Sans';src:url('../tools/fonts/dm-sans-700.woff') format('woff');font-weight:700;font-display:block;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1584px;height:396px;}
+  :root{--fd:#262523;--tr:#FBF8F4;--doux:#D9D1C7;--k:1;--terra:#E07855;}
+  body.clair{--fd:#F5F0EB;--tr:#3A3A3A;--doux:#5A5652;--k:1.25;}
+  .b{position:relative;width:1584px;height:396px;overflow:hidden;background:var(--fd);
+     font-family:'DM Sans',sans-serif;color:var(--tr);}
+  svg.deco{position:absolute;inset:0;}
+  .wordmark{position:absolute;top:34px;left:56px;font-family:'DM Serif Display',serif;font-size:42px;letter-spacing:-0.01em;}
+  .wordmark .dot{color:var(--terra);}
+  /* barre de progression du style performance */
+  .prog{position:absolute;top:0;left:0;right:0;height:6px;display:flex;gap:6px;}
+  .prog i{flex:1;background:var(--tr);opacity:.14;}
+  .prog i.on{background:var(--terra);opacity:1;}
+  .txt{position:absolute;left:390px;top:50%;transform:translateY(-46%);width:900px;}
+  .hook{font-family:'DM Serif Display',serif;font-size:56px;line-height:1.08;letter-spacing:-0.005em;}
+  .acc{display:inline-block;background:var(--terra);color:#FBF8F4;padding:0 14px 4px;margin-top:6px;}
+  .sub{margin-top:16px;font-weight:500;font-size:25px;line-height:1.35;color:var(--doux);}
+  .cta{margin-top:26px;display:inline-flex;align-items:center;gap:14px;font-weight:700;font-size:23px;letter-spacing:.01em;
+       color:var(--terra);padding:13px 26px;border:2px solid var(--terra);}
+  .av{position:absolute;bottom:-190px;right:70px;height:600px;display:none;}
+  body.avec-avatar .av{display:block;}
+</style>
+</head>
+<body>
+<div class="b">
+  <svg class="deco" id="deco" viewBox="0 0 1584 396"></svg>
+  <div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="wordmark">Latitude<span class="dot">.</span></div>
+  <div class="txt">
+    <div class="hook">Le vrai levier de votre entreprise,<br><span class="acc">c'est vous.</span></div>
+    <div class="sub">Vous prenez de la hauteur, votre entreprise aussi.</div>
+    <div class="cta">Le test du dirigeant, en 5 minutes <span>&#8595;</span></div>
+  </div>
+  <img class="av" src="file:///Users/lecerf/Library/CloudStorage/GoogleDrive-florent@latitude.coach/Mon%20Drive/03_MARKETING-CONTENU/Photos-Pro/AVATAR/avatar-bras-croises.png">
+</div>
+<script>
+const h = location.hash.slice(1) || "sombre";
+if (h === "clair" || h === "avatar") document.body.classList.add("clair");
+if (h.startsWith("avatar")) document.body.classList.add("avec-avatar");
+const av = h.startsWith("avatar");
+const cs = getComputedStyle(document.body), TR = cs.getPropertyValue("--tr").trim(), K = parseFloat(cs.getPropertyValue("--k")), TERRA = "#E07855", FD = cs.getPropertyValue("--fd").trim();
+const W = 1584, H = 396, NS = "http://www.w3.org/2000/svg", s = document.getElementById("deco");
+const el = (n, a, p = s) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const line = (x1, y1, x2, y2, op, w = 1) => el("line", { x1, y1, x2, y2, stroke: TR, "stroke-opacity": op, "stroke-width": w });
+// lueur terracotta à droite
+const defs = el("defs", {});
+const rg = el("radialGradient", { id: "lu", cx: "92%", cy: "40%", r: "45%" }, defs);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "sombre" || h === "avatar-sombre" ? 0.22 : 0.08 }, rg);
+el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
+el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
+// quadrillage, un trait sur quatre plus marqué
+const P = 44;
+for (let x = P, i = 1; x < W; x += P, i++) line(x, 0, x, H, (i % 4 ? 0.04 : 0.075) * K);
+for (let y = H - P, i = 1; y > 0; y -= P, i++) line(0, y, W, y, (i % 4 ? 0.04 : 0.075) * K);
+// règles graduées (gauche et bas)
+for (let y = H - 30, i = 0; y > 20; y -= 15, i++) line(0, y, i % 5 ? 12 : 24, y, 0.4 * K, 2);
+for (let x = 30, i = 0; x < W - 10; x += 15, i++) line(x, H, x, H - (i % 5 ? 12 : 24), 0.4 * K, 2);
+if (!av) {
+// la courbe : le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle part sous le texte (bas) et décolle à droite
+const x0 = 1300, x1 = av ? 1330 : 1500, N = 14;
+const pts = (dy, ret) => Array.from({ length: N }, (_, i) => { const u = Math.max(0, i / (N - 1) - ret) / (1 - ret);
+  const wig = Math.sin(i * 1.7) * 8 * (1 - u);
+  return [x0 + (i / (N - 1)) * (x1 - x0), 350 + dy - 250 * Math.pow(u, 2.6) + wig]; });
+const dir = pts(0, 0), ent = pts(26, 0.12);
+const path = (p) => "M" + p.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L");
+// l'objectif, au-dessus : trajectoire en pointillé et anneau
+const goal = [x1 + 34, 54];
+el("path", { d: `M${dir[N - 3][0]} ${dir[N - 3][1]} L${goal[0]} ${goal[1]}`, stroke: TR, "stroke-opacity": 0.38 * K, "stroke-width": 2.5, "stroke-dasharray": "2 9", "stroke-linecap": "round", fill: "none" });
+el("circle", { cx: goal[0], cy: goal[1], r: 17, fill: "none", stroke: TERRA, "stroke-width": 3, "stroke-dasharray": "5 6" });
+// aire sous la courbe
+const ga = el("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.4 }, ga); el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
+el("path", { d: path(dir) + ` L${x1} ${H} L${x0} ${H} Z`, fill: "url(#aire)" });
+el("path", { d: path(ent), fill: "none", stroke: TR, "stroke-opacity": 0.55, "stroke-width": 3, "stroke-linejoin": "round" });
+el("path", { d: path(dir), fill: "none", stroke: TERRA, "stroke-width": 5, "stroke-linejoin": "round" });
+dir.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 5, fill: FD, stroke: TERRA, "stroke-width": 3 }));
+// le repère au bout du réalisé
+const e = dir[N - 1];
+el("circle", { cx: e[0], cy: e[1], r: 22, fill: TERRA, opacity: 0.25 });
+el("circle", { cx: e[0], cy: e[1], r: 9, fill: FD, stroke: TERRA, "stroke-width": 5 });
+el("line", { x1: e[0], y1: e[1] + 22, x2: e[0], y2: H, stroke: TR, "stroke-opacity": 0.35, "stroke-width": 1.5, "stroke-dasharray": "5 7" });
+}
+</script>
+</body>
+</html>
