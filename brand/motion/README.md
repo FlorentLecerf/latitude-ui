@@ -9,6 +9,7 @@ exporté est lourd et va sur le Drive**, jamais dans un dépôt.
 |---|---|
 | `moteur.html` | La scène : types de scènes, fonds, thèmes, calcul des durées. Aucune animation CSS, tout est calculé par `window.image(t)`, donc chaque image est exacte et rejouable. |
 | `rendre.ts` | Le rendu : charge le moteur, lui donne le scénario, capture 30 images par seconde, monte le MP4. |
+| `montage.ts` | Le montage d'une vidéo face caméra de Florent : coupes, sous-titres calés au mot (whisper.cpp), titre d'accroche, incrustations du moteur. |
 | `planche-fonds.ts` | La planche de tous les fonds, deux tons, deux moments : le catalogue pour choisir un fond. |
 
 Polices : `../tools/fonts/` (DM Serif Display, DM Sans 500 et 700). Couleurs : `../../DESIGN.md`.
@@ -166,6 +167,42 @@ window.SCENES_SUR_MESURE = {
 
 Couleurs à prendre dans les variables du thème (`var(--encre)`, `var(--doux)`, `var(--carte)`,
 `var(--bord)`, `var(--plein)`, `var(--terra)`), jamais en dur : la scène doit tenir sur fond clair et sombre.
+
+## Incrustations et montage face caméra
+
+**Une incrustation** est le décor seul d'un fond du moteur, sur fond transparent, à poser par-dessus une vidéo face
+caméra : `{ "incrustation": true, "fond": "plafond", "duree": 6 }` rendu par `rendre.ts` sort
+`<nom>-incrustation.mov` (9x16, ProRes 4444 avec couche alpha ; ffmpeg le pose, Final Cut le lit aussi). Le décor est
+posé en bas du cadre (`sol` à 70 px du bas), sous la zone des sous-titres, en ton sombre (traits clairs sur l'image),
+sans lueur, sur un voile dégradé qui le rend lisible sur n'importe quelle image ; il entre et sort en fondu de 0,45 s
+et a fini de monter 0,7 s avant la fin. Tous les fonds à deux tons s'incrustent (pas `photo`).
+
+**Le montage** d'une vidéo face caméra, fait par l'agent (Florent, 23/11/2026 : « je vais t'utiliser pour faire mes
+montages afin de gagner du temps ») :
+
+```sh
+bun "/Users/lecerf/Projets Claude AI/latitude-ui/brand/motion/montage.ts" <slug>-montage.json --sortie <dossier> \
+  [--nom <base>] [--transcription]
+```
+
+Le fichier de montage (son format est en tête de `montage.ts`) vit à côté du script, dans
+`latitude-marque/editorial/videos/<AAAA-MM-JJ-slug>-montage.json` : la prise, les coupes (en secondes de la prise), le
+titre, les corrections des sous-titres, les incrustations (en secondes de la vidéo coupée). `--transcription` coupe et
+transcrit seulement, et affiche les sous-titres avec leurs temps : on relit, on corrige, on place les incrustations,
+puis on rend. La procédure complète (où trouver la prise, quoi couper, où incruster, où déposer) est la commande
+`/montage-video` de latitude-marque.
+
+- **Le style validé le 20/11/2026 ne bouge pas** : sous-titres en DM Sans ExtraBold 72 px, terracotta sur un bandeau
+  noir aux angles arrondis, centrés à 1 380 px (sous le menton), par groupes de 4 mots ou 22 signes au plus, coupés
+  après la ponctuation, retardés de 0,3 s ; titre au **registre fin** (Florent, 23/11 : le bandeau
+  noir du 20/11 « pas assez raffiné ») : DM Serif Display 72 px, crème et accent terracotta en couleur de texte, sous un
+  filet terracotta de 2 px, sur un voile dégradé très doux en haut de l'image, sans aplat ; il entre et sort en fondu, les
+  3,2 premières secondes. Ces réglages sont en tête de `montage.ts`.
+- Il faut whisper.cpp (`brew install whisper-cpp`) et son modèle medium dans `~/.cache/whisper.cpp/ggml-medium.bin`
+  (le message d'erreur donne la commande pour le télécharger s'il manque).
+- Le travail intermédiaire (prise coupée, transcription, images des sous-titres, incrustations) reste dans
+  `<sortie>/.travail-<nom>/` : un second passage ne refait ni la coupe ni la transcription si rien n'a changé. Ne jamais
+  le poser sur le Drive.
 
 ## Règles
 

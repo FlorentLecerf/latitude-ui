@@ -12,6 +12,9 @@
 // la fin de la scène 1 (l'accroche entière à l'écran), ou de la scène « "miniature": N » du scénario.
 //   --miniatures  ne sort que les miniatures, sans refaire les vidéos (pour une vidéo déjà rendue)
 //
+// Une incrustation ("incrustation": true, "fond", "duree" en secondes, sans scènes) sort « <nom>-incrustation.mov » :
+// le décor seul, 9x16, fond transparent (ProRes 4444), à poser sur une vidéo face caméra (montage.ts).
+//
 // Le scénario est un JSON, seul ou dans le premier bloc ```json d'un fichier Markdown.
 // Un fichier « <scénario>.scenes.js » posé à côté ajoute des scènes sur mesure (voir README.md).
 import { spawn, spawnSync } from "node:child_process";
@@ -93,9 +96,28 @@ export async function image(c: Page, t: number): Promise<Buffer> {
   return Buffer.from(shot.result.data, "base64");
 }
 
+// une image PNG à fond transparent (mode incrustation : le moteur ne peint aucun fond)
+export async function imageTransparente(c: Page, t: number): Promise<Buffer> {
+  await c.js(`window.image(${t.toFixed(5)})`);
+  const shot = await c.cdp("Page.captureScreenshot", { format: "png" });
+  return Buffer.from(shot.result.data, "base64");
+}
+
+// une incrustation : le décor seul, 9x16, en ProRes 4444 avec sa couche alpha (.mov), à poser sur une vidéo face caméra
+export async function rendreIncrustation(c: Page, scenario: any, mov: string) {
+  const info = await preparer(c, { ...scenario, incrustation: true }, "9x16");
+  await c.cdp("Emulation.setDefaultBackgroundColorOverride", { color: { r: 0, g: 0, b: 0, a: 0 } });
+  const f = ffmpeg(["-framerate", String(FPS), "-i", "-", "-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le", "-vendor", "apl0", mov], "png");
+  const n = Math.round(info.duree * FPS);
+  for (let k = 0; k < n; k++) await f.ecrire(await imageTransparente(c, k / FPS));
+  await f.fermer();
+  await c.cdp("Emulation.setDefaultBackgroundColorOverride", {});
+  return info.duree as number;
+}
+
 // ffmpeg nourri image par image par son entrée standard : aucun fichier temporaire
-export function ffmpeg(args: string[]) {
-  const proc = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-c:v", "mjpeg", ...args], { stdio: ["pipe", "ignore", "pipe"] });
+export function ffmpeg(args: string[], codec = "mjpeg") {
+  const proc = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-c:v", codec, ...args], { stdio: ["pipe", "ignore", "pipe"] });
   let err = "";
   proc.stderr!.on("data", (d) => (err += d));
   const fini = new Promise<void>((res, rej) => proc.on("close", (code) => (code === 0 ? res() : rej(new Error("ffmpeg : " + err.trim())))));
@@ -134,6 +156,11 @@ if (import.meta.main) {
     const surMesure = existsSync(js) ? readFileSync(js, "utf8") : undefined;
     mkdirSync(sortie, { recursive: true });
     c = await ouvrirChrome();
+    if (scenario.incrustation === true) {
+      const mov = join(sortie, `${nom}-incrustation.mov`), d = await rendreIncrustation(c, scenario, mov);
+      console.log(`incrustation (fond « ${scenario.fond || "courbe"} », ${d.toFixed(1)} s, 9x16 transparent) : ${mov}`);
+      formats.length = 0;
+    }
     for (const [i, format] of formats.entries()) {
       const info = await preparer(c, scenario, format, surMesure);
       if (i === 0) {

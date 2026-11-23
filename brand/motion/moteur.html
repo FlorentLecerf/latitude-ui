@@ -572,11 +572,26 @@ window.demarrer = async (sc, format = "4x5") => {
   await Promise.all(['400 10px "DM Serif Display"', '500 10px "DM Sans"', '700 10px "DM Sans"', '800 10px "DM Sans"'].map((f) => document.fonts.load(f)));
   const fond = FONDS[sc.fond || "courbe"]; if (!fond) throw new Error(`fond inconnu : « ${sc.fond} » (fonds : ${Object.keys(FONDS).join(", ")})`);
   // un fond performance existe en deux tons : le sien, ou celui que le scénario demande ("ton")
-  const ton = fond.tons && (sc.ton === "clair" || sc.ton === "sombre") ? sc.ton : fond.theme, inverse = ton === "clair" ? "sombre" : "clair";
+  // l'incrustation ("incrustation": true) : le décor seul, sur fond transparent, à poser par-dessus une vidéo face caméra
+  // (montage.ts) ; toujours en ton sombre (traits clairs sur l'image), sans lueur, posé en bas du cadre sous un voile dégradé
+  const inc = sc.incrustation === true;
+  if (inc && !fond.tons) throw new Error(`le fond « ${sc.fond} » ne se pose pas en incrustation (fonds possibles : ceux à deux tons)`);
+  const ton = inc ? "sombre" : fond.tons && (sc.ton === "clair" || sc.ton === "sombre") ? sc.ton : fond.theme, inverse = ton === "clair" ? "sombre" : "clair";
   poser(document.body, ton); document.body.style.setProperty("--bas", (fond.bas || 120) + "px");
-  const decor = document.getElementById("fond"), c = { ...TONS[ton], sol: (H + PH) / 2 - 46 };
-  if (fond.tons) decor.style.background = c.fd;
+  const decor = document.getElementById("fond"), c = { ...TONS[ton], sol: inc ? H - 70 : (H + PH) / 2 - 46 };
+  if (inc) {
+    c.lu = 0; c.fd = "#232220";
+    for (const e of [document.documentElement, document.body]) e.style.background = "transparent";
+    el("div", "", decor).style.cssText = "position:absolute;left:0;right:0;bottom:0;height:640px;background:linear-gradient(to top,rgba(20,19,18,.62),rgba(20,19,18,.38) 45%,rgba(20,19,18,0))";
+  } else if (fond.tons) decor.style.background = c.fd;
   const vivre = fond.monter(decor, H, sc, c);
+  if (inc) {
+    const duree = Number(sc.duree) || 6, hud = document.getElementById("hud"), logo = document.getElementById("logo");
+    hud.style.display = logo.style.display = "none";
+    ETAT = { inc: true, decor, vivre, duree, cap: duree - 0.7 };
+    window.image(0);
+    return { duree, scenes: [], reperes: [duree * 0.5, duree - 0.5] };
+  }
   const voile = document.getElementById("voile"); voile.style.background = TONS[inverse].fd;
   const haut = (H - PH) / 2, p1 = document.getElementById("plateau"), p2 = document.getElementById("plateau2");
   p1.style.top = p2.style.top = haut + "px";
@@ -609,6 +624,7 @@ window.demarrer = async (sc, format = "4x5") => {
   return { duree: a, scenes: scenes.map((x) => ({ type: x.type, debut: +x.a.toFixed(2), duree: +x.d.toFixed(2) })), reperes: scenes.flatMap((x) => [x.a + x.d * 0.5, x.a + x.d - 0.45]) };
 };
 window.image = (T) => {
+  if (ETAT.inc) { ETAT.vivre(T, ETAT.cap); ETAT.decor.style.opacity = p(T, 0, 0.45) * (1 - p(T, ETAT.duree - 0.45, 0.45)); return T; }
   const { scenes, vivre, voile, hud, logo, lame, theme, inverse, cap } = ETAT;
   vivre(T, cap);
   let q = 0;
