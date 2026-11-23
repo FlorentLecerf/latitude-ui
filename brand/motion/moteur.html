@@ -331,6 +331,73 @@ const FONDS = {
     const ici = repere(s, c);
     return (T, D) => { const k = 0.1 + 0.9 * clamp(T / D), [px, py] = sur(voie, k); fait.style.strokeDashoffset = L * (1 - k); masque.setAttribute("width", Math.max(0, px + 14)); ici(px, py); };
   } },
+  // le plafond : un plafond en pointillé dans la bande ; l'entreprise plafonne dessous, le dirigeant le perce le premier
+  // et monte dans la marge droite, l'entreprise le perce après lui et le suit (la thèse « votre plafond, c'est vous »)
+  plafond: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
+    lueur(f, `radial-gradient(circle at 96% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
+    const s = socle(f, H, c), defs = svgEl("defs", {}, s), YP = c.sol - 150, N = 60;
+    trait(s, 0, YP, W, YP, c.tr, 0.42 * c.k, 1, "6 6");
+    legende(s, 28, YP - 14, "LE PLAFOND", c.doux);
+    const X = (u) => 28 + u * 1012, sat = (u, h) => h * (1 - Math.exp(-Math.max(0, u) * 5));
+    // sous le plafond, les deux courbes s'en approchent sans le passer ; puis chacune le perce, le dirigeant d'abord
+    const perce = (u, u0, haut) => (u <= u0 ? 0 : haut * Math.pow((u - u0) / (1 - u0), 3.2));
+    const dir = Array.from({ length: N }, (_, i) => { const u = i / (N - 1); return [X(u), c.sol - 14 - sat(u, 88) - perce(u, 0.72, 470)]; });
+    const ent = Array.from({ length: N }, (_, i) => { const u = i / (N - 1); return [X(u), Math.max(c.sol - 8 - sat(u - 0.05, 68) - perce(u, 0.86, 150), dir[i][1] + 12)]; });
+    const fin = dir[N - 1], eF = ent[N - 1], cible = [fin[0] + 12, fin[1] - 64];
+    svgEl("path", { d: lisse(dir), fill: "none", stroke: c.tr, "stroke-opacity": 0.2 * c.k, "stroke-width": 1, "stroke-dasharray": "2 6", "stroke-linecap": "round" }, s);
+    svgEl("path", { d: `M${fin[0]} ${fin[1]} Q${fin[0] + 4} ${fin[1] - 34} ${cible[0]} ${cible[1]}`, fill: "none", stroke: TERRA, "stroke-opacity": 0.7, "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round" }, s);
+    objectif(s, cible[0], cible[1]);
+    const masque = svgEl("rect", { x: 0, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "avance" }, defs)), g = svgEl("g", { "clip-path": "url(#avance)" }, s);
+    svgEl("path", { d: lisse(ent), fill: "none", stroke: c.tr, "stroke-opacity": 0.45 * Math.min(1, c.k), "stroke-width": 1.5, "stroke-linecap": "round" }, g);
+    svgEl("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" }, g);
+    legende(g, X(0.42), dir[Math.round(N * 0.42)][1] - 16, "LE DIRIGEANT", TERRA);
+    legende(g, X(0.42), ent[Math.round(N * 0.42)][1] + 30, "L'ENTREPRISE", c.doux);
+    const jonction = svgEl("path", { d: `M${eF[0]} ${eF[1]} Q${eF[0] + 18} ${eF[1] - 120} ${cible[0]} ${cible[1] + 12}`, fill: "none", stroke: c.tr, "stroke-opacity": 0.55 * Math.min(1, c.k), "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round", opacity: 0 }, s);
+    const ici = repere(s, c), yEn = (x) => { const u = clamp((x - X(0)) / (X(1) - X(0))) * (N - 1), i = Math.min(N - 2, Math.floor(u)); return dir[i][1] + (dir[i + 1][1] - dir[i][1]) * (u - i); };
+    return (T, D) => { const x = X(0.12 + 0.88 * clamp(T / D)); masque.setAttribute("width", x + 3); ici(x, yEn(x)); jonction.setAttribute("opacity", p(T, D - 0.7, 0.6)); };
+  } },
+  // l'altitude : un altimètre gradué au trait fin dans la marge droite ; le repère terracotta y monte pendant que l'horizon
+  // (une ligne de crêtes très légère) descend dans la bande : on prend de la hauteur
+  altitude: { theme: "clair", tons: true, bas: BANDE, monter(f, H, sc, c) {
+    lueur(f, `radial-gradient(circle at 96% 40%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
+    const s = toile(f, H), XA = W - 52, Y0 = c.sol, YH = c.sol - PH * 0.6, defs = svgEl("defs", {}, s);
+    // l'horizon : deux lignes de crêtes au trait, qui descendent quand on monte
+    const XS = [-20, 70, 130, 210, 280, 350, 430, 520, 590, 680, 760, 840, 910, 990], HS = [10, 46, 28, 70, 40, 92, 58, 120, 74, 104, 60, 82, 40, 20], crete = (base, k, dx) => XS.map((x, i) => [x + dx, base - HS[i] * k]);
+    svgEl("rect", { x: 0, y: 0, width: XA - 40, height: c.sol + 1 }, svgEl("clipPath", { id: "horizon" }, defs));
+    const h = svgEl("g", { "clip-path": "url(#horizon)" }, s), loin = svgEl("g", {}, h), pres = svgEl("g", {}, h);
+    svgEl("path", { d: brise(crete(c.sol - 56, 0.75, -150).reverse()), fill: "none", stroke: c.tr, "stroke-opacity": 0.16 * c.k, "stroke-width": 1, "stroke-linejoin": "round" }, loin);
+    svgEl("path", { d: brise(crete(c.sol - 10, 1, 0)), fill: "none", stroke: c.tr, "stroke-opacity": 0.32 * c.k, "stroke-width": 1.25, "stroke-linejoin": "round" }, pres);
+    trait(s, 0, c.sol, XA - 40, c.sol, c.tr, 0.24 * c.k);
+    // l'altimètre : une échelle verticale, une graduation longue sur cinq
+    trait(s, XA, Y0, XA, YH, c.tr, 0.3 * c.k);
+    for (let y = Y0, i = 0; y >= YH; y -= 16, i++) trait(s, XA - (i % 5 ? 6 : 14), y, XA, y, c.tr, 0.3 * c.k);
+    objectif(s, XA, YH + 30);
+    const monte = svgEl("line", { x1: XA, y1: Y0, x2: XA, y2: Y0, stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" }, s);
+    const lecture = svgEl("line", { stroke: TERRA, "stroke-opacity": 0.6, "stroke-width": 1, "stroke-dasharray": "2 4" }, s), ici = repere(s, c);
+    return (T, D) => {
+      const k = E.io(clamp(T / D)), y = Y0 - 30 - k * (Y0 - YH - 60);
+      pose(monte, { y2: y }); pose(lecture, { x1: XA - 120, y1: y, x2: XA - 14, y2: y }); ici(XA, y);
+      loin.setAttribute("transform", `translate(0 ${k * 22})`); pres.setAttribute("transform", `translate(0 ${k * 44})`);
+    };
+  } },
+  // la cible : des cercles concentriques au trait fin dans le coin bas droit, un viseur en pointillé ; la trajectoire
+  // terracotta part de la gauche, hésite, puis converge vers le centre
+  cible: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
+    const cx = W - 140, cy = c.sol - 96;
+    lueur(f, `radial-gradient(circle at ${cx}px ${cy}px,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 34%)`);
+    const s = socle(f, H, c);
+    [44, 88, 132, 176].forEach((r, i) => svgEl("circle", { cx, cy, r, fill: "none", stroke: c.tr, "stroke-opacity": (0.34 - i * 0.06) * c.k, "stroke-width": 1 }, s));
+    trait(s, cx - 210, cy, cx + 140, cy, c.tr, 0.22 * c.k, 1, "3 5"); trait(s, cx, cy - 200, cx, c.sol, c.tr, 0.22 * c.k, 1, "3 5");
+    objectif(s, cx, cy);
+    const b = bruit(41), pts = Array.from({ length: 30 }, (_, i) => { const u = i / 29, x = 20 + u * (cx - 20); return [x, c.sol - 30 - u * u * (c.sol - 30 - cy) - (b(i * 0.6, 3) - 0.5) * 70 * (1 - u)]; });
+    pts[29] = [cx, cy];
+    svgEl("path", { d: lisse(pts), fill: "none", stroke: c.tr, "stroke-opacity": 0.2 * c.k, "stroke-width": 1, "stroke-dasharray": "2 6", "stroke-linecap": "round" }, s);
+    const voie = svgEl("path", { d: lisse(pts), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" }, s), L = voie.getTotalLength();
+    voie.style.strokeDasharray = L;
+    const ici = repere(s, c);
+    return (T, D) => { const k = 0.1 + 0.9 * clamp(T / D), q = voie.getPointAtLength(L * k); voie.style.strokeDashoffset = L * (1 - k); ici(q.x, q.y); };
+  } },
+
   // une vraie photo de Florent, passée en noir et blanc chaud et assombrie pour porter le texte
   photo: { theme: "sombre", monter(f, H, sc) {
     if (!sc.photo) throw new Error("le fond « photo » demande le champ « photo » (chemin d'une image)");

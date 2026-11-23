@@ -9,6 +9,7 @@ exporté est lourd et va sur le Drive**, jamais dans un dépôt.
 |---|---|
 | `moteur.html` | La scène : types de scènes, fonds, thèmes, calcul des durées. Aucune animation CSS, tout est calculé par `window.image(t)`, donc chaque image est exacte et rejouable. |
 | `rendre.ts` | Le rendu : charge le moteur, lui donne le scénario, capture 30 images par seconde, monte le MP4. |
+| `planche-fonds.ts` | La planche de tous les fonds, deux tons, deux moments : le catalogue pour choisir un fond. |
 
 Polices : `../tools/fonts/` (DM Serif Display, DM Sans 500 et 700). Couleurs : `../../DESIGN.md`.
 
@@ -104,6 +105,9 @@ Sans champ `fond`, le moteur prend `courbe`.
 | `cap` | sombre | L'arc d'un grand cadran gradué au trait fin qui tourne ; l'aiguille terracotta, fine, cherche puis tient sa direction sur l'arc visé. |
 | `sommet` | sombre | Une crête au trait fin, comme une gravure de relevé (hachures très légères), le sommet dans la marge droite ; l'itinéraire terracotta la remonte jusqu'à l'objectif. |
 | `paliers` | clair | Un escalier en pointillé : marches larges, puis hautes et serrées dans la marge droite. Le trait terracotta les franchit une à une. |
+| `plafond` | sombre | La thèse « votre plafond, c'est vous » : un plafond en pointillé dans la bande ; l'entreprise plafonne dessous, le dirigeant le perce le premier et monte dans la marge droite, l'entreprise le perce après lui. |
+| `altitude` | clair | Prendre de la hauteur : un altimètre gradué au trait fin dans la marge droite, le repère terracotta y monte pendant que deux lignes de crêtes s'enfoncent doucement sous l'horizon. |
+| `cible` | sombre | Viser, se concentrer : des cercles concentriques fins et un viseur en pointillé dans le coin bas droit ; la trajectoire terracotta part de la gauche, hésite, puis converge vers le centre. |
 | `photo` | sombre | Une vraie photo (`"photo": "<chemin>"`, `"cadrage": "50% 50%"`), en noir et blanc chaud, assombrie. HEIC accepté. |
 
 - **Les règles du registre, telles que le moteur les pose** : traits de 1 à 1,5 px pour les filets et la série
@@ -137,6 +141,11 @@ Retirés du moteur : le 17/11/2026, les cinq premiers fonds (`carte`, `carnet`, 
 pastilles et rebonds) ; le 23/11/2026, `barres` et `tableau` (aplats et tableau de bord, hors du registre fin). Ils restent
 dans l'historique git. Les scénarios des vidéos publiées qui les utilisent (« Votre entreprise a un plafond », fond
 `tableau`) ne se rendent donc plus à l'identique : c'est voulu, on ne refait pas une vidéo publiée.
+
+**La planche des fonds** : `bun planche-fonds.ts --sortie <fichier.png>` sort le catalogue de tous les fonds (lus
+dans `moteur.html`), dans leurs deux tons, à deux moments d'une même vidéo. À relancer chaque fois qu'un fond est ajouté
+ou retouché, et à reposer sur le Drive : `04_IDENTITE-MARQUE/Charte-Graphique/planche-style-performance-motion.png`
+(l'ancienne planche du style épais est rangée dans `archives/` à côté).
 
 La `chute` inverse toujours le ton : fond clair, chute anthracite ; fond sombre, chute crème.
 
