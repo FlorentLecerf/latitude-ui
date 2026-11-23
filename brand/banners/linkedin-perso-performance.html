@@ -31,7 +31,7 @@
   svg.deco{position:absolute;inset:0;}
   .wordmark{position:absolute;top:38px;left:60px;font-family:'DM Serif Display',serif;font-size:38px;letter-spacing:-0.01em;}
   .wordmark .dot{color:var(--terra);}
-  .txt{position:absolute;left:380px;top:50%;transform:translateY(-50%);width:760px;}
+  .txt{position:absolute;left:0;right:0;top:50%;transform:translate(10px,-56%);text-align:center;}
   .hook{font-family:'DM Serif Display',serif;font-size:50px;line-height:1.12;letter-spacing:-0.01em;}
   .hook .ter{color:var(--terra);}
   .sub{margin-top:18px;font-weight:500;font-size:22px;line-height:1.4;color:var(--doux);letter-spacing:.005em;}
@@ -66,23 +66,24 @@ const line = (x1, y1, x2, y2, op, w = 1, dash) => el("line", Object.assign({ x1,
 const defs = el("defs", {});
 
 // lueur terracotta très douce derrière le graphique
-const rg = el("radialGradient", { id: "lu", cx: "86%", cy: "30%", r: "42%" }, defs);
+const rg = el("radialGradient", { id: "lu", cx: "92%", cy: "20%", r: "40%" }, defs);
 el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "clair" ? 0.07 : 0.13 }, rg);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
 el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
 
 // zone du graphique
-const X0 = 1140, X1 = 1420, Y0 = 336, YT = 74;
+const X0 = 700, X1 = 1450, Y0 = 386, YT = 64, S = 1.25;
 // filets horizontaux, très discrets, dans la zone du graphique seulement
-for (let y = Y0, i = 0; y >= YT - 10; y -= 44, i++) line(X0 - 30, y, W, y, (i === 0 ? 0.22 : 0.06) * K, 1);
+// filets : l'axe sur toute la largeur du graphique, les autres seulement à droite du texte
+for (let y = Y0, i = 0; y >= YT - 10; y -= 44, i++) line(i === 0 ? X0 - 30 : 1230, y, W, y, (i === 0 ? 0.22 : 0.06) * K, 1);
 // graduations fines le long de l'axe bas
-for (let x = X0 - 30, i = 0; x <= W; x += 14, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9), 0.22 * K, 1);
+for (let x = X0 - 30, i = 0; x <= W; x += 16, i++) line(x, Y0, x, Y0 + (i % 5 ? 4 : 9), 0.22 * K, 1);
 
 // deux séries lisses : le dirigeant devant, l'entreprise qui suit (décalée, plus basse)
-const N = 9;
+const N = 12;
 const serie = (ret, bas, amp, haut = 1) => Array.from({ length: N }, (_, i) => {
   const u = i / (N - 1), v = Math.max(0, (u - ret) / (1 - ret));
-  return [X0 + u * (X1 - X0), Y0 - 18 - bas - (Y0 - YT - 40) * haut * Math.pow(v, 2.1) + Math.sin(i * 2.1) * amp * (1 - v)];
+  return [X0 + u * (X1 - X0), Y0 - 16 - bas - (Y0 - YT - 40) * haut * Math.pow(v, 3) + Math.sin(i * 2.1) * amp * (1 - v)];
 });
 const dir = serie(0, 0, 7), ent = serie(0.12, -8, 5, 0.72);
 // courbe lisse (Catmull-Rom → Bézier)
@@ -97,7 +98,7 @@ el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
 el("path", { d: lisse(dir) + ` L${X1} ${Y0} L${X0} ${Y0} Z`, fill: "url(#aire)" });
 
 // l'objectif : un prolongement en pointillé fin vers une cible
-const fin = dir[N - 1], cible = [X1 + 44, YT - 46];
+const fin = dir[N - 1], cible = [X1 + 52, YT - 42];
 el("path", { d: `M${fin[0]} ${fin[1]} Q${fin[0] + 24} ${fin[1] - 34} ${cible[0]} ${cible[1]}`, fill: "none", stroke: TERRA, "stroke-opacity": 0.7, "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round" });
 el("circle", { cx: cible[0], cy: cible[1], r: 7, fill: "none", stroke: TERRA, "stroke-width": 1.25 });
 el("circle", { cx: cible[0], cy: cible[1], r: 2, fill: TERRA });
@@ -109,12 +110,12 @@ const eF = ent[N - 1];
 el("path", { d: `M${eF[0]} ${eF[1]} Q${eF[0] + 34} ${eF[1] - 60} ${cible[0]} ${cible[1] + 8}`, fill: "none", stroke: TR, "stroke-opacity": 0.6 * Math.min(1, K), "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round" });
 // le point final marqué jusqu'à l'échelle : un trait vertical en pointillé sous la cible
 line(cible[0], cible[1] + 10, cible[0], Y0, 0.35 * K, 1, "3 5");
-el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" });
+el("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.75, "stroke-linecap": "round" });
 
 // un seul repère, au bout du réalisé, et sa ligne de lecture
 line(fin[0], fin[1] + 10, fin[0], Y0, 0.3 * K, 1, "2 4");
-el("circle", { cx: fin[0], cy: fin[1], r: 10, fill: TERRA, "fill-opacity": 0.16 });
-el("circle", { cx: fin[0], cy: fin[1], r: 4, fill: FD, stroke: TERRA, "stroke-width": 2 });
+el("circle", { cx: fin[0], cy: fin[1], r: 12, fill: TERRA, "fill-opacity": 0.16 });
+el("circle", { cx: fin[0], cy: fin[1], r: 5, fill: FD, stroke: TERRA, "stroke-width": 2.25 });
 
 // légende en petites capitales, au bout de chaque série
 const l1 = document.getElementById("l1"), l2 = document.getElementById("l2"), e2 = ent[N - 1];
@@ -124,9 +125,9 @@ l1.style.left = (fin[0] - 128) + "px"; l1.style.top = (fin[1] - 6) + "px";
 l2.style.display = "none";
 const pe = el("path", { id: "pe", d: lisse(ent), fill: "none" }, defs);
 const te = el("text", { "font-family": "DM Sans", "font-weight": 500, "font-size": 11, "letter-spacing": "2", fill: cs.getPropertyValue("--doux").trim(), dy: 17 });
-const tp = el("textPath", { href: "#pe", startOffset: "50%" }, te); tp.textContent = "L'ENTREPRISE";
+const tp = el("textPath", { href: "#pe", startOffset: "70%" }, te); tp.textContent = "L'ENTREPRISE";
 // le bouton du test, centré sous la première ligne du titre
-document.getElementById("ctaw").style.width = document.getElementById("l1h").getBoundingClientRect().width + "px";
+// (texte centré : le bouton est centré avec lui)
 </script>
 </body>
 </html>
