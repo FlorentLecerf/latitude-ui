@@ -32,8 +32,8 @@
   .prog{position:absolute;top:0;left:0;right:0;height:6px;display:flex;gap:6px;}
   .prog i{flex:1;background:var(--tr);opacity:.14;}
   .prog i.on{background:var(--terra);opacity:1;}
-  .txt{position:absolute;left:390px;top:50%;transform:translateY(-46%);width:900px;}
-  .hook{font-family:'DM Serif Display',serif;font-size:56px;line-height:1.08;letter-spacing:-0.005em;}
+  .txt{position:absolute;left:370px;top:50%;transform:translateY(-46%);width:900px;}
+  .hook{font-family:'DM Serif Display',serif;font-size:52px;line-height:1.08;letter-spacing:-0.005em;}
   .acc{display:inline-block;background:var(--terra);color:#FBF8F4;padding:0 14px 4px;margin-top:6px;}
   .sub{margin-top:16px;font-weight:500;font-size:25px;line-height:1.35;color:var(--doux);}
   .cta{margin-top:26px;display:inline-flex;align-items:center;gap:14px;font-weight:700;font-size:23px;letter-spacing:.01em;
@@ -65,8 +65,8 @@ const el = (n, a, p = s) => { const e = document.createElementNS(NS, n); for (co
 const line = (x1, y1, x2, y2, op, w = 1) => el("line", { x1, y1, x2, y2, stroke: TR, "stroke-opacity": op, "stroke-width": w });
 // lueur terracotta à droite
 const defs = el("defs", {});
-const rg = el("radialGradient", { id: "lu", cx: "92%", cy: "40%", r: "45%" }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "sombre" || h === "avatar-sombre" ? 0.22 : 0.08 }, rg);
+const rg = el("radialGradient", { id: "lu", cx: "88%", cy: "35%", r: "50%" }, defs);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": h === "sombre" || h === "avatar-sombre" ? 0.3 : 0.1 }, rg);
 el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, rg);
 el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#lu)" });
 // quadrillage, un trait sur quatre plus marqué
@@ -78,27 +78,29 @@ for (let y = H - 30, i = 0; y > 20; y -= 15, i++) line(0, y, i % 5 ? 12 : 24, y,
 for (let x = 30, i = 0; x < W - 10; x += 15, i++) line(x, H, x, H - (i % 5 ? 12 : 24), 0.4 * K, 2);
 if (!av) {
 // la courbe : le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle part sous le texte (bas) et décolle à droite
-const x0 = 1300, x1 = av ? 1330 : 1500, N = 14;
+const x0 = 1170, x1 = av ? 1330 : 1515, N = 12;
 const pts = (dy, ret) => Array.from({ length: N }, (_, i) => { const u = Math.max(0, i / (N - 1) - ret) / (1 - ret);
   const wig = Math.sin(i * 1.7) * 8 * (1 - u);
-  return [x0 + (i / (N - 1)) * (x1 - x0), 350 + dy - 250 * Math.pow(u, 2.6) + wig]; });
-const dir = pts(0, 0), ent = pts(26, 0.12);
+  return [x0 + (i / (N - 1)) * (x1 - x0), 362 + dy - 280 * Math.pow(u, 2.2) + wig]; });
+const dir = pts(0, 0), ent = pts(30, 0.12);
+// des barres derrière la courbe : la mesure, qui monte avec elle
+dir.forEach((q, i) => { if (i % 1) return; const bw = (x1 - x0) / (N - 1) * 0.55; el("rect", { x: q[0] - bw / 2, y: q[1] + 18, width: bw, height: Math.max(0, H - 22 - q[1] - 18), fill: TR, "fill-opacity": 0.07 * K }); });
 const path = (p) => "M" + p.map(q => q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" L");
 // l'objectif, au-dessus : trajectoire en pointillé et anneau
-const goal = [x1 + 34, 54];
+const goal = [x1 + 36, 34];
 el("path", { d: `M${dir[N - 3][0]} ${dir[N - 3][1]} L${goal[0]} ${goal[1]}`, stroke: TR, "stroke-opacity": 0.38 * K, "stroke-width": 2.5, "stroke-dasharray": "2 9", "stroke-linecap": "round", fill: "none" });
-el("circle", { cx: goal[0], cy: goal[1], r: 17, fill: "none", stroke: TERRA, "stroke-width": 3, "stroke-dasharray": "5 6" });
+el("circle", { cx: goal[0], cy: goal[1], r: 20, fill: "none", stroke: TERRA, "stroke-width": 3.5, "stroke-dasharray": "6 6" });
 // aire sous la courbe
 const ga = el("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.4 }, ga); el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
+el("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.6 }, ga); el("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
 el("path", { d: path(dir) + ` L${x1} ${H} L${x0} ${H} Z`, fill: "url(#aire)" });
-el("path", { d: path(ent), fill: "none", stroke: TR, "stroke-opacity": 0.55, "stroke-width": 3, "stroke-linejoin": "round" });
-el("path", { d: path(dir), fill: "none", stroke: TERRA, "stroke-width": 5, "stroke-linejoin": "round" });
-dir.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 5, fill: FD, stroke: TERRA, "stroke-width": 3 }));
+el("path", { d: path(ent), fill: "none", stroke: TR, "stroke-opacity": 0.6, "stroke-width": 4, "stroke-linejoin": "round" });
+el("path", { d: path(dir), fill: "none", stroke: TERRA, "stroke-width": 8, "stroke-linejoin": "round" });
+dir.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 7.5, fill: FD, stroke: TERRA, "stroke-width": 4.5 }));
 // le repère au bout du réalisé
 const e = dir[N - 1];
-el("circle", { cx: e[0], cy: e[1], r: 22, fill: TERRA, opacity: 0.25 });
-el("circle", { cx: e[0], cy: e[1], r: 9, fill: FD, stroke: TERRA, "stroke-width": 5 });
+el("circle", { cx: e[0], cy: e[1], r: 32, fill: TERRA, opacity: 0.28 });
+el("circle", { cx: e[0], cy: e[1], r: 13, fill: FD, stroke: TERRA, "stroke-width": 7 });
 el("line", { x1: e[0], y1: e[1] + 22, x2: e[0], y2: H, stroke: TR, "stroke-opacity": 0.35, "stroke-width": 1.5, "stroke-dasharray": "5 7" });
 }
 </script>
