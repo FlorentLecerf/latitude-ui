@@ -86,54 +86,57 @@ Pose introuvable : le rendu s'arrête en le disant. Règle de Florent (19/11/202
 n'entre que quand il sert le propos ; le décor suffit le reste du temps. Il ne va pas sur `organigramme` (le
 schéma prend toute la largeur).
 
-### Fonds : le style « performance »
+### Fonds : le style performance, registre fin
 
-> **À REPRENDRE (23/11/2026)** : la DA marketing est désormais le **registre fin** de `../../DESIGN.md`
-> (« Supports marketing : style performance, registre fin »). Le moteur ci-dessous (traits épais, points sur les courbes,
-> barres, aplat de l'accent, barre de progression) date d'avant : il doit être repris dans ce registre avant la
-> prochaine vidéo.
+La DA est le **registre fin** de `../../DESIGN.md` (« Supports marketing : style performance, registre fin »), validée
+par Florent le 23/11/2026 sur sa bannière LinkedIn (`../banners/linkedin-perso-performance.html`, le gabarit de
+référence). Le registre est celui des graphiques des rapports financiers haut de gamme, pas un tableau de bord ni une
+infographie. Le style épais du 17/11 (gros points sur les courbes, barres, aplats, règles épaisses) a été rejeté :
+« pas assez raffiné, ça fait de gros points, […] pas assez fin au niveau des traits, pas assez premium ». Le moteur a été
+repris dans ce registre le 23/11 ; les vidéos publiées avant restent telles quelles, on ne les refait pas.
 
-Direction donnée par Florent le 17/11/2026, après avoir vu les premiers fonds : « ce n'est pas assez orienté
-performance […] c'est trop lisse ». Latitude fait travailler le dirigeant sur lui pour améliorer sa performance,
-donc celle de son entreprise : le décor **mesure** (quadrillage, règles graduées) et **monte** (une courbe, des
-barres, une aiguille qui tient son cap). Sans champ `fond`, le moteur prend `courbe`. Il a validé la direction le
-même jour sur planche (« c'est nettement mieux. En effet, on est plus orienté performance, ça me va bien ») et
-demandé d'aller plus loin : « on peut encore accentuer davantage », « en créer d'autres pour avoir encore plus de
-matière, plus de diversité, mais vraiment orienté performance […] toujours en adéquation avec le branding Latitude ».
+Sans champ `fond`, le moteur prend `courbe`.
 
 | Fond | Ton par défaut | Ce que c'est |
 |---|---|---|
-| `courbe` | sombre | Deux séries qui grimpent au fil de la vidéo : la terracotta devant, l'autre qui la suit (le dirigeant, puis l'entreprise). Elle décolle à droite juste avant la chute. |
-| `barres` | clair | Un histogramme qui se construit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres. |
-| `cap` | sombre | L'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée. |
-| `sommet` | sombre | Une crête dessinée comme un relevé (hachures, arêtes), basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte et plante son fanion juste avant la chute. La montagne de la marque, en version mesurée. |
-| `paliers` | clair | Un escalier : des marches larges, puis hautes et serrées dans la marge droite. Le trait terracotta les franchit une à une. |
-| `tableau` | sombre | Un tableau de bord : quatre tuiles d'indicateurs qui vivent pendant la vidéo (une tendance, un anneau, des barres, une flèche). Aucun élément haut : le plus discret des six. |
+| `courbe` | sombre | La thèse. « Le dirigeant » en terracotta devant, « L'entreprise » en gris crème qui le suit, toujours en dessous et en retard. Deux courbes lisses, plates dans la bande, qui décollent dans la marge droite juste avant la chute ; à la fin, l'entreprise rejoint à son tour la cible en pointillé. |
+| `releve` | sombre | La même thèse en relevé de données : de petits mouvements réels autour de la tendance, que l'entreprise refait avec un temps de retard (on voit qu'elle le suit). |
+| `cap` | sombre | L'arc d'un grand cadran gradué au trait fin qui tourne ; l'aiguille terracotta, fine, cherche puis tient sa direction sur l'arc visé. |
+| `sommet` | sombre | Une crête au trait fin, comme une gravure de relevé (hachures très légères), le sommet dans la marge droite ; l'itinéraire terracotta la remonte jusqu'à l'objectif. |
+| `paliers` | clair | Un escalier en pointillé : marches larges, puis hautes et serrées dans la marge droite. Le trait terracotta les franchit une à une. |
 | `photo` | sombre | Une vraie photo (`"photo": "<chemin>"`, `"cadrage": "50% 50%"`), en noir et blanc chaud, assombrie. HEIC accepté. |
 
-- **Deux tons par fond** : `"ton": "clair"` ou `"ton": "sombre"` dans le scénario donne l'autre version des six
-  décors (pas de `photo`). Six décors, douze ambiances.
-- **L'objectif est tracé dès la première image** : la trajectoire en pointillé, le contour des barres, l'anneau
-  terracotta là où le décor doit arriver. Le réalisé le rattrape pendant la vidéo et l'atteint juste avant la
-  chute. C'est ce qui rend le décor présent dès l'accroche, là où se décide si on regarde la suite.
+- **Les règles du registre, telles que le moteur les pose** : traits de 1 à 1,5 px pour les filets et la série
+  secondaire, 2,5 px au plus pour la série terracotta ; courbes lisses, jamais de points sur une courbe ; un seul repère,
+  un anneau fin avec un halo très léger, au point qui compte ; quelques filets horizontaux très légers et une échelle
+  graduée fine sur l'axe du bas, pas de quadrillage plein ni de règle épaisse ; lueur terracotta très douce ; légendes
+  en petites capitales espacées, collées à leur courbe (écrites le long de leur pente).
+- **Deux tons par fond** : `"ton": "clair"` ou `"ton": "sombre"` dans le scénario donne l'autre version (pas de `photo`).
+- **L'objectif est tracé dès la première image** : la trajectoire en pointillé très léger, la cible (anneau fin en
+  pointillé et son centre) et sa ligne verticale jusqu'à l'échelle. Le réalisé le rattrape pendant la vidéo et l'atteint
+  juste avant la chute. C'est ce qui rend le décor présent dès l'accroche.
 - **Le décor vit dans une bande au bas du cadre, sous les textes** (240 px réservés, `BANDE` dans `moteur.html`),
-  et son élément le plus haut monte dans la marge droite (96 px) : il ne passe jamais derrière une phrase. Une courbe ou un trait qui traverse un texte le rend illisible, et
-  Florent lit déjà la vidéo « un tout petit peu vite ».
-- **Ce que le style change aussi dans les scènes** : une barre de progression en haut (un segment par scène) ;
-  l'accent `*entre étoiles*` devient un aplat terracotta qui balaie les mots, texte blanc ; les bulles et les
-  cartes ont des angles nets et un filet fin, sans ombre (la carte de référence de `DESIGN.md`) ; les étiquettes
-  deviennent des rangs numérotés 01, 02, 03 ; rien ne rebondit ; la chute arrive par un volet en biais précédé
-  d'une lame terracotta.
+  et son élément le plus haut monte dans la marge droite (96 px) : il ne passe jamais derrière une phrase.
+- **Ce que le registre change dans les scènes** : la barre de progression en haut n'est plus qu'un filet de 2 px (un
+  segment par scène ; c'est un code propre à la vidéo, il n'existe pas sur une image fixe) ; l'accent `*entre étoiles*`
+  est une couleur de texte terracotta, sans aplat ; les bulles et les cartes ont un filet de 1 px, sans ombre ; la
+  réplique de Florent dans un `dialogue` a le contour terracotta 1,5 px et le fond terracotta à 10 % du bouton de la
+  bannière ; les étiquettes sont des rangs séparés par des filets, numéros en petites capitales ; l'organigramme a des
+  liens de 1,5 px et des points qui remontent en petits anneaux ; les filets de l'accroche et de la chute font 2 px ; la
+  chute arrive par un volet en biais bordé d'un filet terracotta. Rien ne rebondit.
 - **Aucun chiffre dans le décor** : les graduations n'ont pas de valeur, la courbe n'a pas d'unité. Un chiffre à
   l'écran est toujours un chiffre que Florent a donné, dans une scène `chiffre`.
-- La typographie de la marque ne change pas (DM Serif Display pour la voix, DM Sans pour les repères).
-- **Ajouter un fond** : partir de `socle()` (quadrillage et règles), dessiner l'objectif d'abord (`objectif()`,
-  pointillés), puis le réalisé en terracotta, suivi par `repere()` ; tout se pose depuis `c.sol` (la ligne de base
-  de la bande) et se colore avec `c.tr` et `c.fd`, pour tenir dans les deux tons. Vérifier en 4x5 et en 9x16.
+- La typographie de la marque ne change pas (DM Serif Display pour la voix, DM Sans en petites capitales espacées pour
+  les repères).
+- **Ajouter un fond** : partir de `socle()` (l'axe, l'échelle graduée, les filets), dessiner l'objectif d'abord
+  (`objectif()`, pointillés), puis le réalisé en terracotta (`lisse()` pour une courbe), suivi par `repere()` ; légendes
+  avec `legende()`. Tout se pose depuis `c.sol` et se colore avec `c.tr`, `c.doux` et `c.fd`, pour tenir dans les deux
+  tons. Vérifier en 4x5 et en 9x16, sur planche.
 
-Les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`) et leur style (pastilles rondes, ombres
-douces, rebonds, voile rond) ont été retirés du moteur le 17/11/2026, une fois la vidéo validée dans le style
-performance. Ils restent dans l'historique git (avant ce retrait) si une forme devait être reprise.
+Retirés du moteur : le 17/11/2026, les cinq premiers fonds (`carte`, `carnet`, `aube`, `nuit`, `cretes`, style à
+pastilles et rebonds) ; le 23/11/2026, `barres` et `tableau` (aplats et tableau de bord, hors du registre fin). Ils restent
+dans l'historique git. Les scénarios des vidéos publiées qui les utilisent (« Votre entreprise a un plafond », fond
+`tableau`) ne se rendent donc plus à l'identique : c'est voulu, on ne refait pas une vidéo publiée.
 
 La `chute` inverse toujours le ton : fond clair, chute anthracite ; fond sombre, chute crème.
 
@@ -159,11 +162,12 @@ Couleurs à prendre dans les variables du thème (`var(--encre)`, `var(--doux)`,
 
 - **Un petit logo Latitude discret sur toute la vidéo, sans signature** (Florent, 18/11/2026, après avoir retiré le logo
   le 17/11 : la marque voyage dans l'image, comme PARADOX sur les vidéos de Laroche ; son nom est déjà l'auteur de la
-  publication). Le moteur pose « Latitude. » au bout de la barre de progression, aux couleurs du ton (il s'inverse avec
+  publication). Le moteur pose « Latitude. » au bout du filet de progression, aux couleurs du ton (il s'inverse avec
   la chute). `"logo": false` dans le scénario l'enlève ; une signature ne s'affiche que si la `chute` porte
   `"signature": "…"` (le champ `signature` du haut du scénario n'est plus lu).
-- **Orienté performance, jamais « lisse »** (Florent, 17/11/2026) : un nouveau fond ou une nouvelle scène
-  mesure ou monte, avec des angles nets ; pas de dégradé pastel, pas de forme molle qui dérive, pas de rebond.
+- **Orienté performance, au registre fin** (Florent, 17/11 puis 23/11/2026) : un nouveau fond ou une nouvelle scène
+  mesure ou monte, au trait fin et premium ; pas de dégradé pastel, pas de forme molle qui dérive, pas de rebond, pas
+  de gros points ni d'aplat.
   Performance d'entreprise (courbe, indicateur, cap), pas performance sportive (chrono, dossard) : le séminaire
   se présente justement comme « pas une performance sportive ».
 - Jamais de rouge (cf. `DESIGN.md`) ; le terracotta `#E07855` reste l'unique accent.

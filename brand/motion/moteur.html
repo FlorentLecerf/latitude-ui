@@ -17,13 +17,13 @@
   body { position: relative; font-family: "DM Sans", sans-serif; font-weight: 500; -webkit-font-smoothing: antialiased; }
   /* les couches, de bas en haut : le décor, les scènes, la lame et le voile de la chute, la chute, la barre de progression */
   #fond, #voile, #lame { position: absolute; inset: 0; overflow: hidden; }
-  #lame { z-index: 2; background: var(--terra); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+  #lame { z-index: 2; background: var(--terra); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }  /* devenue un filet de 2 px au bord du volet (registre fin) */
   #voile { z-index: 2; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
   .plateau { position: absolute; left: 0; width: 1080px; height: 1350px; }
   #plateau { z-index: 1; }
   #plateau2 { z-index: 3; }
-  #hud { position: absolute; left: 96px; width: 888px; z-index: 4; display: flex; gap: 8px; }
-  #hud i { flex: 1; height: 6px; background: var(--bord); overflow: hidden; }
+  #hud { position: absolute; left: 96px; width: 888px; z-index: 4; display: flex; gap: 10px; }
+  #hud i { flex: 1; height: 2px; background: var(--bord); overflow: hidden; }
   #hud b { display: block; width: 0; height: 100%; background: var(--terra); }
   /* le petit logo, discret, sur toute la vidéo (décision du 18/11/2026), au bout de la barre de progression */
   #logo { position: absolute; right: 96px; z-index: 4; font-family: "DM Serif Display", serif; font-size: 34px; letter-spacing: -0.01em; line-height: 1; color: var(--encre); opacity: .82; white-space: nowrap; }
@@ -35,33 +35,35 @@
   /* mot masqué qui monte : le masque garde de la place pour les accents et les jambages */
   .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .12em 0 .2em; margin: -.12em 0 -.2em; }
   .w > span { display: inline-block; transform: translateY(118%); }
-  /* l'accent : terracotta, puis un aplat qui balaie le mot (le masque s'élargit pour que les aplats se touchent) */
+  /* l'accent : terracotta en couleur de texte, jamais d'aplat (registre fin, 23/11/2026) */
   .hot { color: var(--terra); }
-  .w.c { margin-left: -.13em; margin-right: -.13em; }
-  .w.c > span { padding: 0 .13em; background: linear-gradient(var(--terra), var(--terra)) no-repeat 0 50% / 0% 100%; }
-  .caps { font-weight: 800; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; }
+  .caps { font-weight: 500; font-size: 24px; letter-spacing: .2em; text-transform: uppercase; }
   .reste { color: transparent; }
   .legende { margin-top: 64px; font-size: 36px; line-height: 1.35; color: var(--doux); opacity: 0; }
 
-  .accroche .filet { width: 0; height: 12px; background: var(--terra); margin-bottom: 34px; }
+  .accroche .filet { width: 0; height: 2px; background: var(--terra); margin-bottom: 40px; }
   .accroche h1 { line-height: 1.07; }
   .accroche .sous { margin-top: 64px; color: var(--terra); opacity: 0; }
 
   .phrase p { line-height: 1.1; }
 
   /* bulles et cartes : angles nets, filet fin, pas d'ombre (la carte de référence de DESIGN.md) */
-  .bulle .boite { position: relative; margin: 0; padding: 54px 54px 60px; background: var(--carte); border-radius: 12px; border: 2px solid var(--bord-fort); transform-origin: 14% 100%; opacity: 0; }
-  .bulle .boite::after { content: ""; position: absolute; left: 70px; bottom: -22px; width: 40px; height: 40px; background: var(--carte); transform: rotate(45deg); border-radius: 0 0 4px 0; border-right: 2px solid var(--bord-fort); border-bottom: 2px solid var(--bord-fort); }
+  /* bulles : filet fin, pas d'ombre, pas d'aplat appuyé (registre fin) */
+  .bulle .boite { position: relative; margin: 0; padding: 54px 54px 60px; background: var(--carte); border-radius: 12px; border: 1px solid var(--bord-fort); transform-origin: 14% 100%; opacity: 0; }
+  .bulle .boite::after { content: ""; position: absolute; left: 70px; bottom: -15px; width: 28px; height: 28px; background: var(--carte); transform: rotate(45deg); border-right: 1px solid var(--bord-fort); border-bottom: 1px solid var(--bord-fort); }
   .bulle .citation { line-height: 1.1; }
 
-  .dialogue .rep { max-width: 790px; padding: 34px 42px 38px; border-radius: 12px; line-height: 1.14; opacity: 0; margin-bottom: 30px; border: 2px solid var(--bord); }
+  .dialogue .rep { max-width: 790px; padding: 34px 42px 38px; border-radius: 12px; line-height: 1.14; opacity: 0; margin-bottom: 30px; border: 1px solid var(--bord); }
   .dialogue .rep.lui { align-self: flex-start; background: var(--carte); border-color: var(--bord-fort); border-bottom-left-radius: 2px; transform-origin: 0 100%; }
-  .dialogue .rep.moi { align-self: flex-end; background: var(--terra); color: #FFFFFF; border-color: transparent; border-bottom-right-radius: 2px; transform-origin: 100% 100%; }
+  /* Florent : contour terracotta 1,5 px sur fond terracotta à 10 %, comme le bouton de la bannière */
+  .dialogue .rep.moi { align-self: flex-end; background: rgba(224,120,85,.1); color: var(--encre); border: 1.5px solid var(--terra); border-bottom-right-radius: 2px; transform-origin: 100% 100%; }
   .dialogue .legende { margin-top: 34px; }
 
   .etiquettes h2 { line-height: 1.1; margin-bottom: 54px; }
-  .rang { display: flex; align-items: center; gap: 30px; padding: 0 40px 0 36px; border-radius: 10px; background: var(--carte); border: 1.5px solid var(--bord); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; }
-  .rang b { flex: none; width: 62px; font-family: "DM Sans", sans-serif; font-weight: 800; font-size: 35px; letter-spacing: .04em; color: var(--terra); font-variant-numeric: tabular-nums; }
+  /* des rangs séparés par un filet fin, comme les lignes d'un rapport (registre fin) : pas de carte */
+  .rang { position: relative; display: flex; align-items: center; gap: 30px; padding: 0 8px 0 4px; border-top: 1px solid var(--bord-fort); font-family: "DM Serif Display", serif; letter-spacing: -0.012em; white-space: nowrap; opacity: 0; }
+  .rang:last-of-type { border-bottom: 1px solid var(--bord-fort); }
+  .rang b { flex: none; width: 62px; font-family: "DM Sans", sans-serif; font-weight: 500; font-size: 26px; letter-spacing: .16em; color: var(--terra); font-variant-numeric: tabular-nums; }
   .etiquettes .chute { margin-top: 30px; line-height: 1.12; }
 
   .organigramme h2 { line-height: 1.09; margin-bottom: 34px; }
@@ -77,8 +79,8 @@
   .scene.avec-avatar { padding-right: 490px; }
   .scene .avatar { position: absolute; right: 30px; bottom: calc(var(--bas, 120px) - 8px); height: 760px; width: auto; opacity: 0; pointer-events: none; }
   .chute-finale .citation { line-height: 1.07; }
-  .chute-finale .trait { width: 0; height: 8px; background: var(--terra); margin-top: 64px; }
-  .chute-finale .nom { margin-top: 44px; color: var(--encre); font-weight: 800; font-size: 26px; letter-spacing: .18em; text-transform: uppercase; opacity: 0; }
+  .chute-finale .trait { width: 0; height: 2px; background: var(--terra); margin-top: 64px; }
+  .chute-finale .nom { margin-top: 44px; color: var(--encre); font-weight: 500; font-size: 24px; letter-spacing: .2em; text-transform: uppercase; opacity: 0; }
 </style></head>
 <body>
 <div id="fond"></div>
@@ -121,8 +123,6 @@ function mots(cible, texte) {
 const monte = (spans, t, s, pas = 0.07, d = 0.75) =>
   spans.forEach((sp, i) => {
     sp.style.transform = `translateY(${(1 - p(t, s + i * pas, d, E.out5)) * 118}%)`;
-    // une fois le mot monté, l'aplat le balaie de gauche à droite et le mot passe en blanc
-    if (sp.className === "hot") { const k = p(t, s + i * pas + d * 0.62, 0.3, E.io); sp.style.backgroundSize = `${(k * 100).toFixed(1)}% 100%`; sp.style.color = k > 0.5 ? "#FFFFFF" : ""; }
   });
 // un point qui avance le long d'une ligne brisée : u de 0 à 1
 const sur = (pts, u) => {
@@ -168,200 +168,169 @@ const THEMES = {
 };
 const poser = (e, nom) => { for (const k in THEMES[nom]) e.style.setProperty("--" + k, THEMES[nom][k]); };
 
-// ---------- motifs « performance » : la mesure, et ce qui monte ----------
-const trait = (svg, x1, y1, x2, y2, stroke, op, w = 1) => svgEl("line", { x1, y1, x2, y2, stroke, "stroke-opacity": op, "stroke-width": w }, svg);
+// ---------- motifs « performance », registre fin (DA du 23/11/2026, DESIGN.md) ----------
+// Le registre des graphiques des rapports financiers haut de gamme : traits fins (1 à 1,5 px, 2,5 px au plus pour la
+// série terracotta), courbes lisses sans points, un seul repère (anneau fin) au point qui compte, quelques filets très
+// légers et une échelle graduée fine en bas. Ni quadrillage plein, ni règle épaisse, ni aplat.
+const trait = (svg, x1, y1, x2, y2, stroke, op, w = 1, dash) => svgEl("line", Object.assign({ x1, y1, x2, y2, stroke, "stroke-opacity": op, "stroke-width": w }, dash ? { "stroke-dasharray": dash } : {}), svg);
 const pose = (e, a) => { for (const k in a) e.setAttribute(k, a[k]); };
 const brise = (pts) => "M" + pts.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(" L");
-// quadrillage fin, un trait sur quatre plus marqué
-function grille(svg, H, pas, stroke, op) {
-  for (let x = pas, i = 1; x < W; x += pas, i++) trait(svg, x, 0, x, H, stroke, i % 4 === 0 ? op * 1.9 : op);
-  for (let y = H - pas, i = 1; y > 0; y -= pas, i++) trait(svg, 0, y, W, y, stroke, i % 4 === 0 ? op * 1.9 : op);
-}
-// graduations de règle le long du bord gauche et du bord bas
-function regle(svg, H, stroke, op) {
-  for (let y = H - 36, i = 0; y > 20; y -= 18, i++) trait(svg, 0, y, i % 5 === 0 ? 30 : 15, y, stroke, op, 2);
-  for (let x = 36, i = 0; x < W - 10; x += 18, i++) trait(svg, x, H, x, H - (i % 5 === 0 ? 30 : 15), stroke, op, 2);
-}
+// une courbe lisse passant par les points (Catmull-Rom adoucie, comme la bannière de référence)
+const lisse = (q) => { let d = `M${q[0][0].toFixed(1)} ${q[0][1].toFixed(1)}`; for (let i = 0; i < q.length - 1; i++) {
+  const a = q[Math.max(0, i - 1)], b = q[i], c = q[i + 1], e = q[Math.min(q.length - 1, i + 2)], t = 6;
+  d += ` C${(b[0] + (c[0] - a[0]) / t).toFixed(1)} ${(b[1] + (c[1] - a[1]) / t).toFixed(1)} ${(c[0] - (e[0] - b[0]) / t).toFixed(1)} ${(c[1] - (e[1] - b[1]) / t).toFixed(1)} ${c[0].toFixed(1)} ${c[1].toFixed(1)}`; } return d; };
 const lueur = (f, css) => { el("div", "", f).style.cssText = "position:absolute;inset:0;background:" + css; };
-// le socle commun : quadrillage et règles graduées
-const socle = (f, H, c) => { const s = toile(f, H); grille(s, H, 54, c.tr, 0.04 * c.k); regle(s, H, c.tr, 0.42 * c.k); return s; };
-// le repère qui avance : un anneau terracotta et son halo qui bat
+// le socle commun : l'axe, une échelle graduée fine dessous, quelques filets très légers (dans la bande, et dans la marge droite au-dessus)
+const socle = (f, H, c) => {
+  const s = toile(f, H);
+  trait(s, 0, c.sol, W, c.sol, c.tr, 0.24 * c.k);
+  for (let x = 8, i = 0; x < W; x += 16, i++) trait(s, x, c.sol, x, c.sol + (i % 5 ? 4 : 10), c.tr, 0.24 * c.k);
+  for (let y = c.sol - 48, i = 1; y > c.sol - PH * 0.62; y -= 48, i++) trait(s, y > c.sol - BANDE + 40 ? 0 : W - 150, y, W, y, c.tr, 0.06 * c.k);
+  return s;
+};
+// le repère : un seul, au point qui compte ; un anneau fin et un halo très léger
 function repere(s, c) {
-  const halo = svgEl("circle", { r: 32, fill: TERRA, opacity: 0.24 }, s), pointe = svgEl("circle", { r: 12, fill: c.fd, stroke: TERRA, "stroke-width": 7 }, s);
-  return (x, y, T) => { pose(pointe, { cx: x, cy: y }); pose(halo, { cx: x, cy: y, r: 30 + 8 * Math.sin(T * 3) }); };
+  const halo = svgEl("circle", { r: 15, fill: TERRA, "fill-opacity": 0.16 }, s), pointe = svgEl("circle", { r: 6, fill: c.fd, stroke: TERRA, "stroke-width": 2.25 }, s);
+  return (x, y) => { pose(pointe, { cx: x, cy: y }); pose(halo, { cx: x, cy: y }); };
 }
-// l'objectif, visible dès la première image : un anneau en pointillé là où le décor doit arriver
-const objectif = (s, x, y) => svgEl("circle", { cx: x, cy: y, r: 24, fill: "none", stroke: TERRA, "stroke-width": 3, "stroke-dasharray": "5 6" }, s);
+// l'objectif, visible dès la première image : un anneau fin en pointillé et son centre, là où le décor doit arriver
+const objectif = (s, x, y) => { svgEl("circle", { cx: x, cy: y, r: 10, fill: "none", stroke: TERRA, "stroke-width": 1.25, "stroke-dasharray": "2.5 3" }, s); svgEl("circle", { cx: x, cy: y, r: 2.2, fill: TERRA }, s); };
+// une légende en petites capitales espacées, collée à sa courbe
+const legende = (s, x, y, texte, fill, attrs = {}) => { const t = svgEl("text", Object.assign({ x, y, "font-family": "DM Sans", "font-weight": 500, "font-size": 19, "letter-spacing": 3.8, fill }, attrs), s); t.textContent = texte; return t; };
 // les deux tons d'un fond performance : fd = le fond, tr = la couleur des traits, k = dosage des opacités,
-// lu = force de la lueur terracotta (franche sur sombre, à peine posée sur clair : sinon le crème vire au pêche), carte = fond d'une tuile
-const TONS = { sombre: { fd: "#262523", tr: "#FBF8F4", k: 1, lu: 0.3, carte: "#3B3835" }, clair: { fd: "#F5F0EB", tr: "#3A3A3A", k: 1.25, lu: 0.1, carte: "#FFFFFF" } };
+// lu = force de la lueur terracotta (très douce : registre fin), doux = la couleur de la série secondaire et de sa légende
+const TONS = { sombre: { fd: "#232220", tr: "#F5F0EB", doux: "#C9C1B8", k: 1, lu: 0.15 }, clair: { fd: "#F5F0EB", tr: "#2E2D2B", doux: "#6E6A66", k: 1.6, lu: 0.07 } };
 // les poses de l'avatar : "avatar": "perdu" dans une scène prend avatar-perdu.png de ce dossier (ou un chemin absolu)
 const AVATARS = "/Users/lecerf/Library/CloudStorage/GoogleDrive-florent@latitude.coach/Mon Drive/03_MARKETING-CONTENU/Photos-Pro/AVATAR";
 // hauteur de la bande réservée au décor, sous les textes
 const BANDE = 240;
 
+// la courbe de la thèse (gabarit : brand/banners/linkedin-perso-performance.html) : « Le dirigeant » en terracotta
+// devant, « L'entreprise » qui le suit, en dessous et en retard ; plate dans la bande, elle décolle dans la marge droite
+// et rejoint la cible. reel = un relevé de données : petits mouvements réels, que l'entreprise refait avec un temps de retard.
+function courbeThese(f, H, c, reel) {
+  lueur(f, `radial-gradient(circle at 96% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
+  const s = socle(f, H, c), N = reel ? 72 : 48, RET = reel ? 4 : 3, defs = svgEl("defs", {}, s);
+  const X = (u) => 28 + u * 1012, hd = (u) => (u <= 0 ? 0 : 170 * Math.pow(u, 1.4) + 440 * Math.pow(u, 20));
+  let graine = 7; const alea = () => { graine = (graine * 16807) % 2147483647; return graine / 2147483647 - 0.5; };
+  const br = []; let m = 0; for (let i = 0; i < N + RET; i++) { m = m * 0.55 + alea() * 11; br.push(m); }
+  const ux = (i) => i / (N - 1), amp = (i) => (reel ? 1 - 0.7 * ux(i) : 0); // le bruit se calme quand la courbe décolle
+  const dir = Array.from({ length: N }, (_, i) => [X(ux(i)), c.sol - 18 - hd(ux(i)) + br[i + RET] * amp(i)]);
+  const tend = Array.from({ length: N }, (_, i) => [X(ux(i)), c.sol - 8 - 0.72 * hd(ux(i - RET))]);
+  const ent = tend.map((q, i) => [q[0], Math.max(q[1] + (reel ? br[Math.max(0, i - RET) + RET] * 0.8 * amp(i) : 0), dir[i][1] + 12)]);
+  const fin = dir[N - 1], eF = ent[N - 1], cible = [fin[0] + 12, fin[1] - 64];
+  // l'objectif, dès la première image : la trajectoire du dirigeant en pointillé très léger, la cible, et sa ligne jusqu'à l'échelle
+  svgEl("path", { d: lisse(dir), fill: "none", stroke: c.tr, "stroke-opacity": 0.2 * c.k, "stroke-width": 1, "stroke-dasharray": "2 6", "stroke-linecap": "round" }, s);
+  svgEl("path", { d: `M${fin[0]} ${fin[1]} Q${fin[0] + 4} ${fin[1] - 34} ${cible[0]} ${cible[1]}`, fill: "none", stroke: TERRA, "stroke-opacity": 0.7, "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round" }, s);
+  trait(s, cible[0], cible[1] + 12, cible[0], c.sol, c.tr, 0.3 * c.k, 1, "3 5");
+  objectif(s, cible[0], cible[1]);
+  // le réalisé, découvert de gauche à droite
+  const ga = svgEl("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+  svgEl("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": c.k > 1 ? 0.16 : 0.22 }, ga); svgEl("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
+  const masque = svgEl("rect", { x: 0, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "avance" }, defs));
+  const g = svgEl("g", { "clip-path": "url(#avance)" }, s);
+  svgEl("path", { d: lisse(dir) + ` L${fin[0]} ${c.sol} L${dir[0][0]} ${c.sol} Z`, fill: "url(#aire)" }, g);
+  svgEl("path", { d: lisse(ent), fill: "none", stroke: c.tr, "stroke-opacity": 0.45 * Math.min(1, c.k), "stroke-width": 1.5, "stroke-linecap": "round" }, g);
+  svgEl("path", { d: lisse(dir), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" }, g);
+  // les légendes, collées à leur courbe : le dirigeant au-dessus de la sienne, l'entreprise écrite le long de la sienne, dessous
+  // (les deux écrites le long de la tendance de leur courbe, sans ses petits mouvements, sinon les lettres se chevauchent)
+  const leLong = (id, pts, texte, fill, dy, depart) => {
+    svgEl("path", { id, d: brise(pts), fill: "none" }, defs);
+    const te = legende(g, 0, 0, "", fill, { dy }); te.removeAttribute("x"); te.removeAttribute("y");
+    svgEl("textPath", { href: "#" + id, startOffset: depart }, te).textContent = texte;
+  };
+  leLong("pd", dir.map((q, i) => [q[0], c.sol - 18 - hd(ux(i))]), "LE DIRIGEANT", TERRA, -16, "24%");
+  leLong("pe", tend, "L'ENTREPRISE", c.doux, 30, "46%");
+  // à la fin, l'entreprise rejoint elle aussi la cible, par en dessous et après le dirigeant
+  const jonction = svgEl("path", { d: `M${eF[0]} ${eF[1]} Q${eF[0] + 18} ${eF[1] - 120} ${cible[0]} ${cible[1] + 12}`, fill: "none", stroke: c.tr, "stroke-opacity": 0.55 * Math.min(1, c.k), "stroke-width": 1.25, "stroke-dasharray": "2 5", "stroke-linecap": "round", opacity: 0 }, s);
+  const lecture = svgEl("line", { stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 1, "stroke-dasharray": "2 4" }, s), ici = repere(s, c);
+  const yEn = (x) => { const u = clamp((x - X(0)) / (X(1) - X(0))) * (N - 1), i = Math.min(N - 2, Math.floor(u)); return dir[i][1] + (dir[i + 1][1] - dir[i][1]) * (u - i); };
+  return (T, D) => {
+    const x = X(0.12 + 0.88 * clamp(T / D)), y = yEn(x);
+    masque.setAttribute("width", x + 3); ici(x, y);
+    pose(lecture, { x1: x, y1: y + 12, x2: x, y2: c.sol });
+    jonction.setAttribute("opacity", p(T, D - 0.7, 0.6));
+  };
+}
+
 // ---------- fonds : chacun pose son décor et rend la fonction qui le fait vivre ----------
-// monter(f, H, sc, c) : c = { fd, tr, k, lu, carte, sol } (ton du fond et ligne de base de la bande, fonds performance seulement)
+// monter(f, H, sc, c) : c = { fd, tr, doux, k, lu, sol } (ton du fond et ligne de base de la bande, fonds performance seulement)
 // vivre(T, D) : T = temps de la vidéo, D = moment où la chute arrive (le décor a fini de monter à ce moment-là)
 const FONDS = {
-  // ===== style « performance » (17/11/2026) : des décors qui mesurent et qui montent =====
+  // ===== style performance, registre fin (23/11/2026) =====
   // Le décor vit dans une bande au bas du cadre, sous les textes (bas: BANDE), et monte dans la marge droite :
   // il ne passe jamais derrière une phrase. L'objectif est tracé en pointillé dès la première image, le réalisé
   // le rattrape pendant la vidéo. Chaque fond existe en deux tons : le sien, et l'autre avec "ton" dans le scénario.
 
-  // la courbe : deux séries qui grimpent, le dirigeant (terracotta) devant, l'entreprise qui le suit ; elle décolle à droite
-  courbe: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
-    const G = 14, N = 27;
-    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 54%)`);
-    const s = socle(f, H, c), X = (i) => -G + (i / (N - 1)) * (W + 2 * G);
-    const serie = (b, retard, bas, amp) => Array.from({ length: N }, (_, i) => {
-      const u = Math.max(0, i / (N - 1) - retard);
-      return [X(i), c.sol + bas - PH * (0.06 * u + 0.5 * Math.pow(u, 5.5)) - (b(i * 0.9, 3) - 0.5) * PH * amp * (0.45 + u)];
-    });
-    const dir = serie(bruit(31), 0, 0, 0.05), ent = serie(bruit(77), 0.07, 30, 0.035);
-    ent.forEach((q, i) => { q[1] = Math.max(q[1], dir[i][1] + 24); });
-    const yEn = (x) => { const u = clamp((x + G) / (W + 2 * G)) * (N - 1), i = Math.min(N - 2, Math.floor(u)); return dir[i][1] + (dir[i + 1][1] - dir[i][1]) * (u - i); };
-    const xFin = -G + 0.96 * (W + 2 * G);
-    svgEl("path", { d: brise(dir), fill: "none", stroke: c.tr, "stroke-opacity": 0.36 * c.k, "stroke-width": 2.5, "stroke-dasharray": "2 10", "stroke-linecap": "round" }, s);
-    objectif(s, xFin, yEn(xFin));
-    const defs = svgEl("defs", {}, s), grad = svgEl("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
-    svgEl("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": 0.44 }, grad); svgEl("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, grad);
-    const masque = svgEl("rect", { x: 0, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "avance" }, defs));
-    const g = svgEl("g", { "clip-path": "url(#avance)" }, s);
-    svgEl("path", { d: brise(dir) + ` L${W + G} ${H} L${-G} ${H} Z`, fill: "url(#aire)" }, g);
-    svgEl("path", { d: brise(ent), fill: "none", stroke: c.tr, "stroke-opacity": 0.6, "stroke-width": 3.5, "stroke-linejoin": "round" }, g);
-    svgEl("path", { d: brise(dir), fill: "none", stroke: TERRA, "stroke-width": 6.5, "stroke-linejoin": "round" }, g);
-    dir.forEach((q) => svgEl("circle", { cx: q[0], cy: q[1], r: 6.5, fill: c.fd, stroke: TERRA, "stroke-width": 3.5 }, g));
-    const visee = svgEl("line", { stroke: c.tr, "stroke-opacity": 0.4, "stroke-width": 1.5, "stroke-dasharray": "5 8" }, s), ici = repere(s, c);
-    return (T, D) => {
-      const x = -G + (0.12 + 0.84 * clamp(T / D)) * (W + 2 * G), y = yEn(x);
-      masque.setAttribute("width", Math.max(0, x)); ici(x, y, T);
-      pose(visee, { x1: x, y1: y + 26, x2: x, y2: H });
-    };
-  } },
-  // les barres : un histogramme qui se remplit de gauche à droite ; la dernière barre, terracotta, monte bien plus haut que les autres
-  barres: { theme: "clair", tons: true, bas: BANDE, monter(f, H, sc, c) {
-    lueur(f, `radial-gradient(circle at 100% 44%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
-    const s = socle(f, H, c), n = 15, pas = (W - 60) / n, l = pas * 0.64, b = bruit(5);
-    const barres = Array.from({ length: n }, (_, i) => {
-      const u = i / (n - 1), fin = i === n - 1, h = fin ? PH * 0.46 : (34 + 140 * Math.pow(u, 1.5)) * (0.84 + 0.3 * b(i * 1.7, 2)), x = 30 + i * pas + (pas - l) / 2;
-      svgEl("rect", { x, y: c.sol - h, width: l, height: h, fill: "none", stroke: fin ? TERRA : c.tr, "stroke-opacity": fin ? 1 : 0.34 * c.k, "stroke-width": fin ? 3 : 1.5, "stroke-dasharray": fin ? "6 7" : "none" }, s);
-      return { e: svgEl("rect", { x, y: c.sol, width: l, height: 0, fill: fin ? TERRA : c.tr, opacity: fin ? 1 : (0.2 + 0.24 * u) * c.k }, s), h, u };
-    });
-    trait(s, 0, c.sol, W, c.sol, c.tr, 0.6 * c.k, 2.5);
-    return (T, D) => barres.forEach((q) => { const k = p(T, 0.1 + (q.u - 0.14) * D * 0.98, 0.9, E.out5); pose(q.e, { y: c.sol - q.h * k, height: q.h * k }); });
-  } },
-  // le cap : l'arc d'un grand cadran gradué qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée
+  // la thèse, en courbes lisses : le dirigeant devant, l'entreprise qui suit
+  courbe: { theme: "sombre", tons: true, bas: BANDE, monter: (f, H, sc, c) => courbeThese(f, H, c, false) },
+  // la même thèse en relevé de données : de petits mouvements réels, que l'entreprise refait avec un temps de retard
+  releve: { theme: "sombre", tons: true, bas: BANDE, monter: (f, H, sc, c) => courbeThese(f, H, c, true) },
+  // le cap : l'arc d'un grand cadran gradué au trait fin qui tourne ; l'aiguille terracotta cherche, puis tient sa direction dans la zone visée
   cap: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
     const cx = W / 2, cy = c.sol + 376, R = 560, CAP = 12, rad = (a) => ((a - 90) * Math.PI) / 180;
     lueur(f, `radial-gradient(circle at ${cx}px ${cy - R * 0.6}px,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 42%)`);
-    const s = socle(f, H, c), cadran = svgEl("g", {}, s);
+    const s = toile(f, H), cadran = svgEl("g", {}, s);
     for (let a = 0; a < 360; a += 2) {
-      const long = a % 30 === 0, moyen = a % 10 === 0, r2 = R - (long ? 64 : moyen ? 40 : 22), co = Math.cos((a * Math.PI) / 180), si = Math.sin((a * Math.PI) / 180);
-      trait(cadran, cx + R * co, cy + R * si, cx + r2 * co, cy + r2 * si, c.tr, (long ? 0.75 : moyen ? 0.5 : 0.26) * c.k, long ? 5 : 2.5);
+      const long = a % 30 === 0, moyen = a % 10 === 0, r2 = R - (long ? 40 : moyen ? 26 : 14), co = Math.cos((a * Math.PI) / 180), si = Math.sin((a * Math.PI) / 180);
+      trait(cadran, cx + R * co, cy + R * si, cx + r2 * co, cy + r2 * si, c.tr, (long ? 0.5 : moyen ? 0.32 : 0.18) * c.k, long ? 1.5 : 1);
     }
-    svgEl("circle", { cx, cy, r: R + 1, fill: "none", stroke: c.tr, "stroke-opacity": 0.42 * c.k, "stroke-width": 2.5 }, s);
-    svgEl("circle", { cx, cy, r: R - 100, fill: "none", stroke: c.tr, "stroke-opacity": 0.14 * c.k, "stroke-width": 1.5 }, s);
-    // la zone visée : un segment terracotta sur le bord du cadran, là où l'aiguille finit par se poser
+    svgEl("circle", { cx, cy, r: R + 1, fill: "none", stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 1 }, s);
+    svgEl("circle", { cx, cy, r: R - 90, fill: "none", stroke: c.tr, "stroke-opacity": 0.08 * c.k, "stroke-width": 1 }, s);
+    // la zone visée : un arc terracotta fin, juste à l'extérieur du cadran
     const arc = (a1, a2, r) => `M${cx + r * Math.cos(rad(a1))} ${cy + r * Math.sin(rad(a1))} A${r} ${r} 0 0 1 ${cx + r * Math.cos(rad(a2))} ${cy + r * Math.sin(rad(a2))}`;
-    svgEl("path", { d: arc(CAP - 5, CAP + 5, R - 6), fill: "none", stroke: TERRA, "stroke-width": 12 }, s);
+    svgEl("path", { d: arc(CAP - 5, CAP + 5, R + 14), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linecap": "round" }, s);
     const aiguille = svgEl("g", {}, s);
-    svgEl("line", { x1: cx, y1: cy, x2: cx, y2: cy - R + 84, stroke: TERRA, "stroke-width": 9 }, aiguille);
-    svgEl("path", { d: `M${cx} ${cy - R + 20} L${cx - 30} ${cy - R + 96} L${cx + 30} ${cy - R + 96} Z`, fill: TERRA }, aiguille);
+    svgEl("line", { x1: cx, y1: cy, x2: cx, y2: cy - R + 30, stroke: TERRA, "stroke-width": 2 }, aiguille);
+    svgEl("circle", { cx, cy: cy - R + 30, r: 15, fill: TERRA, "fill-opacity": 0.16 }, aiguille);
+    svgEl("circle", { cx, cy: cy - R + 30, r: 6, fill: c.fd, stroke: TERRA, "stroke-width": 2.25 }, aiguille);
     return (T) => {
       cadran.setAttribute("transform", `rotate(${-T * 1.1} ${cx} ${cy})`);
       aiguille.setAttribute("transform", `rotate(${CAP + 26 * Math.exp(-T * 0.4) * Math.cos(T * 1.9)} ${cx} ${cy})`);
     };
   } },
-  // le sommet : une crête dessinée comme un relevé, basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte
+  // le sommet : une crête au trait fin, comme une gravure de relevé, basse dans la bande, le sommet dans la marge droite ; l'itinéraire terracotta la remonte
   sommet: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
-    lueur(f, `radial-gradient(circle at 96% 50%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
+    lueur(f, `radial-gradient(circle at 96% 50%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
     const s = socle(f, H, c);
     const xs = [-14, 64, 142, 210, 296, 366, 452, 520, 608, 686, 762, 836, 896, 946, 988, 1030, 1062, W + 14];
     const hs = [30, 84, 62, 122, 104, 78, 148, 118, 176, 124, 158, 192, 146, 256, 428, PH * 0.47, 470, 380];
     const crete = xs.map((x, i) => [x, c.sol - hs[i]]), iS = 15, pied = ` L${W + 14} ${H} L-14 ${H} Z`;
-    // un second plan derrière, plus pâle
-    svgEl("path", { d: brise(xs.map((x, i) => [x - 46, c.sol - hs[i] * 0.72 - 26])) + pied, fill: c.tr, opacity: 0.05 * c.k }, s);
+    // un second plan derrière, au trait seulement
+    svgEl("path", { d: brise(xs.map((x, i) => [x - 46, c.sol - hs[i] * 0.72 - 26])), fill: "none", stroke: c.tr, "stroke-opacity": 0.14 * c.k, "stroke-width": 1, "stroke-linejoin": "round" }, s);
     svgEl("path", { d: brise(crete) + pied, fill: c.fd }, s);
-    svgEl("path", { d: brise(crete) + pied, fill: c.tr, opacity: 0.08 * c.k }, s);
-    // les hachures du relevé, coupées par la crête
+    // les hachures du relevé, très légères, coupées par la crête
     const defs = svgEl("defs", {}, s); svgEl("path", { d: brise(crete) + pied }, svgEl("clipPath", { id: "massif" }, defs));
     const h = svgEl("g", { "clip-path": "url(#massif)" }, s);
-    for (let x = 6; x < W; x += 13) trait(h, x, c.sol - PH * 0.5, x, H, c.tr, 0.16 * c.k, 1.5);
-    // les arêtes : de chaque pointe, un trait qui redescend
-    crete.forEach((q, i) => { if ([1, 3, 6, 8, 11, iS].includes(i)) trait(s, q[0], q[1], q[0] + hs[i] * 0.3, c.sol, c.tr, 0.2 * c.k, 1.5); });
-    svgEl("path", { d: brise(crete), fill: "none", stroke: c.tr, "stroke-opacity": 0.62 * c.k, "stroke-width": 2.5, "stroke-linejoin": "round" }, s);
-    objectif(s, crete[iS][0], crete[iS][1]);
-    const voie = crete.slice(0, iS + 1), route = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 6.5, "stroke-linejoin": "round" }, s), L = route.getTotalLength();
+    for (let x = 6; x < W; x += 12) trait(h, x, c.sol - PH * 0.5, x, c.sol, c.tr, 0.06 * c.k);
+    crete.forEach((q, i) => { if ([1, 3, 6, 8, 11, iS].includes(i)) trait(s, q[0], q[1], q[0] + hs[i] * 0.3, c.sol, c.tr, 0.14 * c.k); });
+    svgEl("path", { d: brise(crete), fill: "none", stroke: c.tr, "stroke-opacity": 0.5 * c.k, "stroke-width": 1.5, "stroke-linejoin": "round" }, s);
+    trait(s, 0, c.sol, W, c.sol, c.tr, 0.24 * c.k);
+    objectif(s, crete[iS][0], crete[iS][1] - 22);
+    const voie = crete.slice(0, iS + 1), route = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }, s), L = route.getTotalLength();
     route.style.strokeDasharray = L;
-    const [sx, sy] = crete[iS], fanion = svgEl("g", { opacity: 0 }, s);
-    svgEl("line", { x1: sx, y1: sy, x2: sx, y2: sy - 70, stroke: TERRA, "stroke-width": 5 }, fanion);
-    svgEl("path", { d: `M${sx} ${sy - 70} L${sx - 44} ${sy - 54} L${sx} ${sy - 38} Z`, fill: TERRA }, fanion);
     const ici = repere(s, c);
-    return (T, D) => {
-      const k = 0.1 + 0.9 * clamp(T / D), [x, y] = sur(voie, k);
-      route.style.strokeDashoffset = L * (1 - k); ici(x, y, T);
-      fanion.setAttribute("opacity", p(T, D - 0.5, 0.4));
-    };
+    return (T, D) => { const k = 0.1 + 0.9 * clamp(T / D), [x, y] = sur(voie, k); route.style.strokeDashoffset = L * (1 - k); ici(x, y); };
   } },
-  // les paliers : des marches larges dans la bande, puis hautes et serrées dans la marge droite ; ils s'enchaînent de plus en plus vite
+  // les paliers : des marches larges dans la bande, puis hautes et serrées dans la marge droite ; le trait terracotta les franchit
   paliers: { theme: "clair", tons: true, bas: BANDE, monter(f, H, sc, c) {
-    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 52%)`);
+    lueur(f, `radial-gradient(circle at 100% 46%,rgba(224,120,85,${c.lu}),rgba(224,120,85,0) 50%)`);
     const s = socle(f, H, c), pts = [[-14, c.sol - 24]]; let x = -14, y = c.sol - 24;
     for (let i = 0; i < 7; i++) { x += 139; pts.push([x, y]); y -= 24; pts.push([x, y]); }
     for (let i = 0; i < 3; i++) { x += 36; pts.push([x, y]); y -= 124; pts.push([x, y]); }
     pts.push([W + 14, y]);
-    const pied = ` L${W + 14} ${H} L-14 ${H} Z`, defs = svgEl("defs", {}, s);
-    svgEl("path", { d: brise(pts) + pied, fill: c.tr, opacity: 0.07 * c.k }, s);
-    svgEl("path", { d: brise(pts), fill: "none", stroke: c.tr, "stroke-opacity": 0.42 * c.k, "stroke-width": 2.5, "stroke-dasharray": "2 10", "stroke-linecap": "round" }, s);
-    objectif(s, pts[pts.length - 2][0], pts[pts.length - 2][1]);
+    const pied = ` L${W + 14} ${c.sol} L-14 ${c.sol} Z`, defs = svgEl("defs", {}, s);
+    svgEl("path", { d: brise(pts), fill: "none", stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 1, "stroke-dasharray": "2 6", "stroke-linecap": "round" }, s);
+    objectif(s, pts[pts.length - 2][0], pts[pts.length - 2][1] - 22);
     const masque = svgEl("rect", { x: -14, y: 0, width: 0, height: H }, svgEl("clipPath", { id: "gravi" }, defs));
-    svgEl("path", { d: brise(pts) + pied, fill: c.tr, opacity: 0.2 * c.k, "clip-path": "url(#gravi)" }, s);
-    const voie = pts.slice(0, pts.length - 1), fait = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 7 }, s), L = fait.getTotalLength();
+    const ga = svgEl("linearGradient", { id: "aire", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+    svgEl("stop", { offset: 0, "stop-color": TERRA, "stop-opacity": c.k > 1 ? 0.14 : 0.2 }, ga); svgEl("stop", { offset: 1, "stop-color": TERRA, "stop-opacity": 0 }, ga);
+    svgEl("path", { d: brise(pts) + pied, fill: "url(#aire)", "clip-path": "url(#gravi)" }, s);
+    const voie = pts.slice(0, pts.length - 1), fait = svgEl("path", { d: brise(voie), fill: "none", stroke: TERRA, "stroke-width": 2.5 }, s), L = fait.getTotalLength();
     fait.style.strokeDasharray = L;
     const ici = repere(s, c);
-    return (T, D) => {
-      const k = 0.1 + 0.9 * clamp(T / D), [px, py] = sur(voie, k);
-      fait.style.strokeDashoffset = L * (1 - k); masque.setAttribute("width", Math.max(0, px + 14)); ici(px, py, T);
-    };
+    return (T, D) => { const k = 0.1 + 0.9 * clamp(T / D), [px, py] = sur(voie, k); fait.style.strokeDashoffset = L * (1 - k); masque.setAttribute("width", Math.max(0, px + 14)); ici(px, py); };
   } },
-  // le tableau de bord : quatre tuiles d'indicateurs qui vivent pendant la vidéo (une tendance, un anneau, des barres, une flèche)
-  tableau: { theme: "sombre", tons: true, bas: BANDE, monter(f, H, sc, c) {
-    lueur(f, `radial-gradient(circle at 50% ${c.sol - 70}px,rgba(224,120,85,${c.lu * 0.8}),rgba(224,120,85,0) 48%)`);
-    const s = socle(f, H, c), ecart = 24, w = (888 - 3 * ecart) / 4, h = 184, y0 = c.sol - h + 12, defs = svgEl("defs", {}, s);
-    const tuile = (i) => {
-      const x = 96 + i * (w + ecart);
-      svgEl("rect", { x, y: y0, width: w, height: h, rx: 10, fill: c.carte, stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 1.5 }, s);
-      svgEl("rect", { x: 20 + x, y: y0 + 20, width: 10, height: 10, fill: TERRA }, s);
-      svgEl("rect", { x: 40 + x, y: y0 + 21, width: [74, 56, 86, 64][i], height: 8, rx: 4, fill: c.tr, opacity: 0.3 * c.k }, s);
-      return { x: x + 20, y: y0 + 52, l: w - 40, ht: h - 72 }; // la zone de dessin de la tuile
-    };
-    // 1. une tendance qui se trace
-    const a = tuile(0), ba = bruit(3), tend = Array.from({ length: 9 }, (_, i) => [a.x + (i / 8) * a.l, a.y + a.ht - 8 - (i / 8) * (a.ht - 22) * (0.55 + 0.45 * (i / 8)) - (ba(i * 1.3, 2) - 0.5) * 20]);
-    const mA = svgEl("rect", { x: a.x - 8, y: y0, width: 0, height: h }, svgEl("clipPath", { id: "tendance" }, defs));
-    svgEl("path", { d: brise(tend), fill: "none", stroke: c.tr, "stroke-opacity": 0.3 * c.k, "stroke-width": 2, "stroke-dasharray": "2 7", "stroke-linecap": "round" }, s);
-    svgEl("path", { d: brise(tend), fill: "none", stroke: TERRA, "stroke-width": 7, "stroke-linejoin": "round", "clip-path": "url(#tendance)" }, s);
-    // 2. un anneau qui se remplit
-    const b = tuile(1), r = 46, bx = b.x + b.l / 2, by = b.y + b.ht / 2 + 2, tour = 2 * Math.PI * r;
-    svgEl("circle", { cx: bx, cy: by, r, fill: "none", stroke: c.tr, "stroke-opacity": 0.2 * c.k, "stroke-width": 18 }, s);
-    const anneau = svgEl("circle", { cx: bx, cy: by, r, fill: "none", stroke: TERRA, "stroke-width": 18, "stroke-dasharray": tour, transform: `rotate(-90 ${bx} ${by})` }, s);
-    // 3. des barres qui montent
-    const d = tuile(2), nb = 6, lb = d.l / nb, bd = bruit(8);
-    const cols = Array.from({ length: nb }, (_, i) => ({ e: svgEl("rect", { x: d.x + i * lb + 4, y: d.y + d.ht, width: lb - 8, height: 0, fill: i === nb - 1 ? TERRA : c.tr, opacity: i === nb - 1 ? 1 : (0.24 + 0.08 * i) * c.k }, s), h: d.ht * (0.3 + 0.7 * Math.pow((i + 1) / nb, 1.4)) * (i === nb - 1 ? 1 : 0.84 + 0.2 * bd(i * 2.1, 2)), u: i / (nb - 1) }));
-    // 4. une flèche qui part vers le haut
-    const g = tuile(3), fx1 = g.x + 6, fy1 = g.y + g.ht - 4, fx2 = g.x + g.l - 14, fy2 = g.y + 14, Lf = Math.hypot(fx2 - fx1, fy2 - fy1);
-    trait(s, g.x, g.y + g.ht, g.x + g.l, g.y + g.ht, c.tr, 0.3 * c.k, 2);
-    const fleche = svgEl("line", { x1: fx1, y1: fy1, x2: fx2, y2: fy2, stroke: TERRA, "stroke-width": 11, "stroke-dasharray": Lf }, s);
-    const tete = svgEl("path", { d: `M${fx2 + 12} ${fy2 - 9} L${fx2 - 30} ${fy2 - 4} L${fx2 + 6} ${fy2 + 31} Z`, fill: TERRA, opacity: 0 }, s);
-    return (T, D) => {
-      const u = clamp(T / D);
-      mA.setAttribute("width", (a.l + 16) * (0.14 + 0.86 * u));
-      anneau.style.strokeDashoffset = tour * (1 - (0.12 + 0.66 * u));
-      cols.forEach((q) => { const k = p(T, (q.u - 0.2) * D * 0.9, 0.8, E.out5); pose(q.e, { y: d.y + d.ht - q.h * k, height: q.h * k }); });
-      const kf = p(T, D * 0.18, D * 0.72, E.io); fleche.style.strokeDashoffset = Lf * (1 - kf); tete.setAttribute("opacity", p(T, D * 0.86, 0.3));
-    };
-  } },
-
   // une vraie photo de Florent, passée en noir et blanc chaud et assombrie pour porter le texte
   photo: { theme: "sombre", monter(f, H, sc) {
     if (!sc.photo) throw new Error("le fond « photo » demande le champ « photo » (chemin d'une image)");
@@ -459,7 +428,7 @@ const SCENES = {
   organigramme(sc, s) {
     const h2 = el("h2", "serif", s), titre = mots(h2, sc.titre); ajuste(h2, 68, 46, 160);
     const svg = svgEl("svg", { viewBox: "0 0 888 620", width: 888, height: 620 }, s);
-    const gL = svgEl("g", { fill: "none", "stroke-width": 3.5, "stroke-linecap": "round", style: "stroke:var(--encre)" }, svg), gP = svgEl("g", {}, svg), gN = svgEl("g", {}, svg);
+    const gL = svgEl("g", { fill: "none", "stroke-width": 1.5, "stroke-linecap": "round", style: "stroke:var(--encre);stroke-opacity:.55" }, svg), gP = svgEl("g", {}, svg), gN = svgEl("g", {}, svg);
     const chuteEl = sc.chute ? el("p", "chute serif", s) : null, chute = chuteEl ? mots(chuteEl, sc.chute) : null; if (chuteEl) ajuste(chuteEl, 52, 38, 190);
     const bas = sc.bas, n = bas.length, lw = Math.min(204, (888 - (n - 1) * 24) / n);
     const XS = bas.map((_, i) => (n === 1 ? 444 : lw / 2 + (i * (888 - lw)) / (n - 1)));
@@ -470,18 +439,18 @@ const SCENES = {
     ].map((l) => { const e = svgEl("path", { d: l.d }, gL), len = e.getTotalLength() || 1; e.style.strokeDasharray = len; return { ...l, e, len }; });
     const noeud = (x, y, w, h, label, plein) => {
       const g = svgEl("g", {}, gN), L = typo(label), fs = Math.min(plein ? 37 : 28, Math.floor((w - 28) / (L.length * 0.56)));
-      svgEl("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: 10, style: plein ? "fill:var(--plein)" : "fill:var(--carte);stroke:var(--bord);stroke-width:1.5" }, g);
-      svgEl("text", { x: 0, y: fs * 0.35, "text-anchor": "middle", "font-family": "DM Sans", "font-weight": 500, "font-size": fs, style: plein ? "fill:var(--plein-texte)" : "fill:var(--encre)" }, g).textContent = L;
+      svgEl("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: 10, style: plein ? "fill:rgba(224,120,85,.1);stroke:var(--terra);stroke-width:1.5" : "fill:var(--carte);stroke:var(--bord-fort);stroke-width:1" }, g);
+      svgEl("text", { x: 0, y: fs * 0.35, "text-anchor": "middle", "font-family": "DM Sans", "font-weight": 500, "font-size": fs, style: "fill:var(--encre)" }, g).textContent = L;
       return { g, x, y };
     };
     const chef = noeud(CH.x, CH.y, CH.w, CH.h, sc.haut, true), services = bas.map((b, i) => noeud(XS[i], HAUT + hh / 2, lw, hh, b, false));
     const N = sc.remontee === undefined ? 12 : sc.remontee, places = [];
-    [5, 4, 3, 2, 1].forEach((k, r) => { for (let j = 0; j < k; j++) places.push([444 + (j - (k - 1) / 2) * 37, CH.y - CH.h / 2 - 26 - r * 32]); });
+    [5, 4, 3, 2, 1].forEach((k, r) => { for (let j = 0; j < k; j++) places.push([444 + (j - (k - 1) / 2) * 26, CH.y - CH.h / 2 - 20 - r * 22]); });
     const ordre = [...XS.keys()].filter((i) => i % 2 === 0).concat([...XS.keys()].filter((i) => i % 2 === 1));
     const tPts = chute ? 2.75 + 0.3 + chute.length / 11 : 2.6;
     const points = Array.from({ length: Math.min(N, places.length) }, (_, k) => {
       const x = XS[ordre[k % n]];
-      return { e: svgEl("circle", { r: 15, fill: TERRA, opacity: 0 }, gP), a: tPts + k * 0.24, pts: [[x, HAUT + hh / 2], [x, BUS], [444, BUS], [444, CH.y], places[k]] };
+      return { e: svgEl("circle", { r: 7, fill: TERRA, "fill-opacity": 0.25, stroke: TERRA, "stroke-width": 2, opacity: 0 }, gP), a: tPts + k * 0.24, pts: [[x, HAUT + hh / 2], [x, BUS], [444, BUS], [444, CH.y], places[k]] };
     });
     const fin = points.length ? tPts + (points.length - 1) * 0.24 + 1.5 + 0.95 : Math.max(3.4, 2.75 + (chute ? lecture(chute.length) : 0) + 0.6);
     return { d: fin, jouer(t) {
@@ -562,7 +531,7 @@ window.demarrer = async (sc, format = "4x5") => {
     a += d; return sc1;
   });
   await Promise.all(chargements);
-  // la barre de progression du style performance : un segment par scène, qui se remplit pendant sa scène
+  // la barre de progression : un segment par scène, un filet de 2 px qui se remplit pendant sa scène (registre fin)
   const hud = document.getElementById("hud"), logo = document.getElementById("logo"); hud.innerHTML = ""; hud.style.top = haut + 56 + "px";
   // le logo au bout de la barre ; "logo": false dans le scénario l'enlève
   const avecLogo = sc.logo !== false; logo.style.display = avecLogo ? "" : "none"; logo.style.top = haut + 56 - 26 + "px"; hud.style.width = (avecLogo ? 888 - 196 : 888) + "px";
@@ -588,9 +557,9 @@ window.image = (T) => {
     // l'avatar glisse depuis la droite, net, sans rebond
     if (x.av) { const k = p(t, 0.12, 0.7, E.out5); x.av.style.opacity = k; x.av.style.transform = `translateX(${(1 - k) * 70}px)`; }
   });
-  // la chute arrive par un volet en biais, précédé d'une lame terracotta
+  // la chute arrive par un volet en biais, bordé d'un filet terracotta (registre fin : plus de lame pleine)
   const biais = (avance) => { const x = -300 + q * (W + 640) + avance; return `polygon(0 0, ${x + 150}px 0, ${x - 150}px 100%, 0 100%)`; };
-  voile.style.clipPath = biais(0); lame.style.clipPath = biais(q > 0 ? 64 : 0);
+  voile.style.clipPath = biais(0); lame.style.clipPath = biais(q > 0 && q < 1 ? 2.5 : 0);
   poser(hud, q > 0.5 ? inverse : theme);
   poser(logo, q > 0.5 ? inverse : theme);
   return T;

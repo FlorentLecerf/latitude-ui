@@ -137,7 +137,7 @@ if (import.meta.main) {
     for (const [i, format] of formats.entries()) {
       const info = await preparer(c, scenario, format, surMesure);
       if (i === 0) {
-        console.log(`fond « ${scenario.fond || "carte"} », ${info.scenes.length} scènes, ${info.duree.toFixed(1)} s`);
+        console.log(`fond « ${scenario.fond || "courbe"} », ${info.scenes.length} scènes, ${info.duree.toFixed(1)} s`);
         for (const s of info.scenes) console.log(`  ${String(s.debut).padStart(5)} s  ${s.type} (${s.duree} s)`);
         if (seulementPlanche) {
           const png = join(sortie, `${nom}-planche.png`);
