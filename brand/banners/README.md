@@ -18,6 +18,7 @@ n'est qu'un rendu local jetable.
 | `facebook-cover.html` | `facebook-cover` (1640×624) | base 1640×624 → 3280×1248 | Drive `Social` |
 | `youtube-banner.html` | `youtube-banner` (2560×1440, safe 1546×423) | 2× → réduit à 2560×1440 | Drive `Social` |
 | `og-diagnostic.html` | `og-image` (1200×630) | 2× → réduit à 1200×630 | `latitude-diagnostic/src/app/opengraph-image.png` + Drive `Social` |
+| `google-business-cover.html` | 16:9 (base 1600×900) | 3200×1800 | Drive `Social` (couverture Google Business, 23/11) |
 | `og-home.html` | `og-image` (1200×630) | 2× → réduit à 1200×630 | `latitude-web/og-image.png` + Drive `Social` |
 | `fond-visio-photo.py` (photo de loft + néon, mode d'emploi en tête du script) | `visio-background` (1920×1080) | recadrage natif 1920×1080 | Drive `Social` (`fond-visio-loft.jpg`) |
 
@@ -61,6 +62,6 @@ le pixel** ; il ne décide pas la copy.
 
 - **Direction MIX A+B figée le 2026-06-30** : accroche reconnaissance-pouvoir
   (« Le vrai levier de votre entreprise, c'est vous. ») + sous-titre destination-loi
-  (« Vous prenez de la hauteur, votre entreprise aussi. ») + CTA « Diagnostic gratuit ↓ ».
+  (« Vous prenez de la hauteur, votre entreprise aussi. ») + CTA « Diagnostic gratuit ↓ », devenu « Le test du dirigeant, en 5 minutes ↓ » le 23/11.
   Construction validée sur Sinek (croyance, pas accusation ni promesse creuse) + Max L&I
   (le client est le héros, le levier c'est lui). Détail : brief QG + journal latitude-marque.
