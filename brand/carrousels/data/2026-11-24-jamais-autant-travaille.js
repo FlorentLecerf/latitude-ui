@@ -2,7 +2,7 @@
 // Source : latitude-marque/editorial/posts/instagram/2026-11-24-jamais-autant-travaille.md
 window.CARROUSEL = {
   slides: [
-    { type: "cover", titre: "Vous n'avez jamais autant travaillé. *Et l'entreprise n'avance pas.*", sousTitre: "Le frein n'est pas là où vous le cherchez.", repere: "Faites glisser" },
+    { type: "cover", titre: "Vous n'avez jamais autant travaillé. *Et l'entreprise n'avance pas.*", sousTitre: "Le frein n'est pas là où vous le cherchez.", repere: "Faites glisser", avatar: "doigt-leve-1" },
     { type: "editorial", titre: "Un DG bouche tous les trous de son entreprise", corps: "Un nouveau commercial arrive, c'est lui qui le forme. Une équipe n'avance pas, c'est lui qui pousse. Il travaille plus que tout le monde." },
     { type: "editorial", titre: "Et les résultats *ne suivent pas*", corps: "Ce qui le frustre, c'est l'écart entre l'énergie qu'il met et ce qu'il obtient. Alors il en remet. Il redouble d'énergie pour embarquer tout le monde." },
     { type: "editorial", titre: "Plus il en fait, *plus tout passe par lui*", corps: "Chaque trou qu'il bouche lui-même, c'est un poste que personne d'autre n'apprend à tenir. L'entreprise s'organise autour de lui. Et elle avance à sa vitesse à lui." },
