@@ -1,6 +1,7 @@
 {
   "_comment": "Registre des formats d'assets de marque Latitude — SOURCE DE VÉRITÉ MACHINE, lue par les agents avant toute génération de visuel. Les tokens (couleur, typo) et la définition du logo vivent dans DESIGN.md + src/theme.css. Les masters vectoriels et les exports lourds vivent sur Google Drive (voir brand/README.md). Quand l'utilisateur nomme une destination (ex: « bannière LinkedIn »), l'agent lit l'entrée correspondante ici, rend le format à la dimension exacte depuis le master, puis dépose au bon endroit (repo ou Drive).",
   "version": 1,
+  "da": "Tout visuel MARKETING (bannières, couvertures, images d'aperçu, posts, carrousels, miniatures, vidéos) suit le style performance, REGISTRE FIN, validé par Florent le 23/11/2026 : DESIGN.md, section « Supports marketing : style performance, registre fin ». Gabarits de référence : brand/banners/linkedin-perso-performance.html et performance-formats.html (#facebook, #gbp, #og). Les anciens gabarits (linkedin-perso, facebook-cover, google-business-cover, og-diagnostic) ne servent plus : voir brand/banners/README.md.",
   "brand": {
     "wordmark": "Latitude",
     "logoFont": "DM Serif Display",
