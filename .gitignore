@@ -4,3 +4,4 @@ node_modules
 
 # Exports de bannières (lourds) — vont sur Drive, pas dans le repo
 brand/banners/*.png
+brand/carrousels/sortie/
