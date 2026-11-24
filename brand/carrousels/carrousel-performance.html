@@ -40,6 +40,10 @@
   .qt .guil{font-family:'DM Serif Display',serif;font-size:150px;line-height:1;color:var(--terra);height:96px;margin-bottom:8px;}
   .qt blockquote{font-family:'DM Serif Display',serif;font-size:72px;line-height:1.14;letter-spacing:-0.01em;}
   .qt blockquote .suite{display:block;margin-top:40px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:36px;line-height:1.45;color:var(--doux);letter-spacing:0;}
+  .avatar{position:absolute;right:30px;bottom:86px;height:780px;z-index:2;filter:drop-shadow(0 0 1px rgba(245,240,235,.35));}
+  .zone.avec-avatar{right:470px;}
+  .zone.avec-avatar.ed h2{font-size:58px;}
+  .zone.avec-avatar.ed p{font-size:33px;}
   .leg{position:absolute;font-weight:500;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--terra);}
 </style>
 </head>
@@ -77,6 +81,11 @@ function rendre(C, n) {
   } else {
     z.className = "zone qt";
     z.innerHTML = (sl.type === "question" ? "" : `<div class="filet-h"></div>`) + `<blockquote>${fmt(sl.texte)}${sl.suite ? `<span class="suite">${fmt(sl.suite)}</span>` : ""}</blockquote>`;
+  }
+  if (sl.avatar) {
+    z.classList.add("avec-avatar");
+    const im = document.createElement("img"); im.className = "avatar"; im.src = "avatar/avatar-" + sl.avatar + ".png";
+    document.getElementById("s").appendChild(im);
   }
   decor(total > 1 ? 0.25 + 0.75 * (n - 1) / (total - 1) : 1, n === total);
 }
@@ -145,7 +154,7 @@ function decor(avance, dernier) {
 
   // « Le dirigeant », collé à sa courbe, au-dessus du repère
   const l1 = document.getElementById("l1");
-  if (fin[0] > 700) { l1.style.left = (fin[0] - 196) + "px"; l1.style.top = (fin[1] - 34) + "px"; }
+  if (fin[0] > 700 || document.querySelector(".avatar")) { l1.style.left = (fin[0] - 196) + "px"; l1.style.top = (fin[1] - 34) + "px"; }
   else { l1.style.left = (fin[0] - 70) + "px"; l1.style.top = (fin[1] - 44) + "px"; }
 }
 </script>
