@@ -46,6 +46,12 @@
   .zone.avec-avatar.cover h1{font-size:70px;}
   .zone.avec-avatar.cover .sub{font-size:30px;}
   .zone.avec-avatar.ed p{font-size:33px;}
+  /* fond fondu (25/11/2026) : l'avatar derrière le texte, très estompé, fondu vers la gauche et vers le bas */
+  .fond{position:absolute;right:-70px;bottom:60px;height:1180px;z-index:0;opacity:var(--fond-op,.2);
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 55%),linear-gradient(to bottom,#000 62%,transparent 96%);
+    -webkit-mask-composite:source-in;mask-composite:intersect;}
+  body.clair .fond{--fond-op:.15;}
+  .s.avec-fond svg.deco,.s.avec-fond .zone,.s.avec-fond .wordmark,.s.avec-fond .num,.s.avec-fond .leg{z-index:1;}
   .leg{position:absolute;font-weight:500;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--terra);}
 </style>
 </head>
@@ -84,7 +90,12 @@ function rendre(C, n) {
     z.className = "zone qt";
     z.innerHTML = (sl.type === "question" ? "" : `<div class="filet-h"></div>`) + `<blockquote>${fmt(sl.texte)}${sl.suite ? `<span class="suite">${fmt(sl.suite)}</span>` : ""}</blockquote>`;
   }
-  if (sl.avatar) {
+  if (sl.avatar && C.fond) {
+    // mode « fond fondu » : l'avatar passe derrière, le texte garde toute sa largeur
+    const s = document.getElementById("s"); s.classList.add("avec-fond");
+    const im = document.createElement("img"); im.className = "fond"; im.src = "avatar/avatar-" + sl.avatar + ".png";
+    s.insertBefore(im, s.firstChild);
+  } else if (sl.avatar) {
     z.classList.add("avec-avatar");
     const im = document.createElement("img"); im.className = "avatar"; im.src = "avatar/avatar-" + sl.avatar + ".png";
     document.getElementById("s").appendChild(im);
