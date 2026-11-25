@@ -86,6 +86,11 @@ function rendre(C, n) {
   } else if (sl.type === "editorial") {
     z.className = "zone ed";
     z.innerHTML = `<div class="filet-h"></div><h2>${fmt(sl.titre)}</h2><p>${fmt(sl.corps)}</p>`;
+  } else if (sl.type === "cta") {
+    // la fin qui ouvre une porte : la question, une phrase, puis l'action en terracotta (même tracé que « Faites glisser »)
+    z.className = "zone ed";
+    z.innerHTML = `<div class="filet-h"></div><h2>${fmt(sl.titre)}</h2>` + (sl.corps ? `<p>${fmt(sl.corps)}</p>` : "") +
+      `<div class="glisse"><span>${esc(sl.action)}</span><span class="filet"></span><span>&#8594;</span></div>`;
   } else {
     z.className = "zone qt";
     z.innerHTML = (sl.type === "question" ? "" : `<div class="filet-h"></div>`) + `<blockquote>${fmt(sl.texte)}${sl.suite ? `<span class="suite">${fmt(sl.suite)}</span>` : ""}</blockquote>`;
